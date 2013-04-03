@@ -326,16 +326,8 @@ namespace SDL2
 			public byte patch;
 		}
 		
-		[DllImport(nativeLibName, EntryPoint = "SDL_GetVersion")]
-		private static extern void INTERNAL_SDL_GetVersion(IntPtr ver);
-		public static void SDL_GetVersion(ref SDL_version ver)
-		{
-			IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(ver));
-			Marshal.StructureToPtr(ver, ptr, false);
-			INTERNAL_SDL_GetVersion(ptr);
-			ver = (SDL_version) Marshal.PtrToStructure(ptr, ver.GetType());
-			Marshal.FreeHGlobal(ptr);
-		}
+		[DllImport(nativeLibName)]
+		private static extern void SDL_GetVersion(ref SDL_version ver);
 		
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetRevision")]
 		private static extern IntPtr INTERNAL_SDL_GetRevision();
@@ -346,6 +338,231 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern int SDL_GetRevisionNumber();
+		
+		#endregion
+		
+		#region SDL_video.h
+		
+		/* Actually, this is from SDL_blendmode.h */
+		public enum SDL_BlendMode
+		{
+			SDL_BLENDMODE_NONE =	0x00000000,
+			SDL_BLENDMODE_BLEND =	0x00000001,
+			SDL_BLENDMODE_ADD =		0x00000002,
+			SDL_BLENDMODE_MOD =		0x00000004
+		}
+		
+		public enum SDL_GLattr
+		{
+			SDL_GL_RED_SIZE,
+			SDL_GL_GREEN_SIZE,
+			SDL_GL_BLUE_SIZE,
+			SDL_GL_ALPHA_SIZE,
+			SDL_GL_BUFFER_SIZE,
+			SDL_GL_DOUBLEBUFFER,
+			SDL_GL_DEPTH_SIZE,
+			SDL_GL_STENCIL_SIZE,
+			SDL_GL_ACCUM_RED_SIZE,
+			SDL_GL_ACCUM_GREEN_SIZE,
+			SDL_GL_ACCUM_BLUE_SIZE,
+			SDL_GL_ACCUM_ALPHA_SIZE,
+			SDL_GL_STEREO,
+			SDL_GL_MULTISAMPLEBUFFERS,
+			SDL_GL_MULTISAMPLESAMPLES,
+			SDL_GL_ACCELERATED_VISUAL,
+			SDL_GL_RETAINED_BACKING,
+			SDL_GL_CONTEXT_MAJOR_VERSION,
+			SDL_GL_CONTEXT_MINOR_VERSION,
+			SDL_GL_CONTEXT_EGL,
+			SDL_GL_CONTEXT_FLAGS,
+			SDL_GL_PROFILE_MASK,
+			SDL_GL_SHARE_WITH_CURRENT_CONTEXT
+		}
+		
+		public enum SDL_WindowEventID
+		{
+			SDL_WINDOWEVENT_NONE,
+			SDL_WINDOWEVENT_SHOWN,
+			SDL_WINDOWEVENT_HIDDEN,
+			SDL_WINDOWEVENT_EXPOSED,
+			SDL_WINDOWEVENT_MOVED,
+			SDL_WINDOWEVENT_RESIZED,
+			SDL_WINDOWEVENT_SIZE_CHANGED,
+			SDL_WINDOWEVENT_MINIMIZED,
+			SDL_WINDOWEVENT_MAXIMIZED,
+			SDL_WINDOWEVENT_RESTORED,
+			SDL_WINDOWEVENT_ENTER,
+			SDL_WINDOWEVENT_LEAVE,
+			SDL_WINDOWEVENT_FOCUS_GAINED,
+			SDL_WINDOWEVENT_FOCUS_LOST,
+			SDL_WINDOWEVENT_CLOSE,
+		}
+		
+		public enum SDL_WindowFlags
+		{
+			SDL_WINDOW_FULLSCREEN =		0x00000001,
+			SDL_WINDOW_OPENGL =			0x00000002,
+			SDL_WINDOW_SHOWN =			0x00000004,
+			SDL_WINDOW_HIDDEN =			0x00000008,
+			SDL_WINDOW_BORDERLESS =		0x00000010,
+			SDL_WINDOW_RESIZABLE =		0x00000020,
+			SDL_WINDOW_MINIMIZED =		0x00000040,
+			SDL_WINDOW_MAXIMIZED =		0x00000080,
+			SDL_WINDOW_INPUT_GRABBED =	0x00000100,
+			SDL_WINDOW_INPUT_FOCUS =	0x00000200,
+			SDL_WINDOW_MOUSE_FOCUS =	0x00000400,
+			SDL_WINDOW_FULLSCREEN_DESKTOP =
+				(SDL_WINDOW_FULLSCREEN | 0x00001000),
+			SDL_WINDOW_FOREIGN =		0x00000800,
+		}
+		
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_DisplayMode
+		{
+			public uint format;
+			public int w;
+			public int h;
+			public int refresh_rate;
+			public IntPtr driverdata; // void*
+		}
+		
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_WindowEvent
+		{
+			public uint type;
+			public uint windowID;
+			public byte windowEvent; // event, lolC#
+			public int data1;
+			public int data2;
+		}
+		
+		/* IntPtr refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_CreateWindow(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string title,
+			int x,
+			int y,
+			int w,
+			int h,
+			uint flags
+		);
+		
+		/* TODO: SDL_video.h:
+		 * http://wiki.libsdl.org/moin.fcg/CategoryVideo
+		 * http://hg.libsdl.org/SDL/file/default/include/SDL_video.h
+		 */
+		
+		#endregion
+		
+		#region SDL_render.h
+		
+		/* TODO: SDL_render.h:
+		 * http://wiki.libsdl.org/moin.fcg/CategoryRender
+		 * http://hg.libsdl.org/SDL/file/default/include/SDL_render.h
+		 */
+		
+		#endregion
+		
+		#region SDL_pixels.h
+		
+		/* TODO: SDL_pixels.h:
+		 * http://wiki.libsdl.org/moin.fcg/CategoryPixels
+		 * http://hg.libsdl.org/SDL/file/default/include/SDL_pixels.h
+		 */
+		
+		#endregion
+		
+		#region SDL_rect.h
+		
+		public struct SDL_Point
+		{
+			public int x;
+			public int y;
+		}
+		
+		public struct SDL_Rect
+		{
+			public int x;
+			public int y;
+			public int w;
+			public int h;
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_EnclosePoints(
+			SDL_Point[] points,
+			int count,
+			ref SDL_Rect clip,
+			ref SDL_Rect result
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_HasIntersection(
+			ref SDL_Rect A,
+			ref SDL_Rect B
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_IntersectRect(
+			ref SDL_Rect A,
+			ref SDL_Rect B,
+			ref SDL_Rect result
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_IntersectRectAndLine(
+			ref SDL_Rect rect,
+			ref int X1,
+			ref int Y1,
+			ref int X2,
+			ref int Y2
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_RectEmpty(ref SDL_Rect rect);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_RectEquals(
+			ref SDL_Rect A,
+			ref SDL_Rect B
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_UnionRect(
+			ref SDL_Rect A,
+			ref SDL_Rect B,
+			ref SDL_Rect result
+		);
+		
+		#endregion
+		
+		#region SDL_surface.h
+		
+		/* TODO: SDL_surface.h:
+		 * http://wiki.libsdl.org/moin.fcg/CategorySurface
+		 * http://hg.libsdl.org/SDL/file/default/include/SDL_surface.h
+		 */
+		
+		#endregion
+		
+		#region SDL_clipboard.h
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_HasClipboardText();
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetClipboardText")]
+		private static extern IntPtr INTERNAL_SDL_GetClipboardText();
+		public static string SDL_GetClipboardText(string name)
+		{
+			return Marshal.PtrToStringAnsi(INTERNAL_SDL_GetClipboardText());
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetClipboardText(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string text
+		);
 		
 		#endregion
 	}
