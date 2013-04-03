@@ -448,6 +448,109 @@ namespace SDL2
 			uint flags
 		);
 		
+		/* window and renderer refer to an SDL_Window* and SDL_Renderer* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_CreateWindowAndRenderer(
+			int width,
+			int height,
+			uint window_flags,
+			ref IntPtr window,
+			ref IntPtr renderer
+		);
+		
+		/* IntPtr refers to an SDL_Window*. data is a void* pointer. */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_CreateWindowFrom(IntPtr data);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_DestroyWindow(IntPtr window);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_DisableScreenSaver();
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_EnableScreenSaver();
+		
+		/* IntPtr refers to an SDL_DisplayMode. Just use closest. */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GetClosestDisplayMode(
+			int displayIndex,
+			ref SDL_DisplayMode mode,
+			ref SDL_DisplayMode closest
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetCurrentDisplayMode(
+			int displayIndex,
+			ref SDL_DisplayMode mode
+		);
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentVideoDriver")]
+		private static extern IntPtr INTERNAL_SDL_GetCurrentVideoDriver();
+		public static string SDL_GetCurrentVideoDriver()
+		{
+			return Marshal.PtrToStringAnsi(INTERNAL_SDL_GetCurrentVideoDriver());
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetDesktopDisplayMode(
+			int displayIndex,
+			ref SDL_DisplayMode mode
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetDisplayBounds(
+			int displayIndex,
+			ref SDL_Rect rect
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetDisplayMode(
+			int displayIndex,
+			int modeIndex,
+			ref SDL_DisplayMode mode
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetNumDisplayModes(int displayIndex);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetNumVideoDisplays();
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetNumVideoDrivers();
+		
+		[DllImport(nativeLibName)]
+		private static extern IntPtr INTERNAL_SDL_GetVideoDriver(int index);
+		public static string SDL_GetVideoDriver(int index)
+		{
+			return Marshal.PtrToStringAnsi(INTERNAL_SDL_GetVideoDriver(index));
+		}
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern float SDL_GetWindowBrightness(IntPtr window);
+		
+		/* IntPtr refers to void* data. window refers to an SDL_Window*. */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GetWindowData(
+			IntPtr window,
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string name
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetWindowDisplayIndex(IntPtr window);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetWindowDisplayMode(
+			IntPtr window,
+			ref SDL_DisplayMode mode
+		);
+		
 		/* TODO: SDL_video.h:
 		 * http://wiki.libsdl.org/moin.fcg/CategoryVideo
 		 * http://hg.libsdl.org/SDL/file/default/include/SDL_video.h
