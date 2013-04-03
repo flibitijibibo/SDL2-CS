@@ -54,16 +54,17 @@ namespace SDL2
 		
 		#region SDL.h
 		
-		public const uint SDL_INIT_TIMER =			0x00000001;
-		public const uint SDL_INIT_AUDIO =			0x00000010;
-		public const uint SDL_INIT_VIDEO =			0x00000020;
+		public const uint SDL_INIT_TIMER =		0x00000001;
+		public const uint SDL_INIT_AUDIO =		0x00000010;
+		public const uint SDL_INIT_VIDEO =		0x00000020;
 		public const uint SDL_INIT_JOYSTICK =		0x00000200;
-		public const uint SDL_INIT_HAPTIC =			0x00001000;
+		public const uint SDL_INIT_HAPTIC =		0x00001000;
 		public const uint SDL_INIT_GAMECONTROLLER =	0x00002000;
 		public const uint SDL_INIT_NOPARACHUTE =	0x00100000;
 		public const uint SDL_INIT_EVERYTHING = (
 			SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO |
-			SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER
+			SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC |
+			SDL_INIT_GAMECONTROLLER
 		);
 		
 		[DllImport(nativeLibName)]
@@ -131,7 +132,9 @@ namespace SDL2
 		);
 		public static string SDL_GetHint(string name)
 		{
-			return Marshal.PtrToStringAnsi(INTERNAL_SDL_GetHint(name));
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetHint(name)
+			);
 		}
 		
 		[DllImport(nativeLibName)]
@@ -201,9 +204,9 @@ namespace SDL2
 		
 		/* Beyond this point is reserved for application use, e.g.
 			enum {
-				MYAPP_CATEGORY_AWESOME1 = SDL_LOG_CATEGORY_CUSTOM,
-				MYAPP_CATEGORY_AWESOME2,
-				MYAPP_CATEGORY_AWESOME3,
+				LOG_CATEGORY_AWESOME1 = SDL_LOG_CATEGORY_CUSTOM,
+				LOG_CATEGORY_AWESOME2,
+				LOG_CATEGORY_AWESOME3,
 				...
 			};
 		*/
@@ -295,7 +298,9 @@ namespace SDL2
 		);
 		
 		[DllImport(nativeLibName)]
-		public static extern SDL_LogPriority SDL_LogGetPriority(int category);
+		public static extern SDL_LogPriority SDL_LogGetPriority(
+			int category
+		);
 		
 		[DllImport(nativeLibName)]
 		public static extern void SDL_LogSetPriority(
@@ -333,7 +338,9 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_SDL_GetRevision();
 		public static string SDL_GetRevision()
 		{
-			return Marshal.PtrToStringAnsi(INTERNAL_SDL_GetRevision());
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetRevision()
+			);
 		}
 		
 		[DllImport(nativeLibName)]
@@ -490,7 +497,9 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_SDL_GetCurrentVideoDriver();
 		public static string SDL_GetCurrentVideoDriver()
 		{
-			return Marshal.PtrToStringAnsi(INTERNAL_SDL_GetCurrentVideoDriver());
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetCurrentVideoDriver()
+			);
 		}
 		
 		[DllImport(nativeLibName)]
@@ -513,7 +522,9 @@ namespace SDL2
 		);
 		
 		[DllImport(nativeLibName)]
-		public static extern int SDL_GetNumDisplayModes(int displayIndex);
+		public static extern int SDL_GetNumDisplayModes(
+			int displayIndex
+		);
 		
 		[DllImport(nativeLibName)]
 		public static extern int SDL_GetNumVideoDisplays();
@@ -521,16 +532,22 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern int SDL_GetNumVideoDrivers();
 		
-		[DllImport(nativeLibName)]
-		private static extern IntPtr INTERNAL_SDL_GetVideoDriver(int index);
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetVideoDriver")]
+		private static extern IntPtr INTERNAL_SDL_GetVideoDriver(
+			int index
+		);
 		public static string SDL_GetVideoDriver(int index)
 		{
-			return Marshal.PtrToStringAnsi(INTERNAL_SDL_GetVideoDriver(index));
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetVideoDriver(index)
+			);
 		}
 		
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName)]
-		public static extern float SDL_GetWindowBrightness(IntPtr window);
+		public static extern float SDL_GetWindowBrightness(
+			IntPtr window
+		);
 		
 		/* IntPtr refers to void* data. window refers to an SDL_Window*. */
 		[DllImport(nativeLibName)]
@@ -542,7 +559,9 @@ namespace SDL2
 		
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName)]
-		public static extern int SDL_GetWindowDisplayIndex(IntPtr window);
+		public static extern int SDL_GetWindowDisplayIndex(
+			IntPtr window
+		);
 		
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName)]
@@ -551,10 +570,262 @@ namespace SDL2
 			ref SDL_DisplayMode mode
 		);
 		
-		/* TODO: SDL_video.h:
-		 * http://wiki.libsdl.org/moin.fcg/CategoryVideo
-		 * http://hg.libsdl.org/SDL/file/default/include/SDL_video.h
-		 */
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern uint SDL_GetWindowFlags(IntPtr window);
+		
+		/* IntPtr refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GetWindowFromID(uint id);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetWindowGammaRamp(
+			IntPtr window,
+			ref ushort red,
+			ref ushort green,
+			ref ushort blue
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_GetWindowGrab(IntPtr window);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern uint SDL_GetWindowID(IntPtr window);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern uint SDL_GetWindowPixelFormat(
+			IntPtr window
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GetWindowPosition(
+			IntPtr window,
+			ref int x,
+			ref int y
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GetWindowSize(
+			IntPtr window,
+			ref int w,
+			ref int h
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetWindowSurface")]
+		private static extern IntPtr INTERNAL_SDL_GetWindowSurface(
+			IntPtr window
+		);
+		public static SDL_Surface SDL_GetWindowSurface(IntPtr window)
+		{
+			SDL_Surface result;
+			IntPtr result_ptr = INTERNAL_SDL_GetWindowSurface(
+				window
+			);
+			result = (SDL_Surface) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetWindowTitle")]
+		private static extern IntPtr INTERNAL_SDL_GetWindowTitle(
+			IntPtr window
+		);
+		public static string SDL_GetWindowTitle(IntPtr window)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetWindowTitle(window)
+			);
+		}
+		
+		/* texture refers to an SDL_Texture* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GL_BindTexture(
+			IntPtr texture,
+			ref float texw,
+			ref float texh
+		);
+		
+		/* IntPtr and window refer to an SDL_GLContext and SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GL_CreateContext(IntPtr window);
+		
+		/* context refers to an SDL_GLContext */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GL_DeleteContext(IntPtr context);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_GL_ExtensionSupported(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string extension
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GL_GetAttribute(
+			SDL_GLattr attr,
+			ref int value
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GL_GetSwapInterval();
+		
+		/* window and context refer to an SDL_Window* and SDL_GLContext */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GL_MakeCurrent(
+			IntPtr window,
+			IntPtr context
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GL_SetAttribute(
+			SDL_GLattr attr,
+			int value
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GL_SetSwapInterval(int interval);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GL_SwapWindow(IntPtr window);
+		
+		/* texture refers to an SDL_Texture* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GL_UnbindTexture(IntPtr texture);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_HideWindow(IntPtr window);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_IsScreenSaverEnabled();
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_MaximizeWindow(IntPtr window);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_MinimizeWindow(IntPtr window);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_RaiseWindow(IntPtr window);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_RestoreWindow(IntPtr window);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetWindowBrightness(
+			IntPtr window,
+			float brightness
+		);
+		
+		/* IntPtr and userdata are void*, window is an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_SetWindowData(
+			IntPtr window,
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string name,
+			IntPtr userdata
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetWindowDisplayMode(
+			IntPtr window,
+			ref SDL_DisplayMode mode
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetWindowFullscreen(
+			IntPtr window,
+			SDL_bool fullscreen
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetWindowGammaRamp(
+			IntPtr window,
+			ref ushort red,
+			ref ushort green,
+			ref ushort blue
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_SetWindowGrab(
+			IntPtr window,
+			SDL_bool grabbed
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_SetWindowIcon(
+			IntPtr window,
+			ref SDL_Surface icon
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_SetWindowPosition(
+			IntPtr window,
+			int x,
+			int y
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_SetWindowSize(
+			IntPtr window,
+			int w,
+			int h
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_SetWindowTitle(
+			IntPtr window,
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string title
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_ShowWindow(IntPtr window);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_UpdateWindowSurface(IntPtr window);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_UpdateWindowSurfaceRects(
+			IntPtr window,
+			SDL_Rect[] rects,
+			int numrects
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_VideoInit(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string driver_name
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_VideoQuit();
 		
 		#endregion
 		
@@ -642,6 +913,11 @@ namespace SDL2
 		
 		#region SDL_surface.h
 		
+		public struct SDL_Surface
+		{
+			// TODO...
+		}
+		
 		/* TODO: SDL_surface.h:
 		 * http://wiki.libsdl.org/moin.fcg/CategorySurface
 		 * http://hg.libsdl.org/SDL/file/default/include/SDL_surface.h
@@ -658,7 +934,9 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_SDL_GetClipboardText();
 		public static string SDL_GetClipboardText(string name)
 		{
-			return Marshal.PtrToStringAnsi(INTERNAL_SDL_GetClipboardText());
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetClipboardText()
+			);
 		}
 		
 		[DllImport(nativeLibName)]
