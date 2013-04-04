@@ -1751,18 +1751,18 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_Surface
 		{
-			uint flags;
-			IntPtr format; // SDL_PixelFormat*
-			int w;
-			int h;
-			int pitch;
-			IntPtr pixels; // void*
-			IntPtr userdata; // void*
-			int locked;
-			IntPtr lock_data; // void*
-			SDL_Rect clip_rect;
-			IntPtr map; // SDL_BlitMap*
-			int refcount;
+			public uint flags;
+			public IntPtr format; // SDL_PixelFormat*
+			public int w;
+			public int h;
+			public int pitch;
+			public IntPtr pixels; // void*
+			public IntPtr userdata; // void*
+			public int locked;
+			public IntPtr lock_data; // void*
+			public SDL_Rect clip_rect;
+			public IntPtr map; // SDL_BlitMap*
+			public int refcount;
 		}
 		
 		/* TODO: SDL_surface.h:
