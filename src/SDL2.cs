@@ -1765,10 +1765,325 @@ namespace SDL2
 			public int refcount;
 		}
 		
-		/* TODO: SDL_surface.h:
-		 * http://wiki.libsdl.org/moin.fcg/CategorySurface
-		 * http://hg.libsdl.org/SDL/file/default/include/SDL_surface.h
-		 */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_BlitSurface(
+			ref SDL_Surface src,
+			ref SDL_Rect srcrect,
+			ref SDL_Surface dst,
+			ref SDL_Rect dstrect
+		);
+		
+		/* src and dst are void* pointers */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_ConvertPixels(
+			int width,
+			int height,
+			uint src_format,
+			IntPtr src,
+			int src_pitch,
+			uint dst_format,
+			IntPtr dst,
+			int dst_pitch
+		);
+		
+		/* fmt refers to an SDL_PixelFormat* */
+		[DllImport(nativeLibName, EntryPoint = "SDL_ConvertSurface")]
+		private static extern IntPtr INTERNAL_SDL_ConvertSurface(
+			ref SDL_Surface src,
+			IntPtr fmt,
+			uint flags
+		);
+		public static SDL_Surface SDL_ConvertSurface(
+			ref SDL_Surface src,
+			IntPtr fmt,
+			uint flags
+		) {
+			SDL_Surface result;
+			IntPtr result_ptr = INTERNAL_SDL_ConvertSurface(
+				ref src,
+				fmt,
+				flags
+			);
+			result = (SDL_Surface) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_ConvertSurfaceFormat")]
+		private static extern IntPtr INTERNAL_SDL_ConvertSurfaceFormat(
+			ref SDL_Surface src,
+			uint pixel_format,
+			uint flags
+		);
+		public static SDL_Surface SDL_ConvertSurfaceFormat(
+			ref SDL_Surface src,
+			uint pixel_format,
+			uint flags
+		) {
+			SDL_Surface result;
+			IntPtr result_ptr = INTERNAL_SDL_ConvertSurfaceFormat(
+				ref src,
+				pixel_format,
+				flags
+			);
+			result = (SDL_Surface) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_CreateRGBSurface")]
+		private static extern IntPtr INTERNAL_SDL_CreateRGBSurface(
+			uint flags,
+			int width,
+			int height,
+			int depth,
+			uint Rmask,
+			uint Gmask,
+			uint Bmask,
+			uint Amask
+		);
+		public static SDL_Surface SDL_CreateRGBSurface(
+			uint flags,
+			int width,
+			int height,
+			int depth,
+			uint Rmask,
+			uint Gmask,
+			uint Bmask,
+			uint Amask
+		) {
+			SDL_Surface result;
+			IntPtr result_ptr = INTERNAL_SDL_CreateRGBSurface(
+				flags,
+				width,
+				height,
+				depth,
+				Rmask,
+				Gmask,
+				Bmask,
+				Amask
+			);
+			result = (SDL_Surface) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		/* pixels refers to a void* */
+		[DllImport(nativeLibName, EntryPoint = "SDL_CreateRGBSurfaceFrom")]
+		private static extern IntPtr INTERNAL_SDL_CreateRGBSurfaceFrom(
+			IntPtr pixels,
+			int width,
+			int height,
+			int depth,
+			int pitch,
+			uint Rmask,
+			uint Gmask,
+			uint Bmask,
+			uint Amask
+		);
+		public static SDL_Surface SDL_CreateRGBSurfaceFrom(
+			IntPtr pixels,
+			int width,
+			int height,
+			int depth,
+			int pitch,
+			uint Rmask,
+			uint Gmask,
+			uint Bmask,
+			uint Amask
+		) {
+			SDL_Surface result;
+			IntPtr result_ptr = INTERNAL_SDL_CreateRGBSurfaceFrom(
+				pixels,
+				width,
+				height,
+				depth,
+				pitch,
+				Rmask,
+				Gmask,
+				Bmask,
+				Amask
+			);
+			result = (SDL_Surface) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_FillRect(
+			ref SDL_Surface dst,
+			ref SDL_Rect rect,
+			uint color
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_FillRects(
+			ref SDL_Surface dst,
+			SDL_Rect[] rects,
+			int count,
+			uint color
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_FreeSurface(ref SDL_Surface surface);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GetClipRect(
+			ref SDL_Surface surface,
+			ref SDL_Rect rect
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetColorKey(
+			ref SDL_Surface surface,
+			ref uint key
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetSurfaceAlphaMod(
+			ref SDL_Surface surface,
+			ref byte alpha
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetSurfaceBlendMode(
+			ref SDL_Surface surface,
+			ref SDL_BlendMode blendMode
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetSurfaceColorMod(
+			ref SDL_Surface surface,
+			ref byte r,
+			ref byte g,
+			ref byte b
+		);
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_LoadBMP")]
+		private static extern IntPtr INTERNAL_SDL_LoadBMP(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string file
+		);
+		public static SDL_Surface SDL_LoadBMP(string file)
+		{
+			SDL_Surface result;
+			IntPtr result_ptr = INTERNAL_SDL_LoadBMP(file);
+			result = (SDL_Surface) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_LockSurface(ref SDL_Surface surface);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_LowerBlit(
+			ref SDL_Surface src,
+			ref SDL_Rect srcrect,
+			ref SDL_Surface dst,
+			ref SDL_Rect dstrect
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_LowerBlitScaled(
+			ref SDL_Surface src,
+			ref SDL_Rect srcrect,
+			ref SDL_Surface dst,
+			ref SDL_Rect dstrect
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_MUSTLOCK(ref SDL_Surface surface);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SaveBMP(
+			ref SDL_Surface surface,
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string file
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_SetClipRect(
+			ref SDL_Surface surface,
+			ref SDL_Rect rect
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetColorKey(
+			ref SDL_Surface surface,
+			int flag,
+			uint key
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetSurfaceAlphaMod(
+			ref SDL_Surface surface,
+			byte alpha
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetSurfaceBlendMode(
+			ref SDL_Surface surface,
+			SDL_BlendMode blendMode
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetSurfaceColorMod(
+			ref SDL_Surface surface,
+			byte r,
+			byte g,
+			byte b
+		);
+		
+		/* palette refers to an SDL_Palette* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetSurfacePalette(
+			ref SDL_Surface surface,
+			IntPtr palette
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetSurfaceRLE(
+			ref SDL_Surface surface,
+			int flag
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SoftStretch(
+			ref SDL_Surface src,
+			ref SDL_Rect srcrect,
+			ref SDL_Surface dst,
+			ref SDL_Rect dstrect
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_UnlockSurface(ref SDL_Surface surface);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_UpperBlit(
+			ref SDL_Surface src,
+			ref SDL_Rect srcrect,
+			ref SDL_Surface dst,
+			ref SDL_Rect dstrect
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_UpperBlitScaled(
+			ref SDL_Surface src,
+			ref SDL_Rect srcrect,
+			ref SDL_Surface dst,
+			ref SDL_Rect dstrect
+		);
 		
 		#endregion
 		
