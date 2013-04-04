@@ -1,5 +1,7 @@
 This is SDL2#, a C# wrapper for SDL2.
 
+Project Website: https://github.com/flibitijibibo/SDL2-CS
+
 License
 -------
 SDL2 and SDL2# are released under the zlib license. See LICENSE for details.
@@ -28,10 +30,6 @@ SDL2 library and its extensions.
 
 Roadmap
 -------
-- Implement the SDL2 libraries.
-	- For SDL2 itself, organize it according to this API reference page:
-		http://wiki.libsdl.org/moin.fcg/APIByCategory
-- Document the SDL2 methods.
-	- I have some parameter info, but having full SDL2 docs would be great.
-- Add OpenGL and OpenAL support.
-	- Just rip this off of OpenTK for now. Too much work, not enough time...
+To see the current roadmap for SDL2#, visit the GitHib issues page:
+
+https://github.com/flibitijibibo/SDL2-CS/issues
