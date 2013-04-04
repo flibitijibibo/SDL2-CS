@@ -27,5 +27,7 @@ Roadmap
 - Implement the SDL2 libraries.
 	- For SDL2 itself, organize it according to this API reference page:
 		http://wiki.libsdl.org/moin.fcg/APIByCategory
+- Document the SDL2 methods.
+	- I have some parameter info, but having full SDL2 docs would be great.
 - Add OpenGL and OpenAL support.
 	- Just rip this off of OpenTK for now. Too much work, not enough time...
