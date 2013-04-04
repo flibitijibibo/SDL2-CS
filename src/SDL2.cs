@@ -1567,10 +1567,113 @@ namespace SDL2
 			public IntPtr next; // SDL_PixelFormat*
 		}
 		
-		/* TODO: SDL_pixels.h:
-		 * http://wiki.libsdl.org/moin.fcg/CategoryPixels
-		 * http://hg.libsdl.org/SDL/file/default/include/SDL_pixels.h
-		 */
+		/* IntPtr refers to an SDL_PixelFormat* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_AllocFormat(uint pixel_format);
+		
+		/* IntPtr refers to an SDL_Palette* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_AllocPalette(int ncolors);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_CalculateGammaRamp(
+			float gamma,
+			ref ushort ramp
+		);
+		
+		/* format refers to an SDL_PixelFormat* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_FreeFormat(IntPtr format);
+		
+		/* palette refers to an SDL_Palette* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_FreePalette(IntPtr palette);
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetPixelFormatName")]
+		private static extern IntPtr INTERNAL_SDL_GetPixelFormatName(
+			uint format
+		);
+		public static string SDL_GetPixelFormatName(uint format)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetPixelFormatName(format)
+			);
+		}
+		
+		/* format refers to an SDL_PixelFormat* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GetRGB(
+			uint pixel,
+			IntPtr format,
+			ref byte r,
+			ref byte g,
+			ref byte b
+		);
+		
+		/* format refers to an SDL_PixelFormat* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GetRGBA(
+			uint pixel,
+			IntPtr format,
+			ref byte r,
+			ref byte g,
+			ref byte b,
+			ref byte a
+		);
+		
+		/* format refers to an SDL_PixelFormat* */
+		[DllImport(nativeLibName)]
+		public static extern uint SDL_MapRGB(
+			IntPtr format,
+			byte r,
+			byte g,
+			byte b
+		);
+		
+		/* format refers to an SDL_PixelFormat* */
+		[DllImport(nativeLibName)]
+		public static extern uint SDL_MapRGBA(
+			IntPtr format,
+			byte r,
+			byte g,
+			byte b,
+			byte a
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern uint SDL_MasksToPixelFormatEnum(
+			int bpp,
+			uint Rmask,
+			uint Gmask,
+			uint Bmask,
+			uint Amask
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_PixelFormatEnumToMasks(
+			uint format,
+			ref int bpp,
+			ref uint Rmask,
+			ref uint Gmask,
+			ref uint Bmask,
+			ref uint Amask
+		);
+		
+		/* palette refers to an SDL_Palette* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetPaletteColors(
+			IntPtr palette,
+			SDL_Color[] colors,
+			int firstcolor,
+			int ncolors
+		);
+		
+		/* format and palette refer to an SDL_PixelFormat* and SDL_Palette* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetPixelFormatPalette(
+			IntPtr format,
+			IntPtr palette
+		);
 		
 		#endregion
 		
