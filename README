@@ -20,7 +20,6 @@ The wrapper will include bindings for the following libraries:
 - SDL2_image
 - SDL2_mixer
 - SDL2_net
-- SDL2_rtf
 - SDL2_ttf
 
 Roadmap
