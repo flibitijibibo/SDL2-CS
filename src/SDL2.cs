@@ -1529,6 +1529,7 @@ namespace SDL2
 			(byte) 'Y', (byte) 'V', (byte) 'Y', (byte) 'U'
 		);
 		
+		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_Color
 		{
 			public byte r;
@@ -1537,6 +1538,7 @@ namespace SDL2
 			public byte a;
 		}
 		
+		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_Palette
 		{
 			public int ncolors;
@@ -1545,6 +1547,7 @@ namespace SDL2
 			public int refcount;
 		}
 		
+		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_PixelFormat
 		{
 			public uint format;
@@ -1748,7 +1751,18 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_Surface
 		{
-			// TODO...
+			uint flags;
+			IntPtr format; // SDL_PixelFormat*
+			int w;
+			int h;
+			int pitch;
+			IntPtr pixels; // void*
+			IntPtr userdata; // void*
+			int locked;
+			IntPtr lock_data; // void*
+			SDL_Rect clip_rect;
+			IntPtr map; // SDL_BlitMap*
+			int refcount;
 		}
 		
 		/* TODO: SDL_surface.h:
