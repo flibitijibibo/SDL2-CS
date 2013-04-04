@@ -1287,5 +1287,17 @@ namespace SDL2
 		);
 		
 		#endregion
+		
+		/* TODO: Input Events:
+		 * http://wiki.libsdl.org/moin.fcg/APIByCategory#Input_Events
+		 */
+		
+		/* TODO: Force Feedback:
+		 * http://wiki.libsdl.org/moin.fcg/APIByCategory#Force_Feedback
+		 */
+		
+		/* TODO: Audio:
+		 * http://wiki.libsdl.org/moin.fcg/APIByCategory#Audio
+		 */
 	}
 }

@@ -22,6 +22,10 @@ The wrapper will include bindings for the following libraries:
 - SDL2_net
 - SDL2_ttf
 
+Note that SDL2# will not provide every single SDL2 function. This is due to
+limitations in the C# language that would cause major conflicts with the native
+SDL2 library and its extensions.
+
 Roadmap
 -------
 - Implement the SDL2 libraries.
