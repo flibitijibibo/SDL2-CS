@@ -2217,7 +2217,7 @@ namespace SDL2
 			public byte repeat; /* non-zero if this is a repeat */
 			byte padding2;
 			byte padding3;
-			// TODO: SDL_Keysym struct.
+			public SDL_Keysym keysym;
 		}
 
 		//TODO: SDL_Text*Event (need to work out char[] in C#)
