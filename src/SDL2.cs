@@ -3079,7 +3079,7 @@ namespace SDL2
 
 		/* Key modifiers (bitfield) */
 		[Flags]
-		public enum SDL_Keymod
+		public enum SDL_Keymod : ushort
 		{
 			KMOD_NONE = 0x0000,
 			KMOD_LSHIFT = 0x0001,
@@ -3102,6 +3102,106 @@ namespace SDL2
 			KMOD_GUI = (KMOD_LGUI | KMOD_RGUI)
 		}
 
+		#endregion
+
+		#region SDL_keyboard.h
+		
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_Keysym
+		{
+			SDL_Scancode scancode;
+			SDL_Keycode sym;
+			SDL_Keymod mod; /* UInt16 */
+			UInt32 unicode; /* Deprecated */
+		}
+
+		/* Get the window which has kbd focus */
+		/* Return type is an SDL_Window pointer */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GetKeyboardFocus();
+
+		/* Get a snapshot of the keyboard state. */
+		/* Return value is a pointer to a UInt8 array */
+		/* Numkeys returns the size of the array if non-null */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GetKeyboardState(ref int numkeys);
+
+		/* Get the current key modifier state for the keyboard. */
+		[DllImport(nativeLibName)]
+		public static extern SDL_Keymod SDL_GetModState();
+
+		/* Set the current key modifier state */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_SetModState(SDL_Keymod modstate);
+
+		/* Get the key code corresponding to the given scancode
+		 * with the current keyboard layout.
+		 */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GetKeyFromScancode(SDL_Scancode scancode);
+
+		/* Get the scancode for the given keycode */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GetScancodeFromKey(SDL_Keycode key);
+		
+		/* Wrapper for SDL_GetScancodeName */
+		[DllImport(nativeLibName, EntryPoint="SDL_GetScancodeName")]
+		private static extern IntPtr INTERNAL_SDL_GetScancodeName(SDL_Scancode scancode);
+		/* Get a human-readable name for a scancode */
+		public static string SDL_GetScancodeName(SDL_Scancode scancode)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetScancodeName(scancode)
+			);
+		}
+
+		/* Get a scancode from a human-readable name */
+		[DllImport(nativeLibName)]
+		public static extern SDL_Scancode SDL_GetScancodeFromName(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string name
+		);
+		
+		/* Wrapper for SDL_GetKeyName */
+		[DllImport(nativeLibName, EntryPoint="SDL_GetKeyName")]
+		private static extern IntPtr INTERNAL_SDL_GetKeyName(SDL_Keycode key);
+		/* Get a human-readable name for a key */
+		public static string SDL_GetKeyName(SDL_Keycode key)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetKeyName(key)
+			);
+		}
+
+		/* Get a key code from a human-readable name */
+		[DllImport(nativeLibName)]
+		public static extern SDL_Keycode SDL_GetKeyFromName(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string name
+		);
+		
+		/* Start accepting Unicode text input events, show keyboard */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_StartTextInput();
+
+		/* Check if unicode input events are enabled */
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_IsTextInputActive();
+
+		/* Stop receiving any text input events, hide onscreen kbd */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_StopTextInput();
+
+		/* Set the rectangle used for text input, hint for IME */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_SetTextInputRect(ref SDL_Rect rect);
+
+		/* Does the platform support an on-screen keyboard? */
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_HasScreenKeyboardSupport();
+
+		/* Is the on-screen keyboard shown for a given window? */
+		/* window is an SDL_Window pointer */
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_IsScreenKeyboardShown(IntPtr window);
 		#endregion
 		/* TODO: Force Feedback:
 		 * http://wiki.libsdl.org/moin.fcg/APIByCategory#Force_Feedback
