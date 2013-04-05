@@ -359,6 +359,7 @@ namespace SDL2
 		#region SDL_video.h
 		
 		/* Actually, this is from SDL_blendmode.h */
+		[Flags]
 		public enum SDL_BlendMode
 		{
 			SDL_BLENDMODE_NONE =	0x00000000,
@@ -413,6 +414,7 @@ namespace SDL2
 			SDL_WINDOWEVENT_CLOSE,
 		}
 		
+		[Flags]
 		public enum SDL_WindowFlags
 		{
 			SDL_WINDOW_FULLSCREEN =		0x00000001,
@@ -829,6 +831,7 @@ namespace SDL2
 		
 		#region SDL_render.h
 		
+		[Flags]
 		public enum SDL_RendererFlags
 		{
 			SDL_RENDERER_SOFTWARE =		0x00000001,
@@ -837,6 +840,7 @@ namespace SDL2
 			SDL_RENDERER_TARGETTEXTURE =	0x00000008
 		}
 		
+		[Flags]
 		public enum SDL_RendererFlip
 		{
 			SDL_FLIP_NONE =		0x00000000,
@@ -851,6 +855,7 @@ namespace SDL2
 			SDL_TEXTUREACCESS_TARGET
 		}
 		
+		[Flags]
 		public enum SDL_TextureModulate
 		{
 			SDL_TEXTUREMODULATE_NONE =		0x00000000,
