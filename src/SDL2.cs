@@ -3638,9 +3638,129 @@ namespace SDL2
 
 		#endregion
 
+		#region SDL_audio.h
+
 		/* TODO: Audio:
 		 * http://wiki.libsdl.org/moin.fcg/APIByCategory#Audio
 		 */
+		
+		/* FIXME: Boy, I really wish I could typedef ushort SDL_AudioFormat! */
+		
+		public const ushort SDL_AUDIO_MASK_BITSIZE =	0xFF;
+		public const ushort SDL_AUDIO_MASK_DATATYPE =	(1 << 8);
+		public const ushort SDL_AUDIO_MASK_ENDIAN =	(1 << 12);
+		public const ushort SDL_AUDIO_MASK_SIGNED =	(1 << 15);
+		
+		public static ushort SDL_AUDIO_BITSIZE(ushort x)
+		{
+			return (ushort) (x & SDL_AUDIO_MASK_BITSIZE);
+		}
+		
+		public static bool SDL_AUDIO_ISFLOAT(ushort x)
+		{
+			return (x & SDL_AUDIO_MASK_DATATYPE) != 0;
+		}
+		
+		public static bool SDL_AUDIO_ISBIGENDIAN(ushort x)
+		{
+			return (x & SDL_AUDIO_MASK_ENDIAN) != 0;
+		}
+		
+		public static bool SDL_AUDIO_ISSIGNED(ushort x)
+		{
+			return (x & SDL_AUDIO_MASK_SIGNED) != 0;
+		}
+		
+		public static bool SDL_AUDIO_ISINT(ushort x)
+		{
+			return (x & SDL_AUDIO_MASK_DATATYPE) == 0;
+		}
+		
+		public static bool SDL_AUDIO_ISLITTLEENDIAN(ushort x)
+		{
+			return (x & SDL_AUDIO_MASK_ENDIAN) == 0;
+		}
+		
+		public static bool SDL_AUDIO_ISUNSIGNED(ushort x)
+		{
+			return (x & SDL_AUDIO_MASK_SIGNED) == 0;
+		}
+		
+		public const ushort AUDIO_U8 =		0x0008;
+		public const ushort AUDIO_S8 =		0x8008;
+		public const ushort AUDIO_U16LSB =	0x0010;
+		public const ushort AUDIO_S16LSB =	0x8010;
+		public const ushort AUDIO_U16MSB =	0x1010;
+		public const ushort AUDIO_S16MSB =	0x9010;
+		public const ushort AUDIO_U16 =		AUDIO_U16LSB;
+		public const ushort AUDIO_S16 =		AUDIO_S16LSB;
+		public const ushort AUDIO_S32LSB =	0x8020;
+		public const ushort AUDIO_S32MSB =	0x9020;
+		public const ushort AUDIO_S32 =		AUDIO_S32LSB;
+		public const ushort AUDIO_F32LSB =	0x8120;
+		public const ushort AUDIO_F32MSB =	0x9120;
+		public const ushort AUDIO_F32 =		AUDIO_F32LSB;
+		
+		// FIXME: ASSUMING LITTLE ENDIAN!!!
+		public const ushort AUDIO_U16SYS =	AUDIO_U16LSB;
+		public const ushort AUDIO_S16SYS =	AUDIO_S16LSB;
+		public const ushort AUDIO_S32SYS =	AUDIO_S32LSB;
+		public const ushort AUDIO_F32SYS =	AUDIO_F32LSB;
+		/* Big Endian
+		public const ushort AUDIO_U16SYS =	AUDIO_U16MSB;
+		public const ushort AUDIO_S16SYS =	AUDIO_S16MSB;
+		public const ushort AUDIO_S32SYS =	AUDIO_S32MSB;
+		public const ushort AUDIO_F32SYS =	AUDIO_F32MSB;
+		*/
+		
+		public const uint SDL_AUDIO_ALLOW_FREQUENCY_CHANGE =	0x00000001;
+		public const uint SDL_AUDIO_ALLOW_FORMAT_CHANGE =	0x00000001;
+		public const uint SDL_AUDIO_ALLOW_CHANNELS_CHANGE =	0x00000001;
+		public const uint SDL_AUDIO_ALLOW_ANY_CHANGE = (
+			SDL_AUDIO_ALLOW_FREQUENCY_CHANGE |
+			SDL_AUDIO_ALLOW_FORMAT_CHANGE |
+			SDL_AUDIO_ALLOW_CHANNELS_CHANGE
+		);
+		
+		public enum SDL_AudioStatus
+		{
+			SDL_AUDIO_STOPPED,
+			SDL_AUDIO_PLAYING,
+			SDL_AUDIO_PAUSED
+		}
+		
+		[StructLayoutAttribute(LayoutKind.Sequential)]
+		public struct SDL_AudioCVT
+		{
+			public int needed;
+			public ushort src_format; // SDL_AudioFormat
+			public ushort dst_format; // SDL_AudioFormat
+			public double rate_incr;
+			public IntPtr buf; // Uint8*
+			public int len;
+			public int len_cvt;
+			public int len_mult;
+			public double len_ratio;
+			// FIXME: Uhhhcrap, how do we deal with fn ptrs in C#...
+			public fixed IntPtr filters[10]; // SDL_AudioFilter???
+			public int filter_index;
+		}
+		
+		[StructLayoutAttribute(LayoutKind.Sequential)]
+		public struct SDL_AudioSpec
+		{
+			public int freq;
+			public ushort format; // SDL_AudioFormat
+			public byte channels;
+			public byte silence;
+			public ushort samples;
+			public uint size;
+			// FIXME: Uhhhcrap, how do we deal with fn ptrs in C#...
+			public IntPtr callback; // SDL_AudioCallback???
+			public IntPtr userdata; // void*
+		}
+		
+		#endregion
 	}
 }
 
