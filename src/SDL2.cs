@@ -3729,22 +3729,13 @@ namespace SDL2
 			SDL_AUDIO_PAUSED
 		}
 		
-		[StructLayoutAttribute(LayoutKind.Sequential)]
-		public unsafe struct SDL_AudioCVT
-		{
-			public int needed;
-			public ushort src_format; // SDL_AudioFormat
-			public ushort dst_format; // SDL_AudioFormat
-			public double rate_incr;
-			public IntPtr buf; // Uint8*
-			public int len;
-			public int len_cvt;
-			public int len_mult;
-			public double len_ratio;
-			// FIXME: Uhhhcrap, how do we deal with fn ptrs in C#...
-			public fixed uint/*Ptr*/ filters[10]; // SDL_AudioFilter???
-			public int filter_index;
-		}
+		// FIXME: Will this work?
+		/* userdata refers to a void*, stream to a Uint8 */
+		public delegate void SDL_AudioCallback(
+			IntPtr userdata,
+			IntPtr stream,
+			int len
+		);
 		
 		[StructLayoutAttribute(LayoutKind.Sequential)]
 		public struct SDL_AudioSpec
@@ -3755,8 +3746,7 @@ namespace SDL2
 			public byte silence;
 			public ushort samples;
 			public uint size;
-			// FIXME: Uhhhcrap, how do we deal with fn ptrs in C#...
-			public IntPtr callback; // SDL_AudioCallback???
+			public SDL_AudioCallback callback;
 			public IntPtr userdata; // void*
 		}
 		
@@ -3773,27 +3763,12 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_AudioQuit();
 		
-		/* src_format and dst_format refer to an SDL_AudioFormat */
-		[DllImport(nativeLibName)]
-		public static extern int SDL_BuildAudioCVT(
-			ref SDL_AudioCVT cvt,
-			ushort src_format,
-			byte src_channels,
-			int src_rate,
-			ushort dst_format,
-			byte dst_channels,
-			int dst_rate
-		);
-		
 		[DllImport(nativeLibName)]
 		public static extern void SDL_CloseAudio();
 		
 		/* dev refers to an SDL_AudioDeviceID */
 		[DllImport(nativeLibName)]
 		public static extern void SDL_CloseAudioDevice(uint dev);
-		
-		[DllImport(nativeLibName)]
-		public static extern void SDL_ConvertAudio(ref SDL_AudioCVT cvt);
 		
 		/* audio_buf refers to a malloc()'d buffer from SDL_LoadWAV */
 		[DllImport(nativeLibName)]
