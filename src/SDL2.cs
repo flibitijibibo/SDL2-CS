@@ -3521,6 +3521,123 @@ namespace SDL2
 		
 		#endregion
 		
+		#region SDL_mouse.c
+
+		/* Note: SDL_Cursor is a typedef normally. We'll treat it as
+		 * an IntPtr, because C# doesn't do typedefs. Yay!
+		 */
+
+		/* System cursor types */
+		public enum SDL_SystemCursor
+		{
+			SDL_SYSTEM_CURSOR_ARROW,     // Arrow
+			SDL_SYSTEM_CURSOR_IBEAM,     // I-beam
+			SDL_SYSTEM_CURSOR_WAIT,      // Wait
+			SDL_SYSTEM_CURSOR_CROSSHAIR, // Crosshair
+			SDL_SYSTEM_CURSOR_WAITARROW, // Small wait cursor (or Wait if not available)
+			SDL_SYSTEM_CURSOR_SIZENWSE,  // Double arrow pointing northwest and southeast
+			SDL_SYSTEM_CURSOR_SIZENESW,  // Double arrow pointing northeast and southwest
+			SDL_SYSTEM_CURSOR_SIZEWE,    // Double arrow pointing west and east
+			SDL_SYSTEM_CURSOR_SIZENS,    // Double arrow pointing north and south
+			SDL_SYSTEM_CURSOR_SIZEALL,   // Four pointed arrow pointing north, south, east, and west
+			SDL_SYSTEM_CURSOR_NO,        // Slashed circle or crossbones
+			SDL_SYSTEM_CURSOR_HAND,      // Hand
+			SDL_NUM_SYSTEM_CURSORS
+		}
+
+		/* Get the window which currently has mouse focus */
+		/* Return value is an SDL_Window pointer */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GetMouseFocus();
+
+		/* Get the current state of the mouse */
+		/* NOTE: Not sure if x,y should be 'ref', as SDL accepts null */
+		[DllImport(nativeLibName)]
+		public static extern UInt32 SDL_GetMouseState(out int x, out int y);
+
+		/* Get the mouse state with relative coords*/
+		[DllImport(nativeLibName)]
+		public static extern UInt32 SDL_GetRelativeMouseState(out int x, out int y);
+
+		/* Set the mouse cursor's position (within a window) */
+		/* window is an SDL_Window pointer */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_WarpMouseInWindow(IntPtr window, int x, int y);
+
+		/* Enable/Disable relative mouse mode (grabs mouse, rel coords) */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_SetRelativeMouseMode(SDL_bool enabled);
+
+		/* Query if the relative mouse mode is enabled */
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_GetRelativeMouseMode();
+
+		/* Create a cursor from bitmap data (amd mask) in MSB format */
+		/* data and mask are byte arrays, and w must be a multiple of 8 */
+		/* return value is an SDL_Cursor pointer */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_CreateCursor(
+			IntPtr data,
+			IntPtr mask,
+			int w,
+			int h,
+			int hot_x,
+			int hot_y
+		);
+
+		/* Create a cursor from an SDL_Surface */
+		/* surface is an SDL_Surface pointer */
+		/* return value is an SDL_Cursor pointer */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_CreateColorCursor(
+			IntPtr surface,
+			int hot_x,
+			int hot_y
+		);
+
+		/* Create a cursor from a system cursor id */
+		/* return value is an SDL_Cursor pointer */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_CreateSystemCursor(SDL_SystemCursor id);
+
+		/* Set the active cursor */
+		/* cursor is an SDL_Cursor pointer */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_SetCursor(IntPtr cursor);
+
+		/* Return the active cursor */
+		/* return value is an SDL_Cursor pointer */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GetCursor();
+
+		/* Frees a cursor created with one of the CreateCursor functions */
+		/* cursor in an SDL_Cursor pointer */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_FreeCursor(IntPtr cursor);
+
+		/* Toggle whether or not the cursor is shown */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_ShowCursor(int toggle);
+
+		public static UInt32 SDL_BUTTON(UInt32 X)
+		{
+			// If only there were a better way of doing this in C#
+			return (UInt32)(1 << (((int)X)-1));
+		}
+
+		public const UInt32 SDL_BUTTON_LEFT = 1;
+		public const UInt32 SDL_BUTTON_MIDDLE = 2;
+		public const uint SDL_BUTTON_RIGHT = 3;
+		public const uint SDL_BUTTON_X1 = 4;
+		public const uint SDL_BUTTON_X2 = 5;
+		public const UInt32 SDL_BUTTON_LMASK = (1 << (0));
+		public const UInt32 SDL_BUTTON_MMASK = (1 << (1));
+		public const UInt32 SDL_BUTTON_RMASK = (1 << (2));
+		public const UInt32 SDL_BUTTON_X1MASK = (1 << (3));
+		public const UInt32 SDL_BUTTON_X2MASK = (1 << (4));
+
+		#endregion
+
 		/* TODO: Audio:
 		 * http://wiki.libsdl.org/moin.fcg/APIByCategory#Audio
 		 */
