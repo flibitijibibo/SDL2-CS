@@ -3639,10 +3639,6 @@ namespace SDL2
 		#endregion
 
 		#region SDL_audio.h
-
-		/* TODO: Audio:
-		 * http://wiki.libsdl.org/moin.fcg/APIByCategory#Audio
-		 */
 		
 		/* FIXME: Boy, I really wish I could typedef ushort SDL_AudioFormat! */
 		/* FIXME: Boy, I really wish I could typedef uint SDL_AudioDeviceID! */
