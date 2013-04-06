@@ -3731,7 +3731,7 @@ namespace SDL2
 		}
 		
 		[StructLayoutAttribute(LayoutKind.Sequential)]
-		public struct SDL_AudioCVT
+		public unsafe struct SDL_AudioCVT
 		{
 			public int needed;
 			public ushort src_format; // SDL_AudioFormat
