@@ -3723,6 +3723,8 @@ namespace SDL2
 			SDL_AUDIO_ALLOW_CHANNELS_CHANGE
 		);
 		
+		public const int SDL_MIX_MAXVOLUME = 128;
+		
 		public enum SDL_AudioStatus
 		{
 			SDL_AUDIO_STOPPED,
@@ -3770,6 +3772,170 @@ namespace SDL2
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string driver_name
 		);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_AudioQuit();
+		
+		/* src_format and dst_format refer to an SDL_AudioFormat */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_BuildAudioCVT(
+			ref SDL_AudioCVT cvt,
+			ushort src_format,
+			byte src_channels,
+			int src_rate,
+			ushort dst_format,
+			byte dst_channels,
+			int dst_rate
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_CloseAudio();
+		
+		/* dev refers to an SDL_AudioDeviceID */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_CloseAudioDevice(uint dev);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_ConvertAudio(ref SDL_AudioCVT cvt);
+		
+		/* audio_buf refers to a malloc()'d buffer from SDL_LoadWAV */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_FreeWav(IntPtr audio_buf);
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetAudioDeviceName")]
+		private static extern IntPtr INTERNAL_SDL_GetAudioDeviceName(
+			int index,
+			int iscapture
+		);
+		public static string SDL_GetAudioDeviceName(
+			int index,
+			int iscapture
+		) {
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetAudioDeviceName(index, iscapture)
+			);
+		}
+		
+		/* dev refers to an SDL_AudioDeviceID */
+		[DllImport(nativeLibName)]
+		public static extern SDL_AudioStatus SDL_GetAudioDeviceStatus(
+			uint dev
+		);
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetAudioDriver")]
+		private static extern IntPtr INTERNAL_SDL_GetAudioDriver(int index);
+		public static string SDL_GetAudioDriver(int index)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetAudioDriver(index)
+			);
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_AudioStatus SDL_GetAudioStatus();
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentAudioDriver")]
+		private static extern IntPtr INTERNAL_SDL_GetCurrentAudioDriver();
+		public static string SDL_GetCurrentAudioDriver()
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GetCurrentAudioDriver()
+			);
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetNumAudioDevices(int iscapture);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetNumAudioDrivers();
+		
+		/* audio_buf will refer to a malloc()'d byte buffer */
+		[DllImport(nativeLibName, EntryPoint = "SDL_LoadWAV")]
+		private static extern IntPtr INTERNAL_SDL_LoadWAV(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string filename,
+			ref SDL_AudioSpec spec,
+			ref IntPtr audio_buf,
+			ref uint audio_len
+		);
+		public static SDL_AudioSpec SDL_LoadWAV(
+			string filename,
+			ref SDL_AudioSpec spec,
+			ref IntPtr audio_buf,
+			ref uint audio_len
+		) {
+			SDL_AudioSpec result;
+			IntPtr result_ptr = INTERNAL_SDL_LoadWAV(
+				filename,
+				ref spec,
+				ref audio_buf,
+				ref audio_len
+			);
+			result = (SDL_AudioSpec) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_LockAudio();
+		
+		/* dev refers to an SDL_AudioDeviceID */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_LockAudioDevice(uint dev);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_MixAudio(
+			byte[] dst,
+			byte[] src,
+			uint len,
+			int volume
+		);
+		
+		/* format refers to an SDL_AudioFormat */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_MixAudioFormat(
+			byte[] dst,
+			byte[] src,
+			ushort format,
+			uint len,
+			int volume
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_OpenAudio(
+			ref SDL_AudioSpec desired,
+			ref SDL_AudioSpec obtained
+		);
+		
+		/* uint refers to an SDL_AudioDeviceID */
+		[DllImport(nativeLibName)]
+		public static extern uint SDL_OpenAudioDevice(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string device,
+			int iscapture,
+			ref SDL_AudioSpec desired,
+			ref SDL_AudioSpec obtained,
+			int allowed_changes
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_PauseAudio(int pause_on);
+		
+		/* dev refers to an SDL_AudioDeviceID */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_PauseAudioDevice(
+			uint dev,
+			int pause_on
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_UnlockAudio();
+		
+		/* dev refers to an SDL_AudioDeviceID */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_UnlockAudioDevice(uint dev);
 		
 		#endregion
 	}
