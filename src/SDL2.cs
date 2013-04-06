@@ -3645,6 +3645,7 @@ namespace SDL2
 		 */
 		
 		/* FIXME: Boy, I really wish I could typedef ushort SDL_AudioFormat! */
+		/* FIXME: Boy, I really wish I could typedef uint SDL_AudioDeviceID! */
 		
 		public const ushort SDL_AUDIO_MASK_BITSIZE =	0xFF;
 		public const ushort SDL_AUDIO_MASK_DATATYPE =	(1 << 8);
@@ -3742,7 +3743,7 @@ namespace SDL2
 			public int len_mult;
 			public double len_ratio;
 			// FIXME: Uhhhcrap, how do we deal with fn ptrs in C#...
-			public fixed IntPtr filters[10]; // SDL_AudioFilter???
+			public fixed uint/*Ptr*/ filters[10]; // SDL_AudioFilter???
 			public int filter_index;
 		}
 		
@@ -3759,6 +3760,16 @@ namespace SDL2
 			public IntPtr callback; // SDL_AudioCallback???
 			public IntPtr userdata; // void*
 		}
+		
+		/* dev refers to an SDL_AudioDeviceID */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_AudioDeviceConnected(uint dev);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_AudioInit(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string driver_name
+		);
 		
 		#endregion
 	}
