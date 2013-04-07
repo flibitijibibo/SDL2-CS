@@ -452,7 +452,7 @@ namespace SDL2
 			int y,
 			int w,
 			int h,
-			uint flags
+			SDL_WindowFlags flags
 		);
 		
 		/* window and renderer refer to an SDL_Window* and SDL_Renderer* */
@@ -3270,11 +3270,10 @@ namespace SDL2
 		);
 
 		/* Create a cursor from an SDL_Surface */
-		/* surface is an SDL_Surface pointer */
 		/* return value is an SDL_Cursor pointer */
 		[DllImport(nativeLibName)]
 		public static extern IntPtr SDL_CreateColorCursor(
-			IntPtr surface,
+			SDL_Surface surface,
 			int hot_x,
 			int hot_y
 		);
