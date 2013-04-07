@@ -3109,10 +3109,10 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_Keysym
 		{
-			SDL_Scancode scancode;
-			SDL_Keycode sym;
-			SDL_Keymod mod; /* UInt16 */
-			UInt32 unicode; /* Deprecated */
+			public SDL_Scancode scancode;
+			public SDL_Keycode sym;
+			public SDL_Keymod mod; /* UInt16 */
+			public UInt32 unicode; /* Deprecated */
 		}
 
 		/* Get the window which has kbd focus */
@@ -3418,8 +3418,8 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_HapticDirection
 		{
-			byte type;
-			int dir;
+			public byte type;
+			public int dir;
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]
