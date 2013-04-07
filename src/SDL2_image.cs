@@ -42,6 +42,78 @@ namespace SDL2
 		
 		#endregion
 		
-		// TODO: SDL2_image API
+		#region SDL_image.h
+		
+		[Flags]
+		public enum IMG_InitFlags
+		{
+			IMG_INIT_JPG =	0x00000001,
+			IMG_INIT_PNG =	0x00000002,
+			IMG_INIT_TIF =	0x00000004,
+			IMG_INIT_WEBP =	0x00000008
+		}
+		
+		[DllImport(nativeLibName, EntryPoint = "IMG_LinkedVersion")]
+		private static extern IntPtr INTERNAL_IMG_LinkedVersion();
+		public static SDL2.SDL_version IMG_LinkedVersion()
+		{
+			SDL2.SDL_version result;
+			IntPtr result_ptr = INTERNAL_IMG_LinkedVersion();
+			result = (SDL2.SDL_version) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern void IMG_Init(IMG_InitFlags flags);
+		
+		[DllImport(nativeLibName)]
+		public static extern void IMG_Quit();
+		
+		[DllImport(nativeLibName, EntryPoint = "IMG_Load")]
+		private static extern IntPtr INTERNAL_IMG_Load(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string file
+		);
+		public static SDL2.SDL_Surface IMG_Load(string file)
+		{
+			SDL2.SDL_Surface result;
+			IntPtr result_ptr = INTERNAL_IMG_Load(file);
+			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr IMG_LoadTexture(
+			IntPtr renderer,
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string file
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int IMG_InvertAlpha(int on);
+		
+		[DllImport(nativeLibName, EntryPoint = "IMG_ReadXPMFromArray")]
+		private static extern IntPtr INTERNAL_IMG_ReadXPMFromArray(
+			ref char[] xpm
+		);
+		public static SDL2.SDL_Surface IMG_ReadXPMFromArray(ref char[] xpm)
+		{
+			SDL2.SDL_Surface result;
+			IntPtr result_ptr = INTERNAL_IMG_ReadXPMFromArray(ref xpm);
+			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		#endregion
 	}
 }
