@@ -42,6 +42,205 @@ namespace SDL2
 		
 		#endregion
 		
-		// TODO: SDL2_ttf API
+		#region SDL_ttf.h
+		
+		public const int UNICODE_BOM_NATIVE =	0xFEFF;
+		public const int UNICODE_BOM_SWAPPED =	0xFFFE;
+		
+		public const int TTF_STYLE_NORMAL =			0x00;
+		public const int TTF_STYLE_BOLD =			0x01;
+		public const int TTF_STYLE_ITALIC =			0x02;
+		public const int TTF_STYLE_UNDERLINE =		0x04;
+		public const int TTF_STYLE_STRIKETHROUGH =	0x08;
+		
+		public const int TTF_HINTING_NORMAL =	0;
+		public const int TTF_HINTING_LIGHT =	1;
+		public const int TTF_HINTING_MONO =		2;
+		public const int TTF_HINTING_NONE =		3;
+		
+		[DllImport(nativeLibName, EntryPoint = "TTF_LinkedVersion")]
+		private static extern IntPtr INTERNAL_TTF_LinkedVersion();
+		public static SDL2.SDL_version TTF_LinkedVersion()
+		{
+			SDL2.SDL_version result;
+			IntPtr result_ptr = INTERNAL_TTF_LinkedVersion();
+			result = (SDL2.SDL_version) Marshal.PtrToStructure(
+				result_ptr,
+				result.GetType()
+			);
+			return result;
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern void TTF_ByteSwappedUNICODE(int swapped);
+		
+		[DllImport(nativeLibName)]
+		public static extern int TTF_Init();
+		
+		/* IntPtr refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_OpenFont(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string file,
+			int ptsize
+		);
+		
+		/* IntPtr refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_OpenFontIndex(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string file,
+			int ptsize,
+			long index
+		);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_GetFontStyle(IntPtr font);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern void TTF_SetFontStyle(IntPtr font, int style);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_GetFontOutline(IntPtr font);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern void TTF_SetFontOutline(IntPtr font, int outline);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_GetFontHinting(IntPtr font);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern void TTF_SetFontHinting(IntPtr font, int hinting);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_FontHeight(IntPtr font);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_FontAscent(IntPtr font);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_FontDescent(IntPtr font);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_FontLineSkip(IntPtr font);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_GetFontKerning(IntPtr font);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern void TTF_SetFontKerning(IntPtr font, int allowed);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern long TTF_FontFaces(IntPtr font);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_FontFaceIsFixedWidth(IntPtr font);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName, EntryPoint = "TTF_FontFaceFamilyName")]
+		private static extern IntPtr INTERNAL_TTF_FontFaceFamilyName(
+			IntPtr font
+		);
+		public static string TTF_FontFaceFamily(IntPtr font)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_TTF_FontFaceFamilyName(font)
+			);
+		}
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName, EntryPoint = "TTF_FontFaceStyleName")]
+		private static extern IntPtr INTERNAL_TTF_FontFaceStyleName(
+			IntPtr font
+		);
+		public static string TTF_FontFaceStyleName(IntPtr font)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_TTF_FontFaceStyleName(font)
+			);
+		}
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_GlyphIsProvided(IntPtr font, ushort ch);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_GlyphMetrics(
+			IntPtr font,
+			ushort ch,
+			ref int minx,
+			ref int maxx,
+			ref int miny,
+			ref int maxy,
+			ref int advance
+		);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_SizeText(
+			IntPtr font,
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string text,
+			ref int w,
+			ref int h
+		);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_SizeUTF8(
+			IntPtr font,
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string text,
+			ref int w,
+			ref int h
+		);
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int TTF_SizeUNICODE(
+			IntPtr font,
+			ushort[] text,
+			ref int w,
+			ref int h
+		);
+		
+		/* TODO: A crapload of SDL_Surface generators.
+		 * http://hg.libsdl.org/SDL_ttf/file/default/SDL_ttf.h
+		 */
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern void TTF_CloseFont(IntPtr font);
+		
+		[DllImport(nativeLibName)]
+		public static extern void TTF_Quit();
+		
+		[DllImport(nativeLibName)]
+		public static extern int TTF_WasInit();
+		
+		/* font refers to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GetFontKerningSize(
+			IntPtr font,
+			int prev_index,
+			int index
+		);
+		
+		#endregion
 	}
 }

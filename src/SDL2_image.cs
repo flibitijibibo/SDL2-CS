@@ -67,7 +67,7 @@ namespace SDL2
 		}
 		
 		[DllImport(nativeLibName)]
-		public static extern void IMG_Init(IMG_InitFlags flags);
+		public static extern int IMG_Init(IMG_InitFlags flags);
 		
 		[DllImport(nativeLibName)]
 		public static extern void IMG_Quit();
