@@ -452,7 +452,7 @@ namespace SDL2
 			int y,
 			int w,
 			int h,
-			uint flags
+			SDL_WindowFlags flags
 		);
 		
 		/* window and renderer refer to an SDL_Window* and SDL_Renderer* */
@@ -1964,16 +1964,25 @@ namespace SDL2
 			ref byte g,
 			ref byte b
 		);
-		
-		[DllImport(nativeLibName, EntryPoint = "SDL_LoadBMP")]
-		private static extern IntPtr INTERNAL_SDL_LoadBMP(
+
+		/* These are for SDL_LoadBMP, which is a macro in the SDL headers */
+		[DllImport(nativeLibName, EntryPoint = "SDL_LoadBMP_RW")]
+		private static extern IntPtr INTERNAL_SDL_LoadBMP_RW(
+			IntPtr src,
+			int freesrc
+		);
+		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile")]
+		private static extern IntPtr INTERNAL_SDL_RWFromFile(
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
-				string file
+				string file,
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string mode
 		);
 		public static SDL_Surface SDL_LoadBMP(string file)
 		{
 			SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_SDL_LoadBMP(file);
+			IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "rb");
+			IntPtr result_ptr = INTERNAL_SDL_LoadBMP_RW(rwops, 1);
 			result = (SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
@@ -3270,11 +3279,10 @@ namespace SDL2
 		);
 
 		/* Create a cursor from an SDL_Surface */
-		/* surface is an SDL_Surface pointer */
 		/* return value is an SDL_Cursor pointer */
 		[DllImport(nativeLibName)]
 		public static extern IntPtr SDL_CreateColorCursor(
-			IntPtr surface,
+			ref SDL_Surface surface,
 			int hot_x,
 			int hot_y
 		);
