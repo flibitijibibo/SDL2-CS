@@ -33,7 +33,7 @@ using System.Runtime.InteropServices;
 
 namespace SDL2
 {
-	public static class SDL2_image
+	public static class SDL_image
 	{
 		#region SDL2# Variables
 		
@@ -55,11 +55,11 @@ namespace SDL2
 		
 		[DllImport(nativeLibName, EntryPoint = "IMG_LinkedVersion")]
 		private static extern IntPtr INTERNAL_IMG_LinkedVersion();
-		public static SDL2.SDL_version IMG_LinkedVersion()
+		public static SDL.SDL_version IMG_LinkedVersion()
 		{
-			SDL2.SDL_version result;
+			SDL.SDL_version result;
 			IntPtr result_ptr = INTERNAL_IMG_LinkedVersion();
-			result = (SDL2.SDL_version) Marshal.PtrToStructure(
+			result = (SDL.SDL_version) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -77,11 +77,11 @@ namespace SDL2
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string file
 		);
-		public static SDL2.SDL_Surface IMG_Load(string file)
+		public static SDL.SDL_Surface IMG_Load(string file)
 		{
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_IMG_Load(file);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -103,11 +103,11 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_IMG_ReadXPMFromArray(
 			ref char[] xpm
 		);
-		public static SDL2.SDL_Surface IMG_ReadXPMFromArray(ref char[] xpm)
+		public static SDL.SDL_Surface IMG_ReadXPMFromArray(ref char[] xpm)
 		{
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_IMG_ReadXPMFromArray(ref xpm);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);

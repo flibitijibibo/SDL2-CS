@@ -33,7 +33,7 @@ using System.Runtime.InteropServices;
 
 namespace SDL2
 {
-	public static class SDL2_mixer
+	public static class SDL_mixer
 	{
 		#region SDL2# Variables
 		
@@ -48,8 +48,8 @@ namespace SDL2
 		public const int MIX_CHANNELS = 8;
 		
 		public const int MIX_DEFAULT_FREQUENCY = 22050;
-		// FIXME: ASSUMING LITTLE ENDIAN!!! Big endian: SDL2.AUDIO_S16MSB
-		public const ushort MIX_DEFAULT_FORMAT = SDL2.AUDIO_S16LSB;
+		// FIXME: ASSUMING LITTLE ENDIAN!!! Big endian: SDL.AUDIO_S16MSB
+		public const ushort MIX_DEFAULT_FORMAT = SDL.AUDIO_S16LSB;
 		public const int MIX_DEFAULT_CHANNELS = 2;
 		public const byte MIX_MAX_VOLUME = 128;
 		
@@ -122,11 +122,11 @@ namespace SDL2
 		
 		[DllImport(nativeLibName, EntryPoint = "MIX_Linked_Version")]
 		private static extern IntPtr INTERNAL_MIX_Linked_Version();
-		public static SDL2.SDL_version MIX_Linked_Version()
+		public static SDL.SDL_version MIX_Linked_Version()
 		{
-			SDL2.SDL_version result;
+			SDL.SDL_version result;
 			IntPtr result_ptr = INTERNAL_MIX_Linked_Version();
-			result = (SDL2.SDL_version) Marshal.PtrToStructure(
+			result = (SDL.SDL_version) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -168,7 +168,7 @@ namespace SDL2
 		public static Mix_Chunk Mix_LoadWAV(string file)
 		{
 			Mix_Chunk result;
-			IntPtr rwops = SDL2.INTERNAL_SDL_RWFromFile(file, "rb");
+			IntPtr rwops = SDL.INTERNAL_SDL_RWFromFile(file, "rb");
 			IntPtr result_ptr = INTERNAL_Mix_LoadWAV_RW(rwops, 1);
 			result = (Mix_Chunk) Marshal.PtrToStructure(
 				result_ptr,

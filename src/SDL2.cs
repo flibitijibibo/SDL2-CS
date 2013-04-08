@@ -36,7 +36,7 @@ using System.Runtime.InteropServices;
 
 namespace SDL2
 {
-	public static class SDL2
+	public static class SDL
 	{
 		#region SDL2# Variables
 		
@@ -449,6 +449,31 @@ namespace SDL2
 			SDL_WINDOW_FULLSCREEN_DESKTOP =
 				(SDL_WINDOW_FULLSCREEN | 0x00001000),
 			SDL_WINDOW_FOREIGN =		0x00000800,
+		}
+		
+		public const int SDL_WINDOWPOS_UNDEFINED_MASK =	0x1FFF0000;
+		public const int SDL_WINDOWPOS_CENTERED_MASK =	0x2FFF0000;
+		public const int SDL_WINDOWPOS_UNDEFINED =		0x1FFF0000;
+		public const int SDL_WINDOWPOS_CENTERED =		0x2FFF0000;
+		
+		public static int SDL_WINDOWPOS_UNDEFINED_DISPLAY(int X)
+		{
+			return (SDL_WINDOWPOS_UNDEFINED_MASK | X);
+		}
+		
+		public static bool SDL_WINDOWPOS_ISUNDEFINED(int X)
+		{
+			return (X & 0xFFFF0000) == SDL_WINDOWPOS_UNDEFINED_MASK;
+		}
+		
+		public static int SDL_WINDOWPOS_CENTERED_DISPLAY(int X)
+		{
+			return (SDL_WINDOWPOS_CENTERED_MASK | X);
+		}
+		
+		public static bool SDL_WINDOWPOS_ISCENTERED(int X)
+		{
+			return (X & 0xFFFF0000) == SDL_WINDOWPOS_CENTERED_MASK;
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]

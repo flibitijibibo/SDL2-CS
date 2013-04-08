@@ -33,7 +33,7 @@ using System.Runtime.InteropServices;
 
 namespace SDL2
 {
-	public static class SDL2_ttf
+	public static class SDL_ttf
 	{
 		#region SDL2# Variables
 		
@@ -60,11 +60,11 @@ namespace SDL2
 		
 		[DllImport(nativeLibName, EntryPoint = "TTF_LinkedVersion")]
 		private static extern IntPtr INTERNAL_TTF_LinkedVersion();
-		public static SDL2.SDL_version TTF_LinkedVersion()
+		public static SDL.SDL_version TTF_LinkedVersion()
 		{
-			SDL2.SDL_version result;
+			SDL.SDL_version result;
 			IntPtr result_ptr = INTERNAL_TTF_LinkedVersion();
-			result = (SDL2.SDL_version) Marshal.PtrToStructure(
+			result = (SDL.SDL_version) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -225,20 +225,20 @@ namespace SDL2
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		);
-		public static SDL2.SDL_Surface TTF_RenderText_Solid(
+		public static SDL.SDL_Surface TTF_RenderText_Solid(
 			IntPtr font,
 			string text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderText_Solid(
 				font,
 				text,
 				fg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -251,20 +251,20 @@ namespace SDL2
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		);
-		public static SDL2.SDL_Surface TTF_RenderUTF8_Solid(
+		public static SDL.SDL_Surface TTF_RenderUTF8_Solid(
 			IntPtr font,
 			string text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderUTF8_Solid(
 				font,
 				text,
 				fg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -276,20 +276,20 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_TTF_RenderUNICODE_Solid(
 			IntPtr font,
 			ushort[] text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		);
-		public static SDL2.SDL_Surface TTF_RenderUNICODE_Solid(
+		public static SDL.SDL_Surface TTF_RenderUNICODE_Solid(
 			IntPtr font,
 			ushort[] text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderUNICODE_Solid(
 				font,
 				text,
 				fg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -301,20 +301,20 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_TTF_RenderGlyph_Solid(
 			IntPtr font,
 			ushort ch,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		);
-		public static SDL2.SDL_Surface TTF_RenderGlyph_Solid(
+		public static SDL.SDL_Surface TTF_RenderGlyph_Solid(
 			IntPtr font,
 			ushort ch,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderGlyph_Solid(
 				font,
 				ch,
 				fg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -327,23 +327,23 @@ namespace SDL2
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
-			SDL2.SDL_Color fg,
-			SDL2.SDL_Color bg
+			SDL.SDL_Color fg,
+			SDL.SDL_Color bg
 		);
-		public static SDL2.SDL_Surface TTF_RenderText_Shaded(
+		public static SDL.SDL_Surface TTF_RenderText_Shaded(
 			IntPtr font,
 			string text,
-			SDL2.SDL_Color fg,
-			SDL2.SDL_Color bg
+			SDL.SDL_Color fg,
+			SDL.SDL_Color bg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderText_Shaded(
 				font,
 				text,
 				fg,
 				bg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -356,23 +356,23 @@ namespace SDL2
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
-			SDL2.SDL_Color fg,
-			SDL2.SDL_Color bg
+			SDL.SDL_Color fg,
+			SDL.SDL_Color bg
 		);
-		public static SDL2.SDL_Surface TTF_RenderUTF8_Shaded(
+		public static SDL.SDL_Surface TTF_RenderUTF8_Shaded(
 			IntPtr font,
 			string text,
-			SDL2.SDL_Color fg,
-			SDL2.SDL_Color bg
+			SDL.SDL_Color fg,
+			SDL.SDL_Color bg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderUTF8_Shaded(
 				font,
 				text,
 				fg,
 				bg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -384,23 +384,23 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_TTF_RenderUNICODE_Shaded(
 			IntPtr font,
 			ushort[] text,
-			SDL2.SDL_Color fg,
-			SDL2.SDL_Color bg
+			SDL.SDL_Color fg,
+			SDL.SDL_Color bg
 		);
-		public static SDL2.SDL_Surface TTF_RenderUNICODE_Shaded(
+		public static SDL.SDL_Surface TTF_RenderUNICODE_Shaded(
 			IntPtr font,
 			ushort[] text,
-			SDL2.SDL_Color fg,
-			SDL2.SDL_Color bg
+			SDL.SDL_Color fg,
+			SDL.SDL_Color bg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderUNICODE_Shaded(
 				font,
 				text,
 				fg,
 				bg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -412,23 +412,23 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_TTF_RenderGlyph_Shaded(
 			IntPtr font,
 			ushort ch,
-			SDL2.SDL_Color fg,
-			SDL2.SDL_Color bg
+			SDL.SDL_Color fg,
+			SDL.SDL_Color bg
 		);
-		public static SDL2.SDL_Surface TTF_RenderGlyph_Shaded(
+		public static SDL.SDL_Surface TTF_RenderGlyph_Shaded(
 			IntPtr font,
 			ushort ch,
-			SDL2.SDL_Color fg,
-			SDL2.SDL_Color bg
+			SDL.SDL_Color fg,
+			SDL.SDL_Color bg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderGlyph_Shaded(
 				font,
 				ch,
 				fg,
 				bg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -441,20 +441,20 @@ namespace SDL2
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		);
-		public static SDL2.SDL_Surface TTF_RenderText_Blended(
+		public static SDL.SDL_Surface TTF_RenderText_Blended(
 			IntPtr font,
 			string text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderText_Blended(
 				font,
 				text,
 				fg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -467,20 +467,20 @@ namespace SDL2
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		);
-		public static SDL2.SDL_Surface TTF_RenderUTF8_Blended(
+		public static SDL.SDL_Surface TTF_RenderUTF8_Blended(
 			IntPtr font,
 			string text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderUTF8_Blended(
 				font,
 				text,
 				fg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -492,20 +492,20 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_TTF_RenderUNICODE_Blended(
 			IntPtr font,
 			ushort[] text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		);
-		public static SDL2.SDL_Surface TTF_RenderUNICODE_Blended(
+		public static SDL.SDL_Surface TTF_RenderUNICODE_Blended(
 			IntPtr font,
 			ushort[] text,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderUNICODE_Blended(
 				font,
 				text,
 				fg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -518,23 +518,23 @@ namespace SDL2
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
-			SDL2.SDL_Color fg,
+			SDL.SDL_Color fg,
 			uint wrapped
 		);
-		public static SDL2.SDL_Surface TTF_RenderText_Blended_Wrapped(
+		public static SDL.SDL_Surface TTF_RenderText_Blended_Wrapped(
 			IntPtr font,
 			string text,
-			SDL2.SDL_Color fg,
+			SDL.SDL_Color fg,
 			uint wrapped
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderText_Blended_Wrapped(
 				font,
 				text,
 				fg,
 				wrapped
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -547,23 +547,23 @@ namespace SDL2
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
-			SDL2.SDL_Color fg,
+			SDL.SDL_Color fg,
 			uint wrapped
 		);
-		public static SDL2.SDL_Surface TTF_RenderUTF8_Blended_Wrapped(
+		public static SDL.SDL_Surface TTF_RenderUTF8_Blended_Wrapped(
 			IntPtr font,
 			string text,
-			SDL2.SDL_Color fg,
+			SDL.SDL_Color fg,
 			uint wrapped
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderUTF8_Blended_Wrapped(
 				font,
 				text,
 				fg,
 				wrapped
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -575,23 +575,23 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_TTF_RenderUNICODE_Blended_Wrapped(
 			IntPtr font,
 			ushort[] text,
-			SDL2.SDL_Color fg,
+			SDL.SDL_Color fg,
 			uint wrapped
 		);
-		public static SDL2.SDL_Surface TTF_RenderUNICODE_Blended_Wrapped(
+		public static SDL.SDL_Surface TTF_RenderUNICODE_Blended_Wrapped(
 			IntPtr font,
 			ushort[] text,
-			SDL2.SDL_Color fg,
+			SDL.SDL_Color fg,
 			uint wrapped
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderUNICODE_Blended_Wrapped(
 				font,
 				text,
 				fg,
 				wrapped
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
@@ -603,20 +603,20 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_TTF_RenderGlyph_Blended(
 			IntPtr font,
 			ushort ch,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		);
-		public static SDL2.SDL_Surface TTF_RenderGlyph_Blended(
+		public static SDL.SDL_Surface TTF_RenderGlyph_Blended(
 			IntPtr font,
 			ushort ch,
-			SDL2.SDL_Color fg
+			SDL.SDL_Color fg
 		) {
-			SDL2.SDL_Surface result;
+			SDL.SDL_Surface result;
 			IntPtr result_ptr = INTERNAL_TTF_RenderGlyph_Blended(
 				font,
 				ch,
 				fg
 			);
-			result = (SDL2.SDL_Surface) Marshal.PtrToStructure(
+			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
 				result_ptr,
 				result.GetType()
 			);
