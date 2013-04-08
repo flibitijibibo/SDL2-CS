@@ -99,6 +99,18 @@ namespace SDL2
 			int len
 		);
 		
+		public delegate void Mix_EffectFunc_t(
+			int chan,
+			IntPtr stream, // void*
+			int len,
+			IntPtr udata // void*
+		);
+		
+		public delegate void Mix_EffectDone_t(
+			int chan,
+			IntPtr udata // void*
+		);
+		
 		public delegate void MusicFinishedDelegate();
 		
 		public delegate void ChannelFinishedDelegate(int channel);
@@ -262,9 +274,42 @@ namespace SDL2
 			ChannelFinishedDelegate channel_finished
 		);
 		
-		/* TODO: Special Effects API.
-		 * As of 05d12cea0253 (HEAD on April 7, 2013), lines 231 - 497.
-		 */
+		[DllImport(nativeLibName)]
+		public static extern int Mix_RegisterEffect(
+			int chan,
+			Mix_EffectFunc_t f,
+			Mix_EffectDone_t d,
+			IntPtr arg // void*
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int Mix_UnregisterEffect(
+			int channel,
+			Mix_EffectFunc_t f
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int Mix_UnregisterAllEffects(int channel);
+		
+		[DllImport(nativeLibName)]
+		public static extern int Mix_SetPanning(
+			int channel,
+			byte left,
+			byte right
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int Mix_SetPosition(
+			int channel,
+			short angle,
+			byte distance
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int Mix_SetDistance(int channel, byte distance);
+		
+		[DllImport(nativeLibName)]
+		public static extern int Mix_SetReverseStereo(int channel, int flip);
 		
 		[DllImport(nativeLibName)]
 		public static extern int Mix_ReserveChannels(int num);
