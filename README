@@ -21,7 +21,6 @@ The wrapper will include bindings for the following libraries:
 - SDL2
 - SDL2_image
 - SDL2_mixer
-- SDL2_net
 - SDL2_ttf
 
 Note that SDL2# will not provide every single SDL2 function. This is due to
