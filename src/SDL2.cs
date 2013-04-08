@@ -60,6 +60,24 @@ namespace SDL2
 		
 		#endregion
 		
+		#region SDL_rwops.h
+		
+		/* Note about SDL2# and RWops:
+		 * These functions are currently not supported for public use.
+		 * They are only meant to be used internally in functions marked with
+		 * the phrase "THIS IS AN RWops FUNCTION!"
+		 */
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile")]
+		internal static extern IntPtr INTERNAL_SDL_RWFromFile(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string file,
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string mode
+		);
+		
+		#endregion
+		
 		#region SDL.h
 		
 		public const uint SDL_INIT_TIMER =		0x00000001;
@@ -1965,18 +1983,13 @@ namespace SDL2
 			ref byte b
 		);
 
-		/* These are for SDL_LoadBMP, which is a macro in the SDL headers */
+		/* These are for SDL_LoadBMP, which is a macro in the SDL headers. */
+		/* THIS IS AN RWops FUNCTION!
+		 */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LoadBMP_RW")]
 		private static extern IntPtr INTERNAL_SDL_LoadBMP_RW(
 			IntPtr src,
 			int freesrc
-		);
-		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile")]
-		private static extern IntPtr INTERNAL_SDL_RWFromFile(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
-				string file,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
-				string mode
 		);
 		public static SDL_Surface SDL_LoadBMP(string file)
 		{
@@ -3737,14 +3750,6 @@ namespace SDL2
 			SDL_AUDIO_PAUSED
 		}
 		
-		// FIXME: Will this work?
-		/* userdata refers to a void*, stream to a Uint8 */
-		public delegate void SDL_AudioCallback(
-			IntPtr userdata,
-			IntPtr stream,
-			int len
-		);
-		
 		[StructLayoutAttribute(LayoutKind.Sequential)]
 		public struct SDL_AudioSpec
 		{
@@ -3757,6 +3762,13 @@ namespace SDL2
 			public SDL_AudioCallback callback;
 			public IntPtr userdata; // void*
 		}
+		
+		/* userdata refers to a void*, stream to a Uint8 */
+		public delegate void SDL_AudioCallback(
+			IntPtr userdata,
+			IntPtr stream,
+			int len
+		);
 		
 		/* dev refers to an SDL_AudioDeviceID */
 		[DllImport(nativeLibName)]
