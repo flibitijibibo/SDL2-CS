@@ -41,7 +41,7 @@ namespace SDL2
 		#region SDL2# Variables
 		
 		/* Used by DllImport to load the native library. */
-		private const String nativeLibName = "SDL2.dll";
+		private const string nativeLibName = "SDL2.dll";
 		
 		#endregion
 		
