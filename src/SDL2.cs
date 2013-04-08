@@ -503,7 +503,7 @@ namespace SDL2
 		public static extern int SDL_CreateWindowAndRenderer(
 			int width,
 			int height,
-			uint window_flags,
+			SDL_WindowFlags window_flags,
 			ref IntPtr window,
 			ref IntPtr renderer
 		);
