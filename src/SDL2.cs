@@ -1789,6 +1789,11 @@ namespace SDL2
 		
 		#region SDL_surface.h
 		
+		public const uint SDL_SWSURFACE =	0x00000000;
+		public const uint SDL_PREALLOC =	0x00000001;
+		public const uint SDL_RLEACCEL =	0x00000002;
+		public const uint SDL_DONTFREE =	0x00000004;
+		
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_Surface
 		{
@@ -1804,6 +1809,11 @@ namespace SDL2
 			public SDL_Rect clip_rect;
 			public IntPtr map; // SDL_BlitMap*
 			public int refcount;
+		}
+		
+		public static bool SDL_MUSTLOCK(ref SDL_Surface surface)
+		{
+			return (surface.flags & SDL_RLEACCEL) != 0;
 		}
 		
 		[DllImport(nativeLibName)]
@@ -2046,9 +2056,6 @@ namespace SDL2
 			ref SDL_Surface dst,
 			ref SDL_Rect dstrect
 		);
-		
-		[DllImport(nativeLibName)]
-		public static extern SDL_bool SDL_MUSTLOCK(ref SDL_Surface surface);
 		
 		[DllImport(nativeLibName)]
 		public static extern int SDL_SaveBMP(
