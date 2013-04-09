@@ -250,6 +250,13 @@ namespace SDL2
 			SDL_NUM_LOG_PRIORITIES
 		}
 		
+		public delegate void SDL_LogOutputFunction(
+			IntPtr userdata, // void*
+			int category,
+			SDL_LogPriority priority,
+			IntPtr message // const char*
+		);
+		
 		[DllImport(nativeLibName)]
 		public static extern void SDL_Log(
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
@@ -342,8 +349,19 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_LogResetPriorities();
 		
-		// TODO: SDL_LogGetOutputFunction
-		// TODO: SDL_LogSetOutputFunction
+		/* userdata refers to a void* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_LogGetOutputFunction(
+			ref SDL_LogOutputFunction callback,
+			ref IntPtr userdata
+		);
+		
+		/* userdata refers to a void* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_LogSetOutputFunction(
+			SDL_LogOutputFunction callback,
+			IntPtr userdata
+		);
 		
 		#endregion
 		
