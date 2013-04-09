@@ -47,11 +47,11 @@ namespace SDL2
 		// FIXME: Allow user defined MIX_CHANNELS
 		public const int MIX_CHANNELS = 8;
 		
-		public const int MIX_DEFAULT_FREQUENCY = 22050;
-		// FIXME: ASSUMING LITTLE ENDIAN!!! Big endian: SDL.AUDIO_S16MSB
-		public const ushort MIX_DEFAULT_FORMAT = SDL.AUDIO_S16LSB;
-		public const int MIX_DEFAULT_CHANNELS = 2;
-		public const byte MIX_MAX_VOLUME = 128;
+		public static readonly int MIX_DEFAULT_FREQUENCY = 22050;
+		public static readonly ushort MIX_DEFAULT_FORMAT =
+			BitConverter.IsLittleEndian ? SDL.AUDIO_S16LSB : SDL.AUDIO_S16MSB;
+		public static readonly int MIX_DEFAULT_CHANNELS = 2;
+		public static readonly byte MIX_MAX_VOLUME = 128;
 		
 		[Flags]
 		public enum MIX_InitFlags
