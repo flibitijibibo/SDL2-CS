@@ -3437,7 +3437,7 @@ namespace SDL2
 		public static extern int SDL_JoystickIndex(IntPtr joystick);
 		
 		/* joystick refers to an SDL_Joystick* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, EntryPoint = "SDL_JoystickName")]
 		private static extern IntPtr INTERNAL_SDL_JoystickName(
 			IntPtr joystick
 		);
@@ -3448,7 +3448,7 @@ namespace SDL2
 			);
 		}
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, EntryPoint = "SDL_JoystickNameForIndex")]
 		private static extern IntPtr INTERNAL_SDL_JoystickNameForIndex(
 			int device_index
 		);
@@ -3528,7 +3528,220 @@ namespace SDL2
 		
 		#region SDL_gamecontroller.h
 		
-		// TODO: http://wiki.libsdl.org/moin.fcg/CategoryGameController
+		public enum SDL_GameControllerBindType
+		{
+			SDL_CONTROLLER_BINDTYPE_NONE,
+			SDL_CONTROLLER_BINDTYPE_BUTTON,
+			SDL_CONTROLLER_BINDTYPE_AXIS,
+			SDL_CONTROLLER_BINDTYPE_HAT
+		}
+		
+		public enum SDL_GameControllerAxis
+		{
+			SDL_CONTROLLER_AXIS_INVALID = -1,
+			SDL_CONTROLLER_AXIS_LEFTX,
+			SDL_CONTROLLER_AXIS_LEFTY,
+			SDL_CONTROLLER_AXIS_RIGHTX,
+			SDL_CONTROLLER_AXIS_RIGHTY,
+			SDL_CONTROLLER_AXIS_TRIGGERLEFT,
+			SDL_CONTROLLER_AXIS_TRIGGERRIGHT,
+			SDL_CONTROLLER_AXIS_MAX
+		}
+		
+		public enum SDL_GameControllerButton
+		{
+			SDL_CONTROLLER_BUTTON_INVALID = -1,
+			SDL_CONTROLLER_BUTTON_A,
+			SDL_CONTROLLER_BUTTON_B,
+			SDL_CONTROLLER_BUTTON_X,
+			SDL_CONTROLLER_BUTTON_Y,
+			SDL_CONTROLLER_BUTTON_BACK,
+			SDL_CONTROLLER_BUTTON_GUIDE,
+			SDL_CONTROLLER_BUTTON_START,
+			SDL_CONTROLLER_BUTTON_LEFTSTICK,
+			SDL_CONTROLLER_BUTTON_RIGHTSTICK,
+			SDL_CONTROLLER_BUTTON_LEFTSHOULDER,
+			SDL_CONTROLLER_BUTTON_RIGHTSHOULDER,
+			SDL_CONTROLLER_BUTTON_DPAD_UP,
+			SDL_CONTROLLER_BUTTON_DPAD_DOWN,
+			SDL_CONTROLLER_BUTTON_DPAD_LEFT,
+			SDL_CONTROLLER_BUTTON_DPAD_RIGHT,
+			SDL_CONTROLLER_BUTTON_MAX,
+		}
+		
+		// FIXME: I'd rather this somehow be private...
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_GameControllerButtonBind_hat
+		{
+			public int hat;
+			public int hat_mask;
+		}
+		
+		// FIXME: This has a union in it... does this make sense?
+		[StructLayout(LayoutKind.Explicit)]
+		public struct SDL_GameControllerButtonBind
+		{
+			// FIXME: enum size?
+			[FieldOffset(0)]
+			public SDL_GameControllerBindType bindType;
+			[FieldOffset(4)]
+			public int button;
+			[FieldOffset(4)]
+			public int axis;
+			[FieldOffset(4)]
+			public INTERNAL_GameControllerButtonBind_hat hat;
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GameControllerAddMapping(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string mappingString
+		);
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerMappingForGUID")]
+		private static extern IntPtr INTERNAL_SDL_GameControllerMappingForGUID(
+			SDL_JoystickGUID guid
+		);
+		public static string SDL_GameControllerMappingForGUID(
+			SDL_JoystickGUID guid
+		) {
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GameControllerMappingForGUID(guid)
+			);
+		}
+		
+		/* gamecontroller refers to an SDL_GameController* */
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerMapping")]
+		private static extern IntPtr INTERNAL_SDL_GameControllerMapping(
+			IntPtr gamecontroller
+		);
+		public static string SDL_GameControllerMapping(
+			IntPtr gamecontroller
+		) {
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GameControllerMapping(gamecontroller)
+			);
+		}
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_IsGameController(int joystick_index);
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerNameForIndex")]
+		private static extern IntPtr INTERNAL_SDL_GameControllerNameForIndex(
+			int joystick_index
+		);
+		public static string SDL_GameControllerNameForIndex(int joystick_index)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GameControllerNameForIndex(joystick_index)
+			);
+		}
+		
+		/* IntPtr refers to an SDL_GameController* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GameControllerOpen(int joystick_index);
+		
+		/* gamecontroller refers to an SDL_GameController* */
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerName")]
+		private static extern IntPtr INTERNAL_SDL_GameControllerName(
+			IntPtr gamecontroller
+		);
+		public static string SDL_GameControllerName(IntPtr gamecontroller)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GameControllerName(gamecontroller)
+			);
+		}
+		
+		/* gamecontroller refers to an SDL_GameController* */
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_GameControllerGetAttached(
+			IntPtr gamecontroller
+		);
+		
+		/* IntPtr refers to an SDL_Joystick*
+		 * gamecontroller refers to an SDL_GameController*
+		 */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GameControllerGetJoystick(
+			IntPtr gamecontroller
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_GameControllerEventState(int state);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GameControllerUpdate();
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_GameControllerAxis SDL_GameControllerGetAxisFromString(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string pchString
+		);
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetStringForAxis")]
+		private static extern IntPtr INTERNAL_SDL_GameControllerGetStringForAxis(
+			SDL_GameControllerAxis axis
+		);
+		public static string SDL_GameControllerGetStringForAxis(
+			SDL_GameControllerAxis axis
+		) {
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GameControllerGetStringForAxis(axis)
+			);
+		}
+		
+		/* gamecontroller refers to an SDL_GameController* */
+		[DllImport(nativeLibName)]
+		public static extern SDL_GameControllerButtonBind SDL_GameControllerGetBindForAxis(
+			IntPtr gamecontroller,
+			SDL_GameControllerAxis axis
+		);
+		
+		/* gamecontroller refers to an SDL_GameController* */
+		[DllImport(nativeLibName)]
+		public static extern short SDL_GameControllerGetAxis(
+			IntPtr gamecontroller,
+			SDL_GameControllerAxis axis
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_GameControllerButton SDL_GameControllerGetButtonFromString(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string pchString
+		);
+		
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetStringForButton")]
+		private static extern IntPtr INTERNAL_SDL_GameControllerGetStringForButton(
+			SDL_GameControllerButton button
+		);
+		public static string SDL_GameControllerGetStringForButton(
+			SDL_GameControllerButton button
+		) {
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_GameControllerGetStringForButton(button)
+			);
+		}
+		
+		/* gamecontroller refers to an SDL_GameController* */
+		[DllImport(nativeLibName)]
+		public static extern SDL_GameControllerButtonBind SDL_GameControllerGetBindForButton(
+			IntPtr gamecontroller,
+			SDL_GameControllerButton button
+		);
+		
+		/* gamecontroller refers to an SDL_GameController* */
+		[DllImport(nativeLibName)]
+		public static extern byte SDL_GameControllerGetButton(
+			IntPtr gamecontroller,
+			SDL_GameControllerButton button
+		);
+		
+		/* gamecontroller refers to an SDL_GameController* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_GameControllerClose(
+			IntPtr gamecontroller
+		);
 		
 		#endregion
 		
