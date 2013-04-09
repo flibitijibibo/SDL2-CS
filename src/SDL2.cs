@@ -3375,6 +3375,163 @@ namespace SDL2
 
 		#endregion
 		
+		#region SDL_joystick.h
+		
+		/* FIXME: Boy, I wish I could typedef int SDL_JoystickID here! */
+		
+		public const byte SDL_HAT_CENTERED =	0x00;
+		public const byte SDL_HAT_UP =		0x01;
+		public const byte SDL_HAT_RIGHT =	0x02;
+		public const byte SDL_HAT_DOWN =	0x04;
+		public const byte SDL_HAT_LEFT =	0x08;
+		public const byte SDL_HAT_RIGHTUP =	SDL_HAT_RIGHT | SDL_HAT_UP;
+		public const byte SDL_HAT_RIGHTDOWN =	SDL_HAT_RIGHT | SDL_HAT_DOWN;
+		public const byte SDL_HAT_LEFTUP =	SDL_HAT_LEFT | SDL_HAT_UP;
+		public const byte SDL_HAT_LEFTDOWN =	SDL_HAT_LEFT | SDL_HAT_DOWN;
+		
+		[StructLayout(LayoutKind.Sequential)]
+		public unsafe struct SDL_JoystickGUID
+		{
+			public fixed byte data[16];
+		}
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_JoystickClose(IntPtr joystick);
+		
+		[DllImport(nativeLibName)]
+		public static extern int SDL_JoystickEventState(int state);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern short SDL_JoystickGetAxis(
+			IntPtr joystick,
+			int axis
+		);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_JoystickGetBall(
+			IntPtr joystick,
+			int ball,
+			ref int dx,
+			ref int dy
+		);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern byte SDL_JoystickGetButton(
+			IntPtr joystick,
+			int button
+		);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern byte SDL_JoystickGetHat(
+			IntPtr joystick,
+			int hat
+		);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_JoystickIndex(IntPtr joystick);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		private static extern IntPtr INTERNAL_SDL_JoystickName(
+			IntPtr joystick
+		);
+		public static string SDL_JoystickName(IntPtr joystick)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_JoystickName(joystick)
+			);
+		}
+		
+		[DllImport(nativeLibName)]
+		private static extern IntPtr INTERNAL_SDL_JoystickNameForIndex(
+			int device_index
+		);
+		public static string SDL_JoystickNameForIndex(int device_index)
+		{
+			return Marshal.PtrToStringAnsi(
+				INTERNAL_SDL_JoystickNameForIndex(device_index)
+			);
+		}
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_JoystickNumAxes(IntPtr joystick);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_JoystickNumBalls(IntPtr joystick);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_JoystickNumButtons(IntPtr joystick);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_JoystickNumHats(IntPtr joystick);
+		
+		/* IntPtr refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_JoystickOpen(int device_index);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_JoystickOpened(int device_index);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_JoystickUpdate();
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_NumJoysticks();
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_JoystickGUID SDL_JoystickGetDeviceGUID(
+			int device_index
+		);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern SDL_JoystickGUID SDL_JoystickGetGUID(
+			IntPtr joystick
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern void SDL_JoystickGetGUIDString(
+			SDL_JoystickGUID guid,
+			[MarshalAsAttribute(UnmanagedType.LPStr)]
+				System.Text.StringBuilder pszGUID,
+			int cbGUID
+		);
+		
+		[DllImport(nativeLibName)]
+		public static extern SDL_JoystickGUID SDL_JoystickGetGUIDFromString(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string pchGUID
+		);
+		
+		/* joystick refers to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_JoystickGetAttached(IntPtr joystick);
+		
+		/* int refers to an SDL_JoystickID, joystick to an SDL_Joystick* */
+		[DllImport(nativeLibName)]
+		public static extern int SDL_JoystickInstanceID(IntPtr joystick);
+		
+		#endregion
+		
+		#region SDL_gamecontroller.h
+		
+		// TODO: http://wiki.libsdl.org/moin.fcg/CategoryGameController
+		
+		#endregion
+		
 		#region SDL_haptic.h
 		
 		/* SDL_HapticCondition type */
