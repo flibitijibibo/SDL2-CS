@@ -3429,8 +3429,6 @@ namespace SDL2
 		
 		#region SDL_joystick.h
 		
-		/* FIXME: Boy, I wish I could typedef int SDL_JoystickID here! */
-		
 		public const byte SDL_HAT_CENTERED =	0x00;
 		public const byte SDL_HAT_UP =		0x01;
 		public const byte SDL_HAT_RIGHT =	0x02;
@@ -4115,9 +4113,6 @@ namespace SDL2
 		#endregion
 
 		#region SDL_audio.h
-		
-		/* FIXME: Boy, I really wish I could typedef ushort SDL_AudioFormat! */
-		/* FIXME: Boy, I really wish I could typedef uint SDL_AudioDeviceID! */
 		
 		public const ushort SDL_AUDIO_MASK_BITSIZE =	0xFF;
 		public const ushort SDL_AUDIO_MASK_DATATYPE =	(1 << 8);
