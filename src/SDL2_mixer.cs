@@ -44,7 +44,10 @@ namespace SDL2
 		
 		#region SDL_mixer.h
 		
-		// FIXME: Allow user defined MIX_CHANNELS
+		/* In C, you can redefine this value before including SDL_mixer.h.
+		 * We're not going to allow this in SDL2#, since the value of this
+		 * variable is persistent and not dependent on preprocessor ordering.
+		 */
 		public const int MIX_CHANNELS = 8;
 		
 		public static readonly int MIX_DEFAULT_FREQUENCY = 22050;
