@@ -219,409 +219,140 @@ namespace SDL2
 			ref int h
 		);
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderText_Solid")]
-		private static extern IntPtr INTERNAL_TTF_RenderText_Solid(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderText_Solid(
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg
 		);
-		public static SDL.SDL_Surface TTF_RenderText_Solid(
-			IntPtr font,
-			string text,
-			SDL.SDL_Color fg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderText_Solid(
-				font,
-				text,
-				fg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderUTF8_Solid")]
-		private static extern IntPtr INTERNAL_TTF_RenderUTF8_Solid(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderUTF8_Solid(
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg
 		);
-		public static SDL.SDL_Surface TTF_RenderUTF8_Solid(
-			IntPtr font,
-			string text,
-			SDL.SDL_Color fg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderUTF8_Solid(
-				font,
-				text,
-				fg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderUNICODE_Solid")]
-		private static extern IntPtr INTERNAL_TTF_RenderUNICODE_Solid(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderUNICODE_Solid(
 			IntPtr font,
 			ushort[] text,
 			SDL.SDL_Color fg
 		);
-		public static SDL.SDL_Surface TTF_RenderUNICODE_Solid(
-			IntPtr font,
-			ushort[] text,
-			SDL.SDL_Color fg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderUNICODE_Solid(
-				font,
-				text,
-				fg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderGlyph_Solid")]
-		private static extern IntPtr INTERNAL_TTF_RenderGlyph_Solid(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderGlyph_Solid(
 			IntPtr font,
 			ushort ch,
 			SDL.SDL_Color fg
 		);
-		public static SDL.SDL_Surface TTF_RenderGlyph_Solid(
-			IntPtr font,
-			ushort ch,
-			SDL.SDL_Color fg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderGlyph_Solid(
-				font,
-				ch,
-				fg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderText_Shaded")]
-		private static extern IntPtr INTERNAL_TTF_RenderText_Shaded(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderText_Shaded(
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
 		);
-		public static SDL.SDL_Surface TTF_RenderText_Shaded(
-			IntPtr font,
-			string text,
-			SDL.SDL_Color fg,
-			SDL.SDL_Color bg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderText_Shaded(
-				font,
-				text,
-				fg,
-				bg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderUTF8_Shaded")]
-		private static extern IntPtr INTERNAL_TTF_RenderUTF8_Shaded(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderUTF8_Shaded(
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
 		);
-		public static SDL.SDL_Surface TTF_RenderUTF8_Shaded(
-			IntPtr font,
-			string text,
-			SDL.SDL_Color fg,
-			SDL.SDL_Color bg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderUTF8_Shaded(
-				font,
-				text,
-				fg,
-				bg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderUNICODE_Shaded")]
-		private static extern IntPtr INTERNAL_TTF_RenderUNICODE_Shaded(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderUNICODE_Shaded(
 			IntPtr font,
 			ushort[] text,
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
 		);
-		public static SDL.SDL_Surface TTF_RenderUNICODE_Shaded(
-			IntPtr font,
-			ushort[] text,
-			SDL.SDL_Color fg,
-			SDL.SDL_Color bg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderUNICODE_Shaded(
-				font,
-				text,
-				fg,
-				bg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderGlyph_Shaded")]
-		private static extern IntPtr INTERNAL_TTF_RenderGlyph_Shaded(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderGlyph_Shaded(
 			IntPtr font,
 			ushort ch,
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
 		);
-		public static SDL.SDL_Surface TTF_RenderGlyph_Shaded(
-			IntPtr font,
-			ushort ch,
-			SDL.SDL_Color fg,
-			SDL.SDL_Color bg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderGlyph_Shaded(
-				font,
-				ch,
-				fg,
-				bg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderText_Blended")]
-		private static extern IntPtr INTERNAL_TTF_RenderText_Blended(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderText_Blended(
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg
 		);
-		public static SDL.SDL_Surface TTF_RenderText_Blended(
-			IntPtr font,
-			string text,
-			SDL.SDL_Color fg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderText_Blended(
-				font,
-				text,
-				fg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderUTF8_Blended")]
-		private static extern IntPtr INTERNAL_TTF_RenderUTF8_Blended(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderUTF8_Blended(
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg
 		);
-		public static SDL.SDL_Surface TTF_RenderUTF8_Blended(
-			IntPtr font,
-			string text,
-			SDL.SDL_Color fg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderUTF8_Blended(
-				font,
-				text,
-				fg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderUNICODE_Blended")]
-		private static extern IntPtr INTERNAL_TTF_RenderUNICODE_Blended(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderUNICODE_Blended(
 			IntPtr font,
 			ushort[] text,
 			SDL.SDL_Color fg
 		);
-		public static SDL.SDL_Surface TTF_RenderUNICODE_Blended(
-			IntPtr font,
-			ushort[] text,
-			SDL.SDL_Color fg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderUNICODE_Blended(
-				font,
-				text,
-				fg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderText_Blended_Wrapped")]
-		private static extern IntPtr INTERNAL_TTF_RenderText_Blended_Wrapped(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderText_Blended_Wrapped(
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg,
 			uint wrapped
 		);
-		public static SDL.SDL_Surface TTF_RenderText_Blended_Wrapped(
-			IntPtr font,
-			string text,
-			SDL.SDL_Color fg,
-			uint wrapped
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderText_Blended_Wrapped(
-				font,
-				text,
-				fg,
-				wrapped
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderUTF8_Blended_Wrapped")]
-		private static extern IntPtr INTERNAL_TTF_RenderUTF8_Blended_Wrapped(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderUTF8_Blended_Wrapped(
 			IntPtr font,
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg,
 			uint wrapped
 		);
-		public static SDL.SDL_Surface TTF_RenderUTF8_Blended_Wrapped(
-			IntPtr font,
-			string text,
-			SDL.SDL_Color fg,
-			uint wrapped
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderUTF8_Blended_Wrapped(
-				font,
-				text,
-				fg,
-				wrapped
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderUNICODE_Blended_Wrapped")]
-		private static extern IntPtr INTERNAL_TTF_RenderUNICODE_Blended_Wrapped(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderUNICODE_Blended_Wrapped(
 			IntPtr font,
 			ushort[] text,
 			SDL.SDL_Color fg,
 			uint wrapped
 		);
-		public static SDL.SDL_Surface TTF_RenderUNICODE_Blended_Wrapped(
-			IntPtr font,
-			ushort[] text,
-			SDL.SDL_Color fg,
-			uint wrapped
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderUNICODE_Blended_Wrapped(
-				font,
-				text,
-				fg,
-				wrapped
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
-		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_RenderGlyph_Blended")]
-		private static extern IntPtr INTERNAL_TTF_RenderGlyph_Blended(
+		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr TTF_RenderGlyph_Blended(
 			IntPtr font,
 			ushort ch,
 			SDL.SDL_Color fg
 		);
-		public static SDL.SDL_Surface TTF_RenderGlyph_Blended(
-			IntPtr font,
-			ushort ch,
-			SDL.SDL_Color fg
-		) {
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_TTF_RenderGlyph_Blended(
-				font,
-				ch,
-				fg
-			);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
 		/* font refers to a TTF_Font* */
 		[DllImport(nativeLibName)]

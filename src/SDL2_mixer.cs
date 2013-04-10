@@ -163,21 +163,16 @@ namespace SDL2
 		/* These are for Mix_LoadWAV, which is a macro in the C header.
 		 * THIS IS AN RWops FUNCTION!
 		 */
+		/* IntPtr refers to a Mix_Chunk* */
 		[DllImport(nativeLibName, EntryPoint = "Mix_LoadWAV_RW")]
 		private static extern IntPtr INTERNAL_Mix_LoadWAV_RW(
 			IntPtr src,
 			int freesrc
 		);
-		public static Mix_Chunk Mix_LoadWAV(string file)
+		public static IntPtr Mix_LoadWAV(string file)
 		{
-			Mix_Chunk result;
 			IntPtr rwops = SDL.INTERNAL_SDL_RWFromFile(file, "rb");
-			IntPtr result_ptr = INTERNAL_Mix_LoadWAV_RW(rwops, 1);
-			result = (Mix_Chunk) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
+			return INTERNAL_Mix_LoadWAV_RW(rwops, 1);
 		}
 		
 		/* IntPtr refers to a Mix_Music* */
@@ -187,37 +182,17 @@ namespace SDL2
 				string file
 		);
 		
-		[DllImport(nativeLibName, EntryPoint = "Mix_QuickLoad_WAV")]
-		private static extern IntPtr INTERNAL_Mix_QuickLoad_WAV(byte[] mem);
-		public static Mix_Chunk Mix_QuickLoad_WAV(byte[] mem)
-		{
-			Mix_Chunk result;
-			IntPtr result_ptr = INTERNAL_Mix_QuickLoad_WAV(mem);
-			result = (Mix_Chunk) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
-		
-		[DllImport(nativeLibName, EntryPoint = "Mix_QuickLoad_RAW")]
-		private static extern IntPtr INTERNAL_Mix_QuickLoad_RAW(
-			byte[] mem,
-			uint len
-		);
-		public static Mix_Chunk Mix_QuickLoad_RAW(byte[] mem, uint len)
-		{
-			Mix_Chunk result;
-			IntPtr result_ptr = INTERNAL_Mix_QuickLoad_RAW(mem, len);
-			result = (Mix_Chunk) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
-		
+		/* IntPtr refers to a Mix_Chunk* */
 		[DllImport(nativeLibName)]
-		public static extern void Mix_FreeChunk(ref Mix_Chunk chunk);
+		public static extern IntPtr Mix_QuickLoad_WAV(byte[] mem);
+		
+		/* IntPtr refers to a Mix_Chunk* */
+		[DllImport(nativeLibName)]
+		public static extern Mix_Chunk Mix_QuickLoad_RAW(byte[] mem, uint len);
+		
+		/* chunk refers to a Mix_Chunk* */
+		[DllImport(nativeLibName)]
+		public static extern void Mix_FreeChunk(IntPtr chunk);
 		
 		/* music refers to a Mix_Music* */
 		[DllImport(nativeLibName)]
@@ -335,18 +310,20 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern int Mix_GroupNewer(int tag);
 		
+		/* chunk refers to a Mix_Chunk* */
 		public static int Mix_PlayChannel(
 			int channel,
-			ref Mix_Chunk chunk,
+			IntPtr chunk,
 			int loops
 		) {
-			return Mix_PlayChannelTimed(channel, ref chunk, loops, -1);
+			return Mix_PlayChannelTimed(channel, chunk, loops, -1);
 		}
 		
+		/* chunk refers to a Mix_Chunk* */
 		[DllImport(nativeLibName)]
 		public static extern int Mix_PlayChannelTimed(
 			int channel,
-			ref Mix_Chunk chunk,
+			IntPtr chunk,
 			int loops,
 			int ticks
 		);
@@ -355,6 +332,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern int Mix_PlayMusic(IntPtr music, int loops);
 		
+		/* music refers to a Mix_Music* */
 		[DllImport(nativeLibName)]
 		public static extern int Mix_FadeInMusic(
 			IntPtr music,
@@ -371,19 +349,21 @@ namespace SDL2
 			double position
 		);
 		
+		/* chunk refers to a Mix_Chunk* */
 		public static int Mix_FadeInChannel(
 			int channel,
-			ref Mix_Chunk chunk,
+			IntPtr chunk,
 			int loops,
 			int ms
 		) {
-			return Mix_FadeInChannelTimed(channel, ref chunk, loops, ms, -1);
+			return Mix_FadeInChannelTimed(channel, chunk, loops, ms, -1);
 		}
 		
+		/* chunk refers to a Mix_Chunk* */
 		[DllImport(nativeLibName)]
 		public static extern int Mix_FadeInChannelTimed(
 			int channel,
-			ref Mix_Chunk chunk,
+			IntPtr chunk,
 			int loops,
 			int ms,
 			int ticks
@@ -392,9 +372,10 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern int Mix_Volume(int channel, int volume);
 		
+		/* chunk refers to a Mix_Chunk* */
 		[DllImport(nativeLibName)]
 		public static extern int Mix_VolumeChunk(
-			ref Mix_Chunk chunk,
+			IntPtr chunk,
 			int volume
 		);
 		
@@ -489,18 +470,9 @@ namespace SDL2
 			IntPtr data // void*
 		);
 		
-		[DllImport(nativeLibName, EntryPoint = "Mix_GetChunk")]
-		private static extern IntPtr INTERNAL_Mix_GetChunk(int channel);
-		public static Mix_Chunk Mix_GetChunk(int channel)
-		{
-			Mix_Chunk result;
-			IntPtr result_ptr = INTERNAL_Mix_GetChunk(channel);
-			result = (Mix_Chunk) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
+		/* IntPtr refers to a Mix_Chunk* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr Mix_GetChunk(int channel);
 		
 		[DllImport(nativeLibName)]
 		public static extern void Mix_CloseAudio();

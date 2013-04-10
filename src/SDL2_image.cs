@@ -72,21 +72,12 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void IMG_Quit();
 		
-		[DllImport(nativeLibName, EntryPoint = "IMG_Load")]
-		private static extern IntPtr INTERNAL_IMG_Load(
+		/* IntPtr refers to an SDL_Surface* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr IMG_Load(
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string file
 		);
-		public static SDL.SDL_Surface IMG_Load(string file)
-		{
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_IMG_Load(file);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
 		
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
 		[DllImport(nativeLibName)]
@@ -99,20 +90,9 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern int IMG_InvertAlpha(int on);
 		
-		[DllImport(nativeLibName, EntryPoint = "IMG_ReadXPMFromArray")]
-		private static extern IntPtr INTERNAL_IMG_ReadXPMFromArray(
-			ref char[] xpm
-		);
-		public static SDL.SDL_Surface IMG_ReadXPMFromArray(ref char[] xpm)
-		{
-			SDL.SDL_Surface result;
-			IntPtr result_ptr = INTERNAL_IMG_ReadXPMFromArray(ref xpm);
-			result = (SDL.SDL_Surface) Marshal.PtrToStructure(
-				result_ptr,
-				result.GetType()
-			);
-			return result;
-		}
+		/* IntPtr refers to an SDL_Surface* */
+		[DllImport(nativeLibName)]
+		public static extern IntPtr IMG_ReadXPMFromArray(ref char[] xpm);
 		
 		#endregion
 	}
