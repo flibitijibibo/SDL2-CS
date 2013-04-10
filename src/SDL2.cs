@@ -3627,11 +3627,11 @@ namespace SDL2
 			public int hat_mask;
 		}
 		
-		// FIXME: This has a union in it... does this make sense?
+		/* This struct has a union in it, hence the Explicit layout. */
 		[StructLayout(LayoutKind.Explicit)]
 		public struct SDL_GameControllerButtonBind
 		{
-			// FIXME: enum size?
+			/* Note: enum size is 4 bytes. */
 			[FieldOffset(0)]
 			public SDL_GameControllerBindType bindType;
 			[FieldOffset(4)]
