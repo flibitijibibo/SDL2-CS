@@ -1915,7 +1915,7 @@ namespace SDL2
 			uint Amask
 		);
 		
-		/* pixels refers to a void* */
+		/* IntPtr refers to an SDL_Surface*, pixels to a void* */
 		[DllImport(nativeLibName)]
 		public static extern IntPtr SDL_CreateRGBSurfaceFrom(
 			IntPtr pixels,
