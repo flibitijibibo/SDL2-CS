@@ -2555,6 +2555,11 @@ namespace SDL2
 			public SDL_DropEvent drop;
 		}
 
+		public delegate int SDL_EventFilter(
+			IntPtr userdata, // void*
+			IntPtr sdlevent // SDL_Event* event, lolC#
+		);
+
 		/* Pump the event loop, getting events from the input devices*/
 		[DllImport(nativeLibName)]
 		public static extern void SDL_PumpEvents();
@@ -2612,9 +2617,40 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern int SDL_PushEvent(ref SDL_Event _event);
 
-		/* TODO: Input Events: All of the event filter stuff.
-		 * http://wiki.libsdl.org/moin.fcg/APIByCategory#Input_Events
-		 */
+		/* userdata refers to a void* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_SetEventFilter(
+			SDL_EventFilter filter,
+			IntPtr userdata
+		);
+
+		/* userdata refers to a void* */
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_GetEventFilter(
+			ref SDL_EventFilter filter,
+			ref IntPtr userdata
+		);
+
+		/* userdata refers to a void* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_AddEventWatch(
+			SDL_EventFilter filter,
+			IntPtr userdata
+		);
+
+		/* userdata refers to a void* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_DelEventWatch(
+			SDL_EventFilter filter,
+			IntPtr userdata
+		);
+
+		/* userdata refers to a void* */
+		[DllImport(nativeLibName)]
+		public static extern void SDL_FilterEvents(
+			SDL_EventFilter filter,
+			IntPtr userdata
+		);
 
 		/* These are for SDL_EventState() */
 		public const int SDL_QUERY = 		-1;
