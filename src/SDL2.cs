@@ -2424,8 +2424,46 @@ namespace SDL2
 					       instance id */
 		}
 
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_TouchFingerEvent
+		{
+			public UInt32 type;
+			public UInt32 timestamp;
+			public Int64 touchId; // SDL_TouchID
+			public Int64 fingerId; // SDL_GestureID
+			public float x;
+			public float y;
+			public float dx;
+			public float dy;
+			public float pressure;
+		}
 
-		// TODO: Touch Finger events, Gesture Events
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_MultiGestureEvent
+		{
+			public UInt32 type;
+			public UInt32 timestamp;
+			public Int64 touchId; // SDL_TouchID
+			public float dTheta;
+			public float dDist;
+			public float x;
+			public float y;
+			public UInt16 numFingers;
+			public UInt16 padding;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_DollarGestureEvent
+		{
+			public UInt32 type;
+			public UInt32 timestamp;
+			public Int64 touchId; // SDL_TouchID
+			public Int64 gestureId; // SDL_GestureID
+			public UInt32 numFingers;
+			public float error;
+			public float x;
+			public float y;
+		}
 
 		/* File open request by system (event.drop.*), disabled by
 		 * default
@@ -2510,7 +2548,12 @@ namespace SDL2
 			public SDL_UserEvent user;
 			[FieldOffset(0)]
 			public SDL_SysWMEvent syswm;
-			//TODO: Touch, Gesture events
+			[FieldOffset(0)]
+			public SDL_TouchFingerEvent tfinger;
+			[FieldOffset(0)]
+			public SDL_MultiGestureEvent mgesture;
+			[FieldOffset(0)]
+			public SDL_DollarGestureEvent dgesture;
 			[FieldOffset(0)]
 			public SDL_DropEvent drop;
 		}
