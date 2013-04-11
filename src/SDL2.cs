@@ -913,7 +913,7 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public unsafe struct SDL_RendererInfo
 		{
-			public string name; // const char*
+			public IntPtr name; // const char*
 			public uint flags;
 			public uint num_texture_formats;
 			public fixed uint texture_formats[16];
