@@ -2147,6 +2147,10 @@ namespace SDL2
 		public const byte SDL_PRESSED =		0;
 		public const byte SDL_RELEASED =	1;
 
+		/* Default size is according to SDL2 default. */
+		public const int SDL_TEXTEDITINGEVENT_TEXT_SIZE = 32;
+		public const int SDL_TEXTINPUTEVENT_TEXT_SIZE = 32;
+
 		/* The types of events that can be delivered. */
 		public enum SDL_EventType : uint
 		{
@@ -2251,7 +2255,25 @@ namespace SDL2
 			public SDL_Keysym keysym;
 		}
 
-		//TODO: SDL_Text*Event (need to work out char[] in C#)
+		[StructLayout(LayoutKind.Sequential)]
+		public unsafe struct SDL_TextEditingEvent
+		{
+			public SDL_EventType type;
+			public UInt32 timestamp;
+			public UInt32 windowID;
+			public fixed char text[SDL_TEXTEDITINGEVENT_TEXT_SIZE];
+			public Int32 start;
+			public Int32 length;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public unsafe struct SDL_TextInputEvent
+		{
+			public SDL_EventType type;
+			public UInt32 timestamp;
+			public UInt32 windowID;
+			public fixed char text[SDL_TEXTINPUTEVENT_TEXT_SIZE];
+		}
 
 		/* Mouse motion event structure (event.motion.*) */
 		[StructLayout(LayoutKind.Sequential)]
@@ -2456,7 +2478,10 @@ namespace SDL2
 			public SDL_WindowEvent window;
 			[FieldOffset(0)]
 			public SDL_KeyboardEvent key;
-			//TODO: TextEditingEvent, TextInputEvent
+			[FieldOffset(0)]
+			public TextEditingEvent edit;
+			[FieldOffset(0)]
+			public TextInputEvent text;
 			[FieldOffset(0)]
 			public SDL_MouseMotionEvent motion;
 			[FieldOffset(0)]
