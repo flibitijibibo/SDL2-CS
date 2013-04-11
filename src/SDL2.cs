@@ -2137,10 +2137,7 @@ namespace SDL2
 		);
 		
 		#endregion
-		
-		/* TODO: Input Events:
-		 * http://wiki.libsdl.org/moin.fcg/APIByCategory#Input_Events
-		 */
+
 		#region SDL_events.h
 
 		/* General keyboard/mouse state definitions. */
@@ -2517,9 +2514,9 @@ namespace SDL2
 			[FieldOffset(0)]
 			public SDL_KeyboardEvent key;
 			[FieldOffset(0)]
-			public TextEditingEvent edit;
+			public SDL_TextEditingEvent edit;
 			[FieldOffset(0)]
-			public TextInputEvent text;
+			public SDL_TextInputEvent text;
 			[FieldOffset(0)]
 			public SDL_MouseMotionEvent motion;
 			[FieldOffset(0)]
@@ -2569,17 +2566,34 @@ namespace SDL2
 			SDL_GETEVENT
 		}
 
-		//TODO: SDL_PeepEvents
+		[DllImport(nativeLibName)]
+		public static extern int SDL_PeepEvents(
+			SDL_Event[] events,
+			int numevents,
+			SDL_eventaction action,
+			SDL_EventType minType,
+			SDL_EventType maxType
+		);
 
 		/* Checks to see if certain events are in the event queue */
 		[DllImport(nativeLibName)]
 		public static extern SDL_bool SDL_HasEvent(SDL_EventType type);
-		//TODO: SDL_HasEvents
+
+		[DllImport(nativeLibName)]
+		public static extern SDL_bool SDL_HasEvents(
+			SDL_EventType minType,
+			SDL_EventType maxType
+		);
 
 		/* Clears events from the event queue */
 		[DllImport(nativeLibName)]
 		public static extern void SDL_FlushEvent(SDL_EventType type);
-		//TODO: SDL_FlushEvents
+
+		[DllImport(nativeLibName)]
+		public static extern void SDL_FlushEvents(
+			SDL_EventType min,
+			SDL_EventType max
+		);
 
 		/* Polls for currently pending events */
 		[DllImport(nativeLibName)]
@@ -2598,7 +2612,9 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern int SDL_PushEvent(ref SDL_Event _event);
 
-		//TODO: All of the event filter stuff.
+		/* TODO: Input Events: All of the event filter stuff.
+		 * http://wiki.libsdl.org/moin.fcg/APIByCategory#Input_Events
+		 */
 
 		/* These are for SDL_EventState() */
 		public const int SDL_QUERY = 		-1;
