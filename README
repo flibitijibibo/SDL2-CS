@@ -17,11 +17,13 @@ About the C# Wrapper
 The C# wrapper was written to be used for MonoGame's desktop platforms. However,
 this is written in a way that can be used for any general C# application.
 
-The wrapper will include bindings for the following libraries:
+The wrapper provides bindings for the following libraries:
 - SDL2
 - SDL2_image
 - SDL2_mixer
 - SDL2_ttf
+
+We are in the process of adding bindings for OpenGL and OpenAL, via OpenTK.
 
 Note that SDL2# will not provide every single SDL2 function. This is due to
 limitations in the C# language that would cause major conflicts with the native
