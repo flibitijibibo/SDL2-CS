@@ -6,6 +6,9 @@ License
 -------
 SDL2 and SDL2# are released under the zlib license. See LICENSE for details.
 
+SDL2# currently uses parts of OpenTK, which is released under the MIT license.
+See opentk.LICENSE for details.
+
 About SDL2
 ----------
 For more information about SDL2, visit the SDL wiki:
