@@ -711,6 +711,12 @@ namespace SDL2
 		public static extern void SDL_GL_DeleteContext(IntPtr context);
 		
 		[DllImport(nativeLibName)]
+		public static extern IntPtr SDL_GL_GetProcAddress(
+			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+				string proc
+		);
+		
+		[DllImport(nativeLibName)]
 		public static extern SDL_bool SDL_GL_ExtensionSupported(
 			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
 				string extension
