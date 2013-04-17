@@ -80,7 +80,7 @@ namespace SDL2
 		/* IntPtr refers to a TTF_Font* */
 		[DllImport(nativeLibName)]
 		public static extern IntPtr TTF_OpenFont(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file,
 			int ptsize
 		);
@@ -88,7 +88,7 @@ namespace SDL2
 		/* IntPtr refers to a TTF_Font* */
 		[DllImport(nativeLibName)]
 		public static extern IntPtr TTF_OpenFontIndex(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file,
 			int ptsize,
 			long index
@@ -194,7 +194,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern int TTF_SizeText(
 			IntPtr font,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			ref int w,
 			ref int h
@@ -204,7 +204,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern int TTF_SizeUTF8(
 			IntPtr font,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			ref int w,
 			ref int h
@@ -223,7 +223,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr TTF_RenderText_Solid(
 			IntPtr font,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg
 		);
@@ -232,7 +232,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr TTF_RenderUTF8_Solid(
 			IntPtr font,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg
 		);
@@ -257,7 +257,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr TTF_RenderText_Shaded(
 			IntPtr font,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
@@ -267,7 +267,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr TTF_RenderUTF8_Shaded(
 			IntPtr font,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
@@ -295,7 +295,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr TTF_RenderText_Blended(
 			IntPtr font,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg
 		);
@@ -304,7 +304,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr TTF_RenderUTF8_Blended(
 			IntPtr font,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg
 		);
@@ -321,7 +321,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr TTF_RenderText_Blended_Wrapped(
 			IntPtr font,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg,
 			uint wrapped
@@ -331,7 +331,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr TTF_RenderUTF8_Blended_Wrapped(
 			IntPtr font,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg,
 			uint wrapped

@@ -178,7 +178,7 @@ namespace SDL2
 		/* IntPtr refers to a Mix_Music* */
 		[DllImport(nativeLibName)]
 		public static extern IntPtr Mix_LoadMUS(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file
 		);
 		
@@ -441,7 +441,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern int Mix_SetMusicCMD(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string command
 		);
 		
@@ -453,7 +453,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern int Mix_SetSoundFonts(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string paths
 		);
 		
