@@ -10,7 +10,7 @@ SDL2 = \
 
 # Targets
 
-build:
+build: clean
 	mkdir bin
 	cp SDL2#.dll.config bin
 	dmcs /unsafe -debug -out:bin/SDL2#.dll -target:library $(SDL2)
