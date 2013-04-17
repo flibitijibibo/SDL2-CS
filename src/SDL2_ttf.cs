@@ -44,6 +44,14 @@ namespace SDL2
 		
 		#region SDL_ttf.h
 		
+		/* Similar to the headers, this is the version we're expecting to be
+		 * running with. You will likely want to check this somewhere in your
+		 * program!
+		 */
+		public const int SDL_TTF_MAJOR_VERSION =	2;
+		public const int SDL_TTF_MINOR_VERSION =	2;
+		public const int SDL_TTF_PATCHLEVEL =		12;
+		
 		public const int UNICODE_BOM_NATIVE =	0xFEFF;
 		public const int UNICODE_BOM_SWAPPED =	0xFFFE;
 		
@@ -57,6 +65,13 @@ namespace SDL2
 		public const int TTF_HINTING_LIGHT =	1;
 		public const int TTF_HINTING_MONO =	2;
 		public const int TTF_HINTING_NONE =	3;
+		
+		public static void SDL_TTF_VERSION(ref SDL.SDL_version X)
+		{
+			X.major = SDL_TTF_MAJOR_VERSION;
+			X.minor = SDL_TTF_MINOR_VERSION;
+			X.patch = SDL_TTF_PATCHLEVEL;
+		}
 		
 		[DllImport(nativeLibName, EntryPoint = "TTF_LinkedVersion", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_TTF_LinkedVersion();

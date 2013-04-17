@@ -44,6 +44,14 @@ namespace SDL2
 		
 		#region SDL_image.h
 		
+		/* Similar to the headers, this is the version we're expecting to be
+		 * running with. You will likely want to check this somewhere in your
+		 * program!
+		 */
+		public const int SDL_IMAGE_MAJOR_VERSION =	2;
+		public const int SDL_IMAGE_MINOR_VERSION =	0;
+		public const int SDL_IMAGE_PATCHLEVEL =		0;
+		
 		[Flags]
 		public enum IMG_InitFlags
 		{
@@ -51,6 +59,13 @@ namespace SDL2
 			IMG_INIT_PNG =	0x00000002,
 			IMG_INIT_TIF =	0x00000004,
 			IMG_INIT_WEBP =	0x00000008
+		}
+		
+		public static void SDL_IMAGE_VERSION(ref SDL.SDL_version X)
+		{
+			X.major = SDL_IMAGE_MAJOR_VERSION;
+			X.minor = SDL_IMAGE_MINOR_VERSION;
+			X.patch = SDL_IMAGE_PATCHLEVEL;
 		}
 		
 		[DllImport(nativeLibName, EntryPoint = "IMG_LinkedVersion", CallingConvention = CallingConvention.Cdecl)]

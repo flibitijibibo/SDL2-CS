@@ -44,6 +44,14 @@ namespace SDL2
 		
 		#region SDL_mixer.h
 		
+		/* Similar to the headers, this is the version we're expecting to be
+		 * running with. You will likely want to check this somewhere in your
+		 * program!
+		 */
+		public const int SDL_MIXER_MAJOR_VERSION =	2;
+		public const int SDL_MIXER_MINOR_VERSION =	0;
+		public const int SDL_MIXER_PATCHLEVEL =		0;
+		
 		/* In C, you can redefine this value before including SDL_mixer.h.
 		 * We're not going to allow this in SDL2#, since the value of this
 		 * variable is persistent and not dependent on preprocessor ordering.
@@ -128,6 +136,13 @@ namespace SDL2
 			IntPtr a, // const char*
 			IntPtr b // void*
 		);
+		
+		public static void SDL_MIXER_VERSION(ref SDL.SDL_version X)
+		{
+			X.major = SDL_MIXER_MAJOR_VERSION;
+			X.minor = SDL_MIXER_MINOR_VERSION;
+			X.patch = SDL_MIXER_PATCHLEVEL;
+		}
 		
 		[DllImport(nativeLibName, EntryPoint = "MIX_Linked_Version", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_MIX_Linked_Version();
