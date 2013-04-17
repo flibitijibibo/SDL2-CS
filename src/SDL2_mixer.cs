@@ -96,12 +96,14 @@ namespace SDL2
 			public byte volume;
 		}
 		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void MixFuncDelegate(
 			IntPtr udata, // void*
 			IntPtr stream, // Uint8*
 			int len
 		);
 		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void Mix_EffectFunc_t(
 			int chan,
 			IntPtr stream, // void*
@@ -109,21 +111,25 @@ namespace SDL2
 			IntPtr udata // void*
 		);
 		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void Mix_EffectDone_t(
 			int chan,
 			IntPtr udata // void*
 		);
 		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void MusicFinishedDelegate();
 		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void ChannelFinishedDelegate(int channel);
 		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate int SoundFontDelegate(
 			IntPtr a, // const char*
 			IntPtr b // void*
 		);
 		
-		[DllImport(nativeLibName, EntryPoint = "MIX_Linked_Version")]
+		[DllImport(nativeLibName, EntryPoint = "MIX_Linked_Version", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_MIX_Linked_Version();
 		public static SDL.SDL_version MIX_Linked_Version()
 		{
@@ -131,18 +137,18 @@ namespace SDL2
 			IntPtr result_ptr = INTERNAL_MIX_Linked_Version();
 			result = (SDL.SDL_version) Marshal.PtrToStructure(
 				result_ptr,
-				result.GetType()
+				typeof(SDL.SDL_version)
 			);
 			return result;
 		}
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_Init(MIX_InitFlags flags);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_Quit();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_OpenAudio(
 			int frequency,
 			ushort format,
@@ -150,10 +156,10 @@ namespace SDL2
 			int chunksize
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_AllocateChannels(int numchans);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_QuerySpec(
 			ref int frequency,
 			ref ushort format,
@@ -164,7 +170,7 @@ namespace SDL2
 		 * THIS IS AN RWops FUNCTION!
 		 */
 		/* IntPtr refers to a Mix_Chunk* */
-		[DllImport(nativeLibName, EntryPoint = "Mix_LoadWAV_RW")]
+		[DllImport(nativeLibName, EntryPoint = "Mix_LoadWAV_RW", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_Mix_LoadWAV_RW(
 			IntPtr src,
 			int freesrc
@@ -176,32 +182,32 @@ namespace SDL2
 		}
 		
 		/* IntPtr refers to a Mix_Music* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr Mix_LoadMUS(
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file
 		);
 		
 		/* IntPtr refers to a Mix_Chunk* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr Mix_QuickLoad_WAV(byte[] mem);
 		
 		/* IntPtr refers to a Mix_Chunk* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern Mix_Chunk Mix_QuickLoad_RAW(byte[] mem, uint len);
 		
 		/* chunk refers to a Mix_Chunk* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_FreeChunk(IntPtr chunk);
 		
 		/* music refers to a Mix_Music* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_FreeMusic(IntPtr music);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GetNumChunkDecoders();
 		
-		[DllImport(nativeLibName, EntryPoint = "Mix_GetChunkDecoder")]
+		[DllImport(nativeLibName, EntryPoint = "Mix_GetChunkDecoder", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_Mix_GetChunkDecoder(int index);
 		public static string Mix_GetChunkDecoder(int index)
 		{
@@ -210,10 +216,10 @@ namespace SDL2
 			);
 		}
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GetNumMusicDecoders();
 		
-		[DllImport(nativeLibName, EntryPoint = "Mix_GetMusicDecoder")]
+		[DllImport(nativeLibName, EntryPoint = "Mix_GetMusicDecoder", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_Mix_GetMusicDecoder(int index);
 		public static string Mix_GetMusicDecoder(int index)
 		{
@@ -223,36 +229,36 @@ namespace SDL2
 		}
 		
 		/* music refers to a Mix_Music* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern Mix_MusicType Mix_GetMusicType(IntPtr music);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_SetPostMix(
 			MixFuncDelegate mix_func,
 			IntPtr arg // void*
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_HookMusic(
 			MixFuncDelegate mix_func,
 			IntPtr arg // void*
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_HookMusicFinished(
 			MusicFinishedDelegate music_finished
 		);
 		
 		/* IntPtr refers to a void* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr Mix_GetMusicHookData();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_ChannelFinished(
 			ChannelFinishedDelegate channel_finished
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_RegisterEffect(
 			int chan,
 			Mix_EffectFunc_t f,
@@ -260,54 +266,54 @@ namespace SDL2
 			IntPtr arg // void*
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_UnregisterEffect(
 			int channel,
 			Mix_EffectFunc_t f
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_UnregisterAllEffects(int channel);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetPanning(
 			int channel,
 			byte left,
 			byte right
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetPosition(
 			int channel,
 			short angle,
 			byte distance
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetDistance(int channel, byte distance);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetReverseStereo(int channel, int flip);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_ReserveChannels(int num);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GroupChannel(int which, int tag);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GroupChannels(int from, int to, int tag);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GroupAvailable(int tag);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GroupCount(int tag);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GroupOldest(int tag);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GroupNewer(int tag);
 		
 		/* chunk refers to a Mix_Chunk* */
@@ -320,7 +326,7 @@ namespace SDL2
 		}
 		
 		/* chunk refers to a Mix_Chunk* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_PlayChannelTimed(
 			int channel,
 			IntPtr chunk,
@@ -329,11 +335,11 @@ namespace SDL2
 		);
 		
 		/* music refers to a Mix_Music* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_PlayMusic(IntPtr music, int loops);
 		
 		/* music refers to a Mix_Music* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_FadeInMusic(
 			IntPtr music,
 			int loops,
@@ -341,7 +347,7 @@ namespace SDL2
 		);
 		
 		/* music refers to a Mix_Music* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_FadeInMusicPos(
 			IntPtr music,
 			int loops,
@@ -360,7 +366,7 @@ namespace SDL2
 		}
 		
 		/* chunk refers to a Mix_Chunk* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_FadeInChannelTimed(
 			int channel,
 			IntPtr chunk,
@@ -369,112 +375,112 @@ namespace SDL2
 			int ticks
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_Volume(int channel, int volume);
 		
 		/* chunk refers to a Mix_Chunk* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_VolumeChunk(
 			IntPtr chunk,
 			int volume
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_VolumeMusic(int volume);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_HaltChannel(int channel);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_HaltGroup(int tag);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_HaltMusic();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_ExpireChannel(int channel, int ticks);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_FadeOutChannel(int which, int ms);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_FadeOutGroup(int tag, int ms);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_FadeOutMusic(int ms);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern Mix_Fading Mix_FadingMusic();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern Mix_Fading Mix_FadingChannel(int which);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_Pause(int channel);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_Resume(int channel);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_Paused(int channel);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_PauseMusic();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_ResumeMusic();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_RewindMusic();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_PausedMusic();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetMusicPosition(double position);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_Playing(int channel);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_PlayingMusic();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetMusicCMD(
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string command
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetSynchroValue(int value);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GetSynchroValue();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetSoundFonts(
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string paths
 		);
 		
-		[DllImport(nativeLibName, EntryPoint = "Mix_GetSoundFonts")]
+		[DllImport(nativeLibName, EntryPoint = "Mix_GetSoundFonts", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_Mix_GetSoundFonts();
 		public static string Mix_GetSoundFonts()
 		{
 			return Marshal.PtrToStringAnsi(INTERNAL_Mix_GetSoundFonts());
 		}
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_EachSoundFont(
 			SoundFontDelegate function,
 			IntPtr data // void*
 		);
 		
 		/* IntPtr refers to a Mix_Chunk* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr Mix_GetChunk(int channel);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void Mix_CloseAudio();
 		
 		#endregion

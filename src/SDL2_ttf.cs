@@ -58,7 +58,7 @@ namespace SDL2
 		public const int TTF_HINTING_MONO =	2;
 		public const int TTF_HINTING_NONE =	3;
 		
-		[DllImport(nativeLibName, EntryPoint = "TTF_LinkedVersion")]
+		[DllImport(nativeLibName, EntryPoint = "TTF_LinkedVersion", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_TTF_LinkedVersion();
 		public static SDL.SDL_version TTF_LinkedVersion()
 		{
@@ -66,19 +66,19 @@ namespace SDL2
 			IntPtr result_ptr = INTERNAL_TTF_LinkedVersion();
 			result = (SDL.SDL_version) Marshal.PtrToStructure(
 				result_ptr,
-				result.GetType()
+				typeof(SDL.SDL_version)
 			);
 			return result;
 		}
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void TTF_ByteSwappedUNICODE(int swapped);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_Init();
 		
 		/* IntPtr refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_OpenFont(
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file,
@@ -86,7 +86,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_OpenFontIndex(
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file,
@@ -95,63 +95,63 @@ namespace SDL2
 		);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_GetFontStyle(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void TTF_SetFontStyle(IntPtr font, int style);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_GetFontOutline(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void TTF_SetFontOutline(IntPtr font, int outline);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_GetFontHinting(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void TTF_SetFontHinting(IntPtr font, int hinting);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_FontHeight(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_FontAscent(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_FontDescent(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_FontLineSkip(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_GetFontKerning(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void TTF_SetFontKerning(IntPtr font, int allowed);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern long TTF_FontFaces(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_FontFaceIsFixedWidth(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_FontFaceFamilyName")]
+		[DllImport(nativeLibName, EntryPoint = "TTF_FontFaceFamilyName", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_TTF_FontFaceFamilyName(
 			IntPtr font
 		);
@@ -163,7 +163,7 @@ namespace SDL2
 		}
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_FontFaceStyleName")]
+		[DllImport(nativeLibName, EntryPoint = "TTF_FontFaceStyleName", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_TTF_FontFaceStyleName(
 			IntPtr font
 		);
@@ -175,11 +175,11 @@ namespace SDL2
 		}
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_GlyphIsProvided(IntPtr font, ushort ch);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_GlyphMetrics(
 			IntPtr font,
 			ushort ch,
@@ -191,7 +191,7 @@ namespace SDL2
 		);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_SizeText(
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
@@ -201,7 +201,7 @@ namespace SDL2
 		);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_SizeUTF8(
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
@@ -211,7 +211,7 @@ namespace SDL2
 		);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_SizeUNICODE(
 			IntPtr font,
 			ushort[] text,
@@ -220,7 +220,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Solid(
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
@@ -229,7 +229,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_Solid(
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
@@ -238,7 +238,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUNICODE_Solid(
 			IntPtr font,
 			ushort[] text,
@@ -246,7 +246,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderGlyph_Solid(
 			IntPtr font,
 			ushort ch,
@@ -254,7 +254,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Shaded(
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
@@ -264,7 +264,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_Shaded(
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
@@ -274,7 +274,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUNICODE_Shaded(
 			IntPtr font,
 			ushort[] text,
@@ -283,7 +283,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderGlyph_Shaded(
 			IntPtr font,
 			ushort ch,
@@ -292,7 +292,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Blended(
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
@@ -301,7 +301,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_Blended(
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
@@ -310,7 +310,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUNICODE_Blended(
 			IntPtr font,
 			ushort[] text,
@@ -318,7 +318,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Blended_Wrapped(
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
@@ -328,7 +328,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_Blended_Wrapped(
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
@@ -338,7 +338,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUNICODE_Blended_Wrapped(
 			IntPtr font,
 			ushort[] text,
@@ -347,7 +347,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderGlyph_Blended(
 			IntPtr font,
 			ushort ch,
@@ -355,17 +355,17 @@ namespace SDL2
 		);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void TTF_CloseFont(IntPtr font);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void TTF_Quit();
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_WasInit();
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetFontKerningSize(
 			IntPtr font,
 			int prev_index,

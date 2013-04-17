@@ -53,7 +53,7 @@ namespace SDL2
 			IMG_INIT_WEBP =	0x00000008
 		}
 		
-		[DllImport(nativeLibName, EntryPoint = "IMG_LinkedVersion")]
+		[DllImport(nativeLibName, EntryPoint = "IMG_LinkedVersion", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_IMG_LinkedVersion();
 		public static SDL.SDL_version IMG_LinkedVersion()
 		{
@@ -61,37 +61,37 @@ namespace SDL2
 			IntPtr result_ptr = INTERNAL_IMG_LinkedVersion();
 			result = (SDL.SDL_version) Marshal.PtrToStructure(
 				result_ptr,
-				result.GetType()
+				typeof(SDL.SDL_version)
 			);
 			return result;
 		}
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int IMG_Init(IMG_InitFlags flags);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void IMG_Quit();
 		
 		/* IntPtr refers to an SDL_Surface* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_Load(
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file
 		);
 		
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_LoadTexture(
 			IntPtr renderer,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file
 		);
 		
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int IMG_InvertAlpha(int on);
 		
 		/* IntPtr refers to an SDL_Surface* */
-		[DllImport(nativeLibName)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_ReadXPMFromArray(ref char[] xpm);
 		
 		#endregion
