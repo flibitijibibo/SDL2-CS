@@ -404,7 +404,7 @@ namespace SDL2
 		
 		public static bool SDL_VERSION_ATLEAST(int X, int Y, int Z)
 		{
-			return SDL_COMPILEDVERSION >= SDL_VERSIONNUM(X, Y, Z);
+			return (SDL_COMPILEDVERSION >= SDL_VERSIONNUM(X, Y, Z));
 		}
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
