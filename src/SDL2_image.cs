@@ -75,7 +75,7 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Surface* */
 		[DllImport(nativeLibName)]
 		public static extern IntPtr IMG_Load(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file
 		);
 		
@@ -83,7 +83,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr IMG_LoadTexture(
 			IntPtr renderer,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file
 		);
 		

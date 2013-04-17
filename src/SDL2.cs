@@ -70,9 +70,9 @@ namespace SDL2
 		
 		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile")]
 		internal static extern IntPtr INTERNAL_SDL_RWFromFile(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string mode
 		);
 		
@@ -153,7 +153,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetHint")]
 		private static extern IntPtr INTERNAL_SDL_GetHint(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string name
 		);
 		public static string SDL_GetHint(string name)
@@ -165,17 +165,17 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern SDL_bool SDL_SetHint(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string name,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string value
 		);
 		
 		[DllImport(nativeLibName)]
 		public static extern SDL_bool SDL_SetHintWithPriority(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string name,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string value,
 			SDL_HintPriority priority
 		);
@@ -196,7 +196,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern void SDL_SetError(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string fmt,
 			__arglist
 		);
@@ -259,7 +259,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern void SDL_Log(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string fmt,
 			__arglist
 		);
@@ -267,7 +267,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_LogVerbose(
 			int category,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string fmt,
 			__arglist
 		);
@@ -275,7 +275,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_LogDebug(
 			int category,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string fmt,
 			__arglist
 		);
@@ -283,7 +283,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_LogInfo(
 			int category,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string fmt,
 			__arglist
 		);
@@ -291,7 +291,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_LogWarn(
 			int category,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string fmt,
 			__arglist
 		);
@@ -299,7 +299,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_LogError(
 			int category,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string fmt,
 			__arglist
 		);
@@ -307,7 +307,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_LogCritical(
 			int category,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string fmt,
 			__arglist
 		);
@@ -316,7 +316,7 @@ namespace SDL2
 		public static extern void SDL_LogMessage(
 			int category,
 			SDL_LogPriority priority,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string fmt,
 			__arglist
 		);
@@ -325,7 +325,7 @@ namespace SDL2
 		public static extern void SDL_LogMessageV(
 			int category,
 			SDL_LogPriority priority,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string fmt,
 			__arglist
 		);
@@ -507,7 +507,7 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Window* */
 		[DllImport(nativeLibName)]
 		public static extern IntPtr SDL_CreateWindow(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string title,
 			int x,
 			int y,
@@ -614,7 +614,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr SDL_GetWindowData(
 			IntPtr window,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string name
 		);
 		
@@ -712,13 +712,13 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern IntPtr SDL_GL_GetProcAddress(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string proc
 		);
 		
 		[DllImport(nativeLibName)]
 		public static extern SDL_bool SDL_GL_ExtensionSupported(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string extension
 		);
 		
@@ -789,7 +789,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern IntPtr SDL_SetWindowData(
 			IntPtr window,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string name,
 			IntPtr userdata
 		);
@@ -851,7 +851,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_SetWindowTitle(
 			IntPtr window,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string title
 		);
 		
@@ -873,7 +873,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern int SDL_VideoInit(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string driver_name
 		);
 		
@@ -2033,7 +2033,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern int SDL_SaveBMP(
 			IntPtr surface,
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string file
 		);
 		
@@ -2138,7 +2138,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern int SDL_SetClipboardText(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text
 		);
 		
@@ -3315,7 +3315,7 @@ namespace SDL2
 		/* Get a scancode from a human-readable name */
 		[DllImport(nativeLibName)]
 		public static extern SDL_Scancode SDL_GetScancodeFromName(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string name
+			[In()] [MarshalAs(UnmanagedType.LPStr)] string name
 		);
 		
 		/* Wrapper for SDL_GetKeyName */
@@ -3332,7 +3332,7 @@ namespace SDL2
 		/* Get a key code from a human-readable name */
 		[DllImport(nativeLibName)]
 		public static extern SDL_Keycode SDL_GetKeyFromName(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string name
+			[In()] [MarshalAs(UnmanagedType.LPStr)] string name
 		);
 		
 		/* Start accepting Unicode text input events, show keyboard */
@@ -3606,14 +3606,14 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_JoystickGetGUIDString(
 			SDL_JoystickGUID guid,
-			[MarshalAsAttribute(UnmanagedType.LPStr)]
+			[MarshalAs(UnmanagedType.LPStr)]
 				System.Text.StringBuilder pszGUID,
 			int cbGUID
 		);
 		
 		[DllImport(nativeLibName)]
 		public static extern SDL_JoystickGUID SDL_JoystickGetGUIDFromString(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string pchGUID
 		);
 		
@@ -3695,7 +3695,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern int SDL_GameControllerAddMapping(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string mappingString
 		);
 		
@@ -3776,7 +3776,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern SDL_GameControllerAxis SDL_GameControllerGetAxisFromString(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string pchString
 		);
 		
@@ -3808,7 +3808,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern SDL_GameControllerButton SDL_GameControllerGetButtonFromString(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string pchString
 		);
 		
@@ -4247,7 +4247,7 @@ namespace SDL2
 			SDL_AUDIO_PAUSED
 		}
 		
-		[StructLayoutAttribute(LayoutKind.Sequential)]
+		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_AudioSpec
 		{
 			public int freq;
@@ -4273,7 +4273,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName)]
 		public static extern int SDL_AudioInit(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string driver_name
 		);
 		
@@ -4341,7 +4341,7 @@ namespace SDL2
 		/* audio_buf will refer to a malloc()'d byte buffer */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LoadWAV")]
 		private static extern IntPtr INTERNAL_SDL_LoadWAV(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string filename,
 			ref SDL_AudioSpec spec,
 			ref IntPtr audio_buf,
@@ -4401,7 +4401,7 @@ namespace SDL2
 		/* uint refers to an SDL_AudioDeviceID */
 		[DllImport(nativeLibName)]
 		public static extern uint SDL_OpenAudioDevice(
-			[InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string device,
 			int iscapture,
 			ref SDL_AudioSpec desired,
