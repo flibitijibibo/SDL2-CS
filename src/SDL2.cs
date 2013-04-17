@@ -710,6 +710,7 @@ namespace SDL2
 		[DllImport(nativeLibName)]
 		public static extern void SDL_GL_DeleteContext(IntPtr context);
 		
+		/* IntPtr refers to a function pointer */
 		[DllImport(nativeLibName)]
 		public static extern IntPtr SDL_GL_GetProcAddress(
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
