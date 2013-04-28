@@ -4331,7 +4331,7 @@ namespace SDL2
 		
 		/* audio_buf refers to a malloc()'d buffer from SDL_LoadWAV */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_FreeWav(IntPtr audio_buf);
+		public static extern void SDL_FreeWAV(IntPtr audio_buf);
 		
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetAudioDeviceName", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_GetAudioDeviceName(
@@ -4381,23 +4381,26 @@ namespace SDL2
 		public static extern int SDL_GetNumAudioDrivers();
 		
 		/* audio_buf will refer to a malloc()'d byte buffer */
-		[DllImport(nativeLibName, EntryPoint = "SDL_LoadWAV", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_SDL_LoadWAV(
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
-				string filename,
+		/* THIS IS AN RWops FUNCTION! */
+		[DllImport(nativeLibName, EntryPoint = "SDL_LoadWAV_RW", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_LoadWAV_RW(
+			IntPtr src,
+			int freesrc,
 			ref SDL_AudioSpec spec,
 			ref IntPtr audio_buf,
 			ref uint audio_len
 		);
 		public static SDL_AudioSpec SDL_LoadWAV(
-			string filename,
+			string file,
 			ref SDL_AudioSpec spec,
 			ref IntPtr audio_buf,
 			ref uint audio_len
 		) {
 			SDL_AudioSpec result;
-			IntPtr result_ptr = INTERNAL_SDL_LoadWAV(
-				filename,
+			IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "rb");
+			IntPtr result_ptr = INTERNAL_SDL_LoadWAV_RW(
+				rwops,
+				1,
 				ref spec,
 				ref audio_buf,
 				ref audio_len
