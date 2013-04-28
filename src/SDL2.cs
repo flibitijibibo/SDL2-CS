@@ -3500,22 +3500,22 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_ShowCursor(int toggle);
 
-		public static UInt32 SDL_BUTTON(UInt32 X)
+		public static uint SDL_BUTTON(uint X)
 		{
 			// If only there were a better way of doing this in C#
-			return (UInt32)(1 << (((int)X)-1));
+			return (uint) (1 << ((int) X - 1));
 		}
 
-		public const UInt32 SDL_BUTTON_LEFT = 1;
-		public const UInt32 SDL_BUTTON_MIDDLE = 2;
-		public const uint SDL_BUTTON_RIGHT = 3;
-		public const uint SDL_BUTTON_X1 = 4;
-		public const uint SDL_BUTTON_X2 = 5;
-		public const UInt32 SDL_BUTTON_LMASK = (1 << (0));
-		public const UInt32 SDL_BUTTON_MMASK = (1 << (1));
-		public const UInt32 SDL_BUTTON_RMASK = (1 << (2));
-		public const UInt32 SDL_BUTTON_X1MASK = (1 << (3));
-		public const UInt32 SDL_BUTTON_X2MASK = (1 << (4));
+		public const uint SDL_BUTTON_LEFT =     1;
+		public const uint SDL_BUTTON_MIDDLE =   2;
+		public const uint SDL_BUTTON_RIGHT =    3;
+		public const uint SDL_BUTTON_X1 =       4;
+		public const uint SDL_BUTTON_X2 =       5;
+		public static readonly UInt32 SDL_BUTTON_LMASK =    SDL_BUTTON(SDL_BUTTON_LEFT);
+		public static readonly UInt32 SDL_BUTTON_MMASK =    SDL_BUTTON(SDL_BUTTON_MIDDLE);
+		public static readonly UInt32 SDL_BUTTON_RMASK =    SDL_BUTTON(SDL_BUTTON_RIGHT);
+		public static readonly UInt32 SDL_BUTTON_X1MASK =   SDL_BUTTON(SDL_BUTTON_X1);
+		public static readonly UInt32 SDL_BUTTON_X2MASK =   SDL_BUTTON(SDL_BUTTON_X2);
 
 		#endregion
 		
