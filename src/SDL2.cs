@@ -882,6 +882,13 @@ namespace SDL2
 		
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetWindowBordered(
+			IntPtr window,
+			SDL_bool bordered
+		);
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetWindowTitle(
 			IntPtr window,
 			[In()] [MarshalAs(UnmanagedType.LPStr)]
