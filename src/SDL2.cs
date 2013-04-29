@@ -838,7 +838,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetWindowFullscreen(
 			IntPtr window,
-			SDL_bool fullscreen
+			uint flags
 		);
 		
 		/* window refers to an SDL_Window* */
