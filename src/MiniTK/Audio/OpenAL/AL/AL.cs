@@ -77,7 +77,7 @@ namespace OpenTK.Audio.OpenAL
         #region Constants
 
         internal const string Lib = "openal32.dll";
-        private const CallingConvention Style = CallingConvention.Cdecl;
+        internal const CallingConvention Style = CallingConvention.Cdecl;
 
         #endregion Constants
 
@@ -1122,7 +1122,7 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="sid">The name of the source to queue buffers onto.</param>
         /// <param name="numEntries">The number of buffers to be queued.</param>
         /// <param name="bids">A pointer to an array of buffer names to be queued.</param>
-        [CLSCompliant(false), DllImport(AL.Lib, EntryPoint = "alSourceQueueBuffers"), SuppressUnmanagedCodeSecurity]
+        [CLSCompliant(false), DllImport(AL.Lib, EntryPoint = "alSourceQueueBuffers", CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity]
         unsafe public static extern void SourceQueueBuffers(uint sid, int numEntries, [In] uint* bids);
         // AL_API void AL_APIENTRY alSourceQueueBuffers( ALuint sid, ALsizei numEntries, const ALuint *bids );
 
@@ -1188,7 +1188,7 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="sid">The name of the source to unqueue buffers from.</param>
         /// <param name="numEntries">The number of buffers to be unqueued.</param>
         /// <param name="bids">A pointer to an array of buffer names that were removed.</param>
-        [CLSCompliant(false), DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers"), SuppressUnmanagedCodeSecurity]
+        [CLSCompliant(false), DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers", CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity]
         unsafe public static extern void SourceUnqueueBuffers(uint sid, int numEntries, [In] uint* bids);
         // AL_API void AL_APIENTRY alSourceUnqueueBuffers( ALuint sid, ALsizei numEntries, ALuint *bids );
 
@@ -1197,14 +1197,14 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="numEntries">The number of buffers to be unqueued.</param>
         /// <param name="bids">A pointer to an array of buffer names that were removed.</param>
         [CLSCompliant(false)]
-        [DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers"), SuppressUnmanagedCodeSecurity]
+        [DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers", CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity]
         public static extern void SourceUnqueueBuffers(uint sid, int numEntries, [Out] uint[] bids);
 
         /// <summary>This function unqueues a set of buffers attached to a source. The number of processed buffers can be detected using AL.GetSource with parameter ALGetSourcei.BuffersProcessed, which is the maximum number of buffers that can be unqueued using this call. The unqueue operation will only take place if all n buffers can be removed from the queue.</summary>
         /// <param name="sid">The name of the source to unqueue buffers from.</param>
         /// <param name="numEntries">The number of buffers to be unqueued.</param>
         /// <param name="bids">A pointer to an array of buffer names that were removed.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers"), SuppressUnmanagedCodeSecurity]
+        [DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers", CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity]
         public static extern void SourceUnqueueBuffers(int sid, int numEntries, [Out] int[] bids);
 
         /// <summary>This function unqueues a set of buffers attached to a source. The number of processed buffers can be detected using AL.GetSource with parameter ALGetSourcei.BuffersProcessed, which is the maximum number of buffers that can be unqueued using this call. The unqueue operation will only take place if all n buffers can be removed from the queue.</summary>
@@ -1212,14 +1212,14 @@ namespace OpenTK.Audio.OpenAL
         /// <param name="numEntries">The number of buffers to be unqueued.</param>
         /// <param name="bids">A pointer to an array of buffer names that were removed.</param>
         [CLSCompliant(false)]
-        [DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers"), SuppressUnmanagedCodeSecurity]
+        [DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers", CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity]
         public static extern void SourceUnqueueBuffers(uint sid, int numEntries, ref uint bids);
 
         /// <summary>This function unqueues a set of buffers attached to a source. The number of processed buffers can be detected using AL.GetSource with parameter ALGetSourcei.BuffersProcessed, which is the maximum number of buffers that can be unqueued using this call. The unqueue operation will only take place if all n buffers can be removed from the queue.</summary>
         /// <param name="sid">The name of the source to unqueue buffers from.</param>
         /// <param name="numEntries">The number of buffers to be unqueued.</param>
         /// <param name="bids">A pointer to an array of buffer names that were removed.</param>
-        [DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers"), SuppressUnmanagedCodeSecurity]
+        [DllImport(AL.Lib, EntryPoint = "alSourceUnqueueBuffers", CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity]
         public static extern void SourceUnqueueBuffers(int sid, int numEntries, ref int bids);
 
         /// <summary>This function unqueues a set of buffers attached to a source. The number of processed buffers can be detected using AL.GetSource with parameter ALGetSourcei.BuffersProcessed, which is the maximum number of buffers that can be unqueued using this call. The unqueue operation will only take place if all n buffers can be removed from the queue.</summary>
