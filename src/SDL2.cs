@@ -3907,9 +3907,9 @@ namespace SDL2
 		public const ushort SDL_HAPTIC_PAUSE =		(1 << 15);
 		
 		/* SDL_HapticDirection type */
-		public const ushort SDL_HAPTIC_POLAR =		0;
-		public const ushort SDL_HAPTIC_CARTESIAN =	1;
-		public const ushort SDL_HAPTIC_SPHERICAL =	2;
+		public const byte SDL_HAPTIC_POLAR =		0;
+		public const byte SDL_HAPTIC_CARTESIAN =	1;
+		public const byte SDL_HAPTIC_SPHERICAL =	2;
 		
 		/* SDL_HapticRunEffect */
 		public const uint SDL_HAPTIC_INFINITY = 4292967295U;
@@ -3981,10 +3981,10 @@ namespace SDL2
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]
-		public struct SDL_HapticDirection
+		public unsafe struct SDL_HapticDirection
 		{
 			public byte type;
-			public int dir;
+			public fixed int dir[3];
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]
