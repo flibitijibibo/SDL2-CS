@@ -3889,7 +3889,7 @@ namespace SDL2
 		
 		#region SDL_haptic.h
 		
-		/* SDL_HapticCondition type */
+		/* SDL_HapticEffect type */
 		public const ushort SDL_HAPTIC_CONSTANT =	(1 << 0);
 		public const ushort SDL_HAPTIC_SINE =		(1 << 1);
 		public const ushort SDL_HAPTIC_SQUARE =		(1 << 2);
@@ -3915,30 +3915,10 @@ namespace SDL2
 		public const uint SDL_HAPTIC_INFINITY = 4292967295U;
 		
 		[StructLayout(LayoutKind.Sequential)]
-		public struct SDL_HapticCondition
+		public unsafe struct SDL_HapticDirection
 		{
-			// Header
-			public ushort type;
-			public SDL_HapticDirection direction;
-			// Replay
-			public uint length;
-			public ushort delay;
-			// Trigger
-			public ushort button;
-			public ushort interval;
-			// Condition
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-			public ushort[] right_sat;
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-			public ushort[] left_sat;
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-			public short[] right_coeff;
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-			public short[] left_coeff;
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-			public ushort[] deadband;
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-			public short[] center;
+			public byte type;
+			public fixed int dir[3];
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]
@@ -3955,6 +3935,73 @@ namespace SDL2
 			public ushort interval;
 			// Constant
 			public short level;
+			// Envelope
+			public ushort attack_length;
+			public ushort attack_level;
+			public ushort fade_length;
+			public ushort fade_level;
+		}
+		
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_HapticPeriodic
+		{
+			// Header
+			public ushort type;
+			public SDL_HapticDirection direction;
+			// Replay
+			public uint length;
+			public ushort delay;
+			// Trigger
+			public ushort button;
+			public ushort interval;
+			// Periodic
+			public ushort period;
+			public short magnitude;
+			public short offset;
+			public ushort phase;
+			// Envelope
+			public ushort attack_length;
+			public ushort attack_level;
+			public ushort fade_length;
+			public ushort fade_level;
+		}
+		
+		[StructLayout(LayoutKind.Sequential)]
+		public unsafe struct SDL_HapticCondition
+		{
+			// Header
+			public ushort type;
+			public SDL_HapticDirection direction;
+			// Replay
+			public uint length;
+			public ushort delay;
+			// Trigger
+			public ushort button;
+			public ushort interval;
+			// Condition
+			public fixed ushort right_sat[3];
+			public fixed ushort left_sat[3];
+			public fixed short right_coeff[3];
+			public fixed short left_coeff[3];
+			public fixed ushort deadband[3];
+			public fixed short center[3];
+		}
+		
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_HapticRamp
+		{
+			// Header
+			public ushort type;
+			public SDL_HapticDirection direction;
+			// Replay
+			public uint length;
+			public ushort delay;
+			// Trigger
+			public ushort button;
+			public ushort interval;
+			// Ramp
+			public short start;
+			public short end;
 			// Envelope
 			public ushort attack_length;
 			public ushort attack_level;
@@ -3986,69 +4033,21 @@ namespace SDL2
 			public ushort fade_level;
 		}
 		
-		[StructLayout(LayoutKind.Sequential)]
-		public struct SDL_HapticDirection
-		{
-			public byte type;
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst=3)]
-			public int[] dir;
-		}
-		
-		[StructLayout(LayoutKind.Sequential)]
+		[StructLayout(LayoutKind.Explicit)]
 		public struct SDL_HapticEffect
 		{
+			[FieldOffset(0)]
 			public ushort type;
+			[FieldOffset(0)]
 			public SDL_HapticConstant constant;
+			[FieldOffset(0)]
 			public SDL_HapticPeriodic periodic;
+			[FieldOffset(0)]
 			public SDL_HapticCondition condition;
+			[FieldOffset(0)]
 			public SDL_HapticRamp ramp;
+			[FieldOffset(0)]
 			public SDL_HapticCustom custom;
-		}
-		
-		[StructLayout(LayoutKind.Sequential)]
-		public struct SDL_HapticPeriodic
-		{
-			// Header
-			public ushort type;
-			public SDL_HapticDirection direction;
-			// Replay
-			public uint length;
-			public ushort delay;
-			// Trigger
-			public ushort button;
-			public ushort interval;
-			// Periodic
-			public ushort period;
-			public short magnitude;
-			public short offset;
-			public ushort phase;
-			// Envelope
-			public ushort attack_length;
-			public ushort attack_level;
-			public ushort fade_length;
-			public ushort fade_level;
-		}
-		
-		[StructLayout(LayoutKind.Sequential)]
-		public struct SDL_HapticRamp
-		{
-			// Header
-			public ushort type;
-			public SDL_HapticDirection direction;
-			// Replay
-			public uint length;
-			public ushort delay;
-			// Trigger
-			public ushort button;
-			public ushort interval;
-			// Ramp
-			public short start;
-			public short end;
-			// Envelope
-			public ushort attack_length;
-			public ushort attack_level;
-			public ushort fade_length;
-			public ushort fade_level;
 		}
 		
 		/* haptic refers to an SDL_Haptic* */
