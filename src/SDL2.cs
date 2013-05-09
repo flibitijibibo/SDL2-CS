@@ -3927,12 +3927,18 @@ namespace SDL2
 			public ushort button;
 			public ushort interval;
 			// Condition
-			public ushort right_sat;
-			public ushort left_sat;
-			public short right_coeff;
-			public short left_coeff;
-			public ushort deadband;
-			public short center;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+			public ushort[] right_sat;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+			public ushort[] left_sat;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+			public short[] right_coeff;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+			public short[] left_coeff;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+			public ushort[] deadband;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+			public short[] center;
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]
@@ -3981,10 +3987,11 @@ namespace SDL2
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]
-		public unsafe struct SDL_HapticDirection
+		public struct SDL_HapticDirection
 		{
 			public byte type;
-			public fixed int dir[3];
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst=3)]
+			public int[] dir;
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]
