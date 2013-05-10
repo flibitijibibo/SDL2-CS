@@ -3905,6 +3905,7 @@ namespace SDL2
 		public const ushort SDL_HAPTIC_AUTOCENTER =	(1 << 13);
 		public const ushort SDL_HAPTIC_STATUS =		(1 << 14);
 		public const ushort SDL_HAPTIC_PAUSE =		(1 << 15);
+		public const ushort SDL_HAPTIC_RUMBLE =		(1 << 11); /* FIXME: Uint16, SHIIIIIIIT */
 		
 		/* SDL_HapticDirection type */
 		public const byte SDL_HAPTIC_POLAR =		0;
@@ -4010,6 +4011,23 @@ namespace SDL2
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_HapticRumble
+		{
+			// Header
+			public ushort type;
+			public SDL_HapticDirection direction;
+			// Replay
+			public uint length;
+			public ushort delay;
+			// Trigger
+			public ushort button;
+			public ushort interval;
+			// Rumble
+			public ushort large_magnitude;
+			public ushort small_magnitude;
+		}
+		
+		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_HapticCustom
 		{
 			// Header
@@ -4046,6 +4064,8 @@ namespace SDL2
 			public SDL_HapticCondition condition;
 			[FieldOffset(0)]
 			public SDL_HapticRamp ramp;
+			[FieldOffset(0)]
+			public SDL_HapticRumble rumble;
 			[FieldOffset(0)]
 			public SDL_HapticCustom custom;
 		}
