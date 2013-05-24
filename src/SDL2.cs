@@ -2069,13 +2069,20 @@ namespace SDL2
 			ref SDL_Rect dstrect
 		);
 		
-		/* surface refers to an SDL_Surface* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_SaveBMP(
+		/* These are for SDL_SaveBMP, which is a macro in the SDL headers. */
+		/* IntPtr refers to an SDL_Surface* */
+		/* THIS IS AN RWops FUNCTION! */
+		[DllImport(nativeLibName, EntryPoint = "SDL_SaveBMP_RW", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_SDL_SaveBMP_RW(
 			IntPtr surface,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
-				string file
+			IntPtr src,
+			int freesrc
 		);
+		public static int SDL_SaveBMP(IntPtr surface, string file)
+		{
+			IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "wb");
+			return INTERNAL_SDL_SaveBMP_RW(surface, rwops, 1);
+		}
 		
 		/* surface refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
