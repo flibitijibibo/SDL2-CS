@@ -95,7 +95,7 @@ namespace SDL2
 		/* IntPtr refers to a TTF_Font* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_OpenFont(
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string file,
 			int ptsize
 		);
@@ -103,7 +103,7 @@ namespace SDL2
 		/* IntPtr refers to a TTF_Font* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_OpenFontIndex(
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string file,
 			int ptsize,
 			long index
@@ -166,29 +166,19 @@ namespace SDL2
 		public static extern int TTF_FontFaceIsFixedWidth(IntPtr font);
 		
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_FontFaceFamilyName", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_TTF_FontFaceFamilyName(
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+		public static extern string TTF_FontFaceFamilyName(
 			IntPtr font
 		);
-		public static string TTF_FontFaceFamily(IntPtr font)
-		{
-			return Marshal.PtrToStringAnsi(
-				INTERNAL_TTF_FontFaceFamilyName(font)
-			);
-		}
-		
+
 		/* font refers to a TTF_Font* */
-		[DllImport(nativeLibName, EntryPoint = "TTF_FontFaceStyleName", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_TTF_FontFaceStyleName(
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+		public static extern string TTF_FontFaceStyleName(
 			IntPtr font
 		);
-		public static string TTF_FontFaceStyleName(IntPtr font)
-		{
-			return Marshal.PtrToStringAnsi(
-				INTERNAL_TTF_FontFaceStyleName(font)
-			);
-		}
-		
+
 		/* font refers to a TTF_Font* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_GlyphIsProvided(IntPtr font, ushort ch);
@@ -209,7 +199,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_SizeText(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
 			ref int w,
 			ref int h
@@ -219,7 +209,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_SizeUTF8(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
 			ref int w,
 			ref int h
@@ -238,7 +228,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Solid(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
 			SDL.SDL_Color fg
 		);
@@ -247,7 +237,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_Solid(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
 			SDL.SDL_Color fg
 		);
@@ -272,7 +262,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Shaded(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
@@ -282,7 +272,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_Shaded(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
@@ -310,7 +300,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Blended(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
 			SDL.SDL_Color fg
 		);
@@ -319,7 +309,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_Blended(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
 			SDL.SDL_Color fg
 		);
@@ -336,7 +326,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Blended_Wrapped(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
 			SDL.SDL_Color fg,
 			uint wrapped
@@ -346,7 +336,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_Blended_Wrapped(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
 			SDL.SDL_Color fg,
 			uint wrapped

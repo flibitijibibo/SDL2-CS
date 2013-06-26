@@ -90,7 +90,7 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_Load(
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string file
 		);
 		
@@ -98,7 +98,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_LoadTexture(
 			IntPtr renderer,
-			[In()] [MarshalAs(UnmanagedType.LPStr)]
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string file
 		);
 		
