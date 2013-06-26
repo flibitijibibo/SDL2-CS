@@ -32,15 +32,34 @@ namespace SDL2
 {
 	internal unsafe class LPUtf8StrMarshaler : ICustomMarshaler
 	{
-		private static LPUtf8StrMarshaler _instance = new LPUtf8StrMarshaler();
+		public const string LeaveAllocated = "LeaveAllocated";
+
+		private static ICustomMarshaler
+			_leaveAllocatedInstance = new LPUtf8StrMarshaler(true),
+			_defaultInstance = new LPUtf8StrMarshaler(false);
 
 		private static ICustomMarshaler GetInstance(string cookie)
 		{
-			return _instance;
+			switch (cookie)
+			{
+			case "LeaveAllocated":
+				return _leaveAllocatedInstance;
+			default:
+				return _defaultInstance;
+			}
+		}
+
+		private bool _leaveAllocated;
+
+		public LPUtf8StrMarshaler(bool leaveAllocated)
+		{
+			_leaveAllocated = leaveAllocated;
 		}
 
 		public object MarshalNativeToManaged(IntPtr pNativeData)
 		{
+			if (pNativeData == IntPtr.Zero)
+				return null;
 			var ptr = (byte*)pNativeData;
 			while (*ptr != 0)
 			{
@@ -53,6 +72,8 @@ namespace SDL2
 
 		public IntPtr MarshalManagedToNative(object ManagedObj)
 		{
+			if (ManagedObj == null)
+				return IntPtr.Zero;
 			var str = ManagedObj as string;
 			if (str == null)
 			{
@@ -65,16 +86,19 @@ namespace SDL2
 			return mem;
 		}
 
-		public void CleanUpNativeData(IntPtr pNativeData)
-		{
-			Marshal.FreeHGlobal(pNativeData);
-		}
-
 		public void CleanUpManagedData(object ManagedObj)
 		{
 		}
 
-		public int GetNativeDataSize()
+		public void CleanUpNativeData(IntPtr pNativeData)
+		{
+			if (!_leaveAllocated)
+			{
+				Marshal.FreeHGlobal(pNativeData);
+			}
+		}
+
+		public int GetNativeDataSize ()
 		{
 			return -1;
 		}
