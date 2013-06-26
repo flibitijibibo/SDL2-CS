@@ -3545,7 +3545,7 @@ namespace SDL2
 		/* joystick refers to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-		public static extern string INTERNAL_SDL_JoystickName(
+		public static extern string SDL_JoystickName(
 			IntPtr joystick
 		);
 
@@ -3711,7 +3711,7 @@ namespace SDL2
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-		public static extern string INTERNAL_SDL_GameControllerNameForIndex(
+		public static extern string SDL_GameControllerNameForIndex(
 			int joystick_index
 		);
 
