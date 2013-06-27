@@ -155,6 +155,7 @@
     <Compile Include="src\MiniTK\Graphics\OpenGL\GLDelegates.cs" />
     <Compile Include="src\MiniTK\Graphics\OpenGL\GLEnums.cs" />
     <Compile Include="src\MiniTK\Graphics\OpenGL\GLHelper.cs" />
+    <Compile Include="src\LPUtf8StrMarshaler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2#.dll.config">
