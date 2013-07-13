@@ -365,6 +365,28 @@ namespace SDL2
 		
 		#endregion
 		
+		#region SDL_messagebox.h
+		
+		public enum SDL_MessageBoxFlags : uint
+		{
+			SDL_MESSAGEBOX_ERROR		= 0x00000010,
+			SDL_MESSAGEBOX_WARNING		= 0x00000020,
+			SDL_MESSAGEBOX_INFORMATION	= 0x00000040
+		}
+		
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_ShowSimpleMessageBox(
+			UInt32 flags,
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+				string title,
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+				string message,
+			IntPtr window
+		);
+		
+		#endregion
+		
 		#region SDL_version.h, SDL_revision.h
 		
 		/* Similar to the headers, this is the version we're expecting to be
@@ -1321,8 +1343,8 @@ namespace SDL2
 					(SDL_PIXELTYPE_ENUM) SDL_PIXELTYPE(format);
 			return (
 				pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX1 ||
-			    pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX4 ||
-			    pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX8
+				pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX4 ||
+				pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX8
 			);
 		}
 		
@@ -1336,9 +1358,9 @@ namespace SDL2
 					(SDL_PIXELORDER_ENUM) SDL_PIXELORDER(format);
 			return (
 				pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_ARGB ||
-			    pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_RGBA ||
-			    pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_ABGR ||
-			    pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_BGRA
+				pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_RGBA ||
+				pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_ABGR ||
+				pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_BGRA
 			);
 		}
 		
@@ -2838,9 +2860,9 @@ namespace SDL2
 			SDL_SCANCODE_VOLUMEUP = 128,
 			SDL_SCANCODE_VOLUMEDOWN = 129,
 			/* not sure whether there's a reason to enable these */
-			/*     SDL_SCANCODE_LOCKINGCAPSLOCK = 130,  */
-			/*     SDL_SCANCODE_LOCKINGNUMLOCK = 131, */
-			/*     SDL_SCANCODE_LOCKINGSCROLLLOCK = 132, */
+			/*	SDL_SCANCODE_LOCKINGCAPSLOCK = 130,  */
+			/*	SDL_SCANCODE_LOCKINGNUMLOCK = 131, */
+			/*	SDL_SCANCODE_LOCKINGSCROLLLOCK = 132, */
 			SDL_SCANCODE_KP_COMMA = 133,
 			SDL_SCANCODE_KP_EQUALSAS400 = 134,
 
@@ -3376,18 +3398,18 @@ namespace SDL2
 		/* System cursor types */
 		public enum SDL_SystemCursor
 		{
-			SDL_SYSTEM_CURSOR_ARROW,     // Arrow
-			SDL_SYSTEM_CURSOR_IBEAM,     // I-beam
-			SDL_SYSTEM_CURSOR_WAIT,      // Wait
-			SDL_SYSTEM_CURSOR_CROSSHAIR, // Crosshair
-			SDL_SYSTEM_CURSOR_WAITARROW, // Small wait cursor (or Wait if not available)
-			SDL_SYSTEM_CURSOR_SIZENWSE,  // Double arrow pointing northwest and southeast
-			SDL_SYSTEM_CURSOR_SIZENESW,  // Double arrow pointing northeast and southwest
-			SDL_SYSTEM_CURSOR_SIZEWE,    // Double arrow pointing west and east
-			SDL_SYSTEM_CURSOR_SIZENS,    // Double arrow pointing north and south
-			SDL_SYSTEM_CURSOR_SIZEALL,   // Four pointed arrow pointing north, south, east, and west
-			SDL_SYSTEM_CURSOR_NO,        // Slashed circle or crossbones
-			SDL_SYSTEM_CURSOR_HAND,      // Hand
+			SDL_SYSTEM_CURSOR_ARROW,	// Arrow
+			SDL_SYSTEM_CURSOR_IBEAM,	// I-beam
+			SDL_SYSTEM_CURSOR_WAIT,		// Wait
+			SDL_SYSTEM_CURSOR_CROSSHAIR,	// Crosshair
+			SDL_SYSTEM_CURSOR_WAITARROW,	// Small wait cursor (or Wait if not available)
+			SDL_SYSTEM_CURSOR_SIZENWSE,	// Double arrow pointing northwest and southeast
+			SDL_SYSTEM_CURSOR_SIZENESW,	// Double arrow pointing northeast and southwest
+			SDL_SYSTEM_CURSOR_SIZEWE,	// Double arrow pointing west and east
+			SDL_SYSTEM_CURSOR_SIZENS,	// Double arrow pointing north and south
+			SDL_SYSTEM_CURSOR_SIZEALL,	// Four pointed arrow pointing north, south, east, and west
+			SDL_SYSTEM_CURSOR_NO,		// Slashed circle or crossbones
+			SDL_SYSTEM_CURSOR_HAND,		// Hand
 			SDL_NUM_SYSTEM_CURSORS
 		}
 
@@ -3470,16 +3492,16 @@ namespace SDL2
 			return (uint) (1 << ((int) X - 1));
 		}
 
-		public const uint SDL_BUTTON_LEFT =     1;
-		public const uint SDL_BUTTON_MIDDLE =   2;
-		public const uint SDL_BUTTON_RIGHT =    3;
-		public const uint SDL_BUTTON_X1 =       4;
-		public const uint SDL_BUTTON_X2 =       5;
-		public static readonly UInt32 SDL_BUTTON_LMASK =    SDL_BUTTON(SDL_BUTTON_LEFT);
-		public static readonly UInt32 SDL_BUTTON_MMASK =    SDL_BUTTON(SDL_BUTTON_MIDDLE);
-		public static readonly UInt32 SDL_BUTTON_RMASK =    SDL_BUTTON(SDL_BUTTON_RIGHT);
-		public static readonly UInt32 SDL_BUTTON_X1MASK =   SDL_BUTTON(SDL_BUTTON_X1);
-		public static readonly UInt32 SDL_BUTTON_X2MASK =   SDL_BUTTON(SDL_BUTTON_X2);
+		public const uint SDL_BUTTON_LEFT =	1;
+		public const uint SDL_BUTTON_MIDDLE =	2;
+		public const uint SDL_BUTTON_RIGHT =	3;
+		public const uint SDL_BUTTON_X1 =	4;
+		public const uint SDL_BUTTON_X2 =	5;
+		public static readonly UInt32 SDL_BUTTON_LMASK =	SDL_BUTTON(SDL_BUTTON_LEFT);
+		public static readonly UInt32 SDL_BUTTON_MMASK =	SDL_BUTTON(SDL_BUTTON_MIDDLE);
+		public static readonly UInt32 SDL_BUTTON_RMASK =	SDL_BUTTON(SDL_BUTTON_RIGHT);
+		public static readonly UInt32 SDL_BUTTON_X1MASK =	SDL_BUTTON(SDL_BUTTON_X1);
+		public static readonly UInt32 SDL_BUTTON_X2MASK =	SDL_BUTTON(SDL_BUTTON_X2);
 
 		#endregion
 		
