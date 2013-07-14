@@ -886,7 +886,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_UpdateWindowSurfaceRects(
 			IntPtr window,
-			SDL_Rect[] rects,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+				SDL_Rect[] rects,
 			int numrects
 		);
 		
@@ -993,23 +994,23 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetRenderDrawBlendMode(
 			IntPtr renderer,
-			ref SDL_BlendMode blendMode
+			out SDL_BlendMode blendMode
 		);
 		
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetRenderDrawColor(
 			IntPtr renderer,
-			ref byte r,
-			ref byte g,
-			ref byte b,
-			ref byte a
+			out byte r,
+			out byte g,
+			out byte b,
+			out byte a
 		);
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetRenderDriverInfo(
 			int index,
-			ref SDL_RendererInfo info
+			out SDL_RendererInfo info
 		);
 		
 		/* IntPtr refers to an SDL_Renderer*, window to an SDL_Window* */
@@ -1020,30 +1021,30 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetRendererInfo(
 			IntPtr renderer,
-			ref SDL_RendererInfo info
+			out SDL_RendererInfo info
 		);
 		
 		/* texture refers to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetTextureAlphaMod(
 			IntPtr texture,
-			ref byte alpha
+			out byte alpha
 		);
 		
 		/* texture refers to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetTextureBlendMode(
 			IntPtr texture,
-			ref SDL_BlendMode blendMode
+			out SDL_BlendMode blendMode
 		);
 		
 		/* texture refers to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetTextureColorMod(
 			IntPtr texture,
-			ref byte r,
-			ref byte g,
-			ref byte b
+			out byte r,
+			out byte g,
+			out byte b
 		);
 		
 		/* texture refers to an SDL_Texture*, pixels to a void* */
@@ -1051,26 +1052,26 @@ namespace SDL2
 		public static extern int SDL_LockTexture(
 			IntPtr texture,
 			ref SDL_Rect rect,
-			ref IntPtr pixels,
-			ref int pitch
+			out IntPtr pixels,
+			out int pitch
 		);
 		
 		/* texture refers to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_QueryTexture(
 			IntPtr texture,
-			ref uint format,
-			ref int access,
-			ref int w,
-			ref int h
+			out uint format,
+			out int access,
+			out int w,
+			out int h
 		);
 		
 		/* texture refers to an SDL_Texture, pixels to a void* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_QueryTexturePixels(
 			IntPtr texture,
-			ref IntPtr pixels,
-			ref int pitch
+			out IntPtr pixels,
+			out int pitch
 		);
 		
 		/* renderer refers to an SDL_Renderer* */
@@ -1112,7 +1113,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawLines(
 			IntPtr renderer,
-			SDL_Point[] points,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+				SDL_Point[] points,
 			int count
 		);
 		
@@ -1128,7 +1130,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawPoints(
 			IntPtr renderer,
-			SDL_Point[] points,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+				SDL_Point[] points,
 			int count
 		);
 		
@@ -1143,7 +1146,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawRects(
 			IntPtr renderer,
-			SDL_Rect[] rects,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+				SDL_Rect[] rects,
 			int count
 		);
 		
@@ -1158,7 +1162,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderFillRects(
 			IntPtr renderer,
-			SDL_Rect[] rects,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+				SDL_Rect[] rects,
 			int count
 		);
 		
@@ -1166,7 +1171,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RendererGetViewport(
 			IntPtr renderer,
-			ref SDL_Rect rect
+			out SDL_Rect rect
 		);
 		
 		/* renderer refers to an SDL_Renderer* */
@@ -1647,7 +1652,7 @@ namespace SDL2
 		public struct SDL_Palette
 		{
 			public int ncolors;
-			public SDL_Color[] colors;
+			public IntPtr colors;
 			public int version;
 			public int refcount;
 		}
@@ -1686,7 +1691,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_CalculateGammaRamp(
 			float gamma,
-			ref ushort ramp
+			[Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
+				ushort[] ramp
 		);
 		
 		/* format refers to an SDL_PixelFormat* */
@@ -1708,9 +1714,9 @@ namespace SDL2
 		public static extern void SDL_GetRGB(
 			uint pixel,
 			IntPtr format,
-			ref byte r,
-			ref byte g,
-			ref byte b
+			out byte r,
+			out byte g,
+			out byte b
 		);
 		
 		/* format refers to an SDL_PixelFormat* */
@@ -1718,10 +1724,10 @@ namespace SDL2
 		public static extern void SDL_GetRGBA(
 			uint pixel,
 			IntPtr format,
-			ref byte r,
-			ref byte g,
-			ref byte b,
-			ref byte a
+			out byte r,
+			out byte g,
+			out byte b,
+			out byte a
 		);
 		
 		/* format refers to an SDL_PixelFormat* */
@@ -1755,18 +1761,19 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_PixelFormatEnumToMasks(
 			uint format,
-			ref int bpp,
-			ref uint Rmask,
-			ref uint Gmask,
-			ref uint Bmask,
-			ref uint Amask
+			out int bpp,
+			out uint Rmask,
+			out uint Gmask,
+			out uint Bmask,
+			out uint Amask
 		);
 		
 		/* palette refers to an SDL_Palette* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetPaletteColors(
 			IntPtr palette,
-			SDL_Color[] colors,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct)]
+				SDL_Color[] colors,
 			int firstcolor,
 			int ncolors
 		);
@@ -1800,10 +1807,11 @@ namespace SDL2
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_EnclosePoints(
-			SDL_Point[] points,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 1)]
+				SDL_Point[] points,
 			int count,
 			ref SDL_Rect clip,
-			ref SDL_Rect result
+			out SDL_Rect result
 		);
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1816,7 +1824,7 @@ namespace SDL2
 		public static extern SDL_bool SDL_IntersectRect(
 			ref SDL_Rect A,
 			ref SDL_Rect B,
-			ref SDL_Rect result
+			out SDL_Rect result
 		);
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1841,7 +1849,7 @@ namespace SDL2
 		public static extern void SDL_UnionRect(
 			ref SDL_Rect A,
 			ref SDL_Rect B,
-			ref SDL_Rect result
+			out SDL_Rect result
 		);
 		
 		#endregion
@@ -1961,7 +1969,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_FillRects(
 			IntPtr dst,
-			SDL_Rect[] rects,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+				SDL_Rect[] rects,
 			int count,
 			uint color
 		);
@@ -1974,37 +1983,37 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_GetClipRect(
 			IntPtr surface,
-			ref SDL_Rect rect
+			out SDL_Rect rect
 		);
 		
 		/* surface refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetColorKey(
 			IntPtr surface,
-			ref uint key
+			out uint key
 		);
 		
 		/* surface refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetSurfaceAlphaMod(
 			IntPtr surface,
-			ref byte alpha
+			out byte alpha
 		);
 		
 		/* surface refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetSurfaceBlendMode(
 			IntPtr surface,
-			ref SDL_BlendMode blendMode
+			out SDL_BlendMode blendMode
 		);
 		
 		/* surface refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetSurfaceColorMod(
 			IntPtr surface,
-			ref byte r,
-			ref byte g,
-			ref byte b
+			out byte r,
+			out byte g,
+			out byte b
 		);
 
 		/* These are for SDL_LoadBMP, which is a macro in the SDL headers. */
@@ -2596,7 +2605,8 @@ namespace SDL2
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_PeepEvents(
-			SDL_Event[] events,
+			[Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 1)]
+				SDL_Event[] events,
 			int numevents,
 			SDL_eventaction action,
 			SDL_EventType minType,
@@ -2650,8 +2660,8 @@ namespace SDL2
 		/* userdata refers to a void* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_GetEventFilter(
-			ref SDL_EventFilter filter,
-			ref IntPtr userdata
+			out SDL_EventFilter filter,
+			out IntPtr userdata
 		);
 
 		/* userdata refers to a void* */
@@ -3298,7 +3308,7 @@ namespace SDL2
 		/* Return value is a pointer to a UInt8 array */
 		/* Numkeys returns the size of the array if non-null */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetKeyboardState(ref int numkeys);
+		public static extern IntPtr SDL_GetKeyboardState(out int numkeys);
 
 		/* Get the current key modifier state for the keyboard. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3520,8 +3530,8 @@ namespace SDL2
 		public static extern int SDL_JoystickGetBall(
 			IntPtr joystick,
 			int ball,
-			ref int dx,
-			ref int dy
+			out int dx,
+			out int dy
 		);
 		
 		/* joystick refers to an SDL_Joystick* */
@@ -4290,14 +4300,14 @@ namespace SDL2
 			IntPtr src,
 			int freesrc,
 			ref SDL_AudioSpec spec,
-			ref IntPtr audio_buf,
-			ref uint audio_len
+			out IntPtr audio_buf,
+			out uint audio_len
 		);
 		public static SDL_AudioSpec SDL_LoadWAV(
 			string file,
 			ref SDL_AudioSpec spec,
-			ref IntPtr audio_buf,
-			ref uint audio_len
+			out IntPtr audio_buf,
+			out uint audio_len
 		) {
 			SDL_AudioSpec result;
 			IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "rb");
@@ -4305,8 +4315,8 @@ namespace SDL2
 				rwops,
 				1,
 				ref spec,
-				ref audio_buf,
-				ref audio_len
+				out audio_buf,
+				out audio_len
 			);
 			result = (SDL_AudioSpec) Marshal.PtrToStructure(
 				result_ptr,
@@ -4324,8 +4334,10 @@ namespace SDL2
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_MixAudio(
-			byte[] dst,
-			byte[] src,
+			[Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 2)]
+				byte[] dst,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 2)]
+				byte[] src,
 			uint len,
 			int volume
 		);
@@ -4333,8 +4345,10 @@ namespace SDL2
 		/* format refers to an SDL_AudioFormat */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_MixAudioFormat(
-			byte[] dst,
-			byte[] src,
+			[Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 3)]
+				byte[] dst,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 3)]
+				byte[] src,
 			ushort format,
 			uint len,
 			int volume
@@ -4343,7 +4357,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_OpenAudio(
 			ref SDL_AudioSpec desired,
-			ref SDL_AudioSpec obtained
+			out SDL_AudioSpec obtained
 		);
 		
 		/* uint refers to an SDL_AudioDeviceID */
@@ -4353,7 +4367,7 @@ namespace SDL2
 				string device,
 			int iscapture,
 			ref SDL_AudioSpec desired,
-			ref SDL_AudioSpec obtained,
+			out SDL_AudioSpec obtained,
 			int allowed_changes
 		);
 		
@@ -4375,6 +4389,8 @@ namespace SDL2
 		public static extern void SDL_UnlockAudioDevice(uint dev);
 		
 		#endregion
+
+
 	}
 }
 
