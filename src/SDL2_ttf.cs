@@ -66,7 +66,7 @@ namespace SDL2
 		public const int TTF_HINTING_MONO =	2;
 		public const int TTF_HINTING_NONE =	3;
 		
-		public static void SDL_TTF_VERSION(ref SDL.SDL_version X)
+		public static void SDL_TTF_VERSION(out SDL.SDL_version X)
 		{
 			X.major = SDL_TTF_MAJOR_VERSION;
 			X.minor = SDL_TTF_MINOR_VERSION;
@@ -188,11 +188,11 @@ namespace SDL2
 		public static extern int TTF_GlyphMetrics(
 			IntPtr font,
 			ushort ch,
-			ref int minx,
-			ref int maxx,
-			ref int miny,
-			ref int maxy,
-			ref int advance
+			out int minx,
+			out int maxx,
+			out int miny,
+			out int maxy,
+			out int advance
 		);
 		
 		/* font refers to a TTF_Font* */
@@ -201,8 +201,8 @@ namespace SDL2
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
-			ref int w,
-			ref int h
+			out int w,
+			out int h
 		);
 		
 		/* font refers to a TTF_Font* */
@@ -211,24 +211,25 @@ namespace SDL2
 			IntPtr font,
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string text,
-			ref int w,
-			ref int h
+			out int w,
+			out int h
 		);
 		
 		/* font refers to a TTF_Font* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_SizeUNICODE(
 			IntPtr font,
-			ushort[] text,
-			ref int w,
-			ref int h
+			[In()] [MarshalAs(UnmanagedType.LPWStr)]
+				string text,
+			out int w,
+			out int h
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Solid(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg
 		);
@@ -246,7 +247,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUNICODE_Solid(
 			IntPtr font,
-			ushort[] text,
+			[In()] [MarshalAs(UnmanagedType.LPWStr)]
+				string text,
 			SDL.SDL_Color fg
 		);
 		
@@ -262,7 +264,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Shaded(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
@@ -282,7 +284,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUNICODE_Shaded(
 			IntPtr font,
-			ushort[] text,
+			[In()] [MarshalAs(UnmanagedType.LPWStr)]
+				string text,
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
 		);
@@ -300,7 +303,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Blended(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg
 		);
@@ -318,7 +321,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUNICODE_Blended(
 			IntPtr font,
-			ushort[] text,
+			[In()] [MarshalAs(UnmanagedType.LPWStr)]
+				string text,
 			SDL.SDL_Color fg
 		);
 		
@@ -326,7 +330,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderText_Blended_Wrapped(
 			IntPtr font,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
 				string text,
 			SDL.SDL_Color fg,
 			uint wrapped
@@ -346,7 +350,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUNICODE_Blended_Wrapped(
 			IntPtr font,
-			ushort[] text,
+			[In()] [MarshalAs(UnmanagedType.LPWStr)]
+				string text,
 			SDL.SDL_Color fg,
 			uint wrapped
 		);
