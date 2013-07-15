@@ -1313,7 +1313,7 @@ namespace SDL2
 		
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_RendererGetViewport(
+		public static extern int SDL_RenderGetViewport(
 			IntPtr renderer,
 			out SDL_Rect rect
 		);
