@@ -61,7 +61,7 @@ namespace SDL2
 			IMG_INIT_WEBP =	0x00000008
 		}
 		
-		public static void SDL_IMAGE_VERSION(ref SDL.SDL_version X)
+		public static void SDL_IMAGE_VERSION(out SDL.SDL_version X)
 		{
 			X.major = SDL_IMAGE_MAJOR_VERSION;
 			X.minor = SDL_IMAGE_MINOR_VERSION;
@@ -107,7 +107,10 @@ namespace SDL2
 		
 		/* IntPtr refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr IMG_ReadXPMFromArray(ref char[] xpm);
+		public static extern IntPtr IMG_ReadXPMFromArray(
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)]
+				string[] xpm
+		);
 		
 		#endregion
 	}
