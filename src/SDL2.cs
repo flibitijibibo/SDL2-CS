@@ -368,7 +368,7 @@ namespace SDL2
 		#region SDL_messagebox.h
 
 		[Flags]
-		public enum SDL_MessageBoxFlags
+		public enum SDL_MessageBoxFlags : uint
 		{
 			SDL_MESSAGEBOX_ERROR        = 0x00000010,
 			SDL_MESSAGEBOX_WARNING      = 0x00000020,
@@ -376,14 +376,14 @@ namespace SDL2
 		}
 
 		[Flags]
-		public enum SDL_MessageBoxButtonFlags
+		public enum SDL_MessageBoxButtonFlags : uint
 		{
 			SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT = 0x00000001,
 			SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT = 0x00000002
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
-		internal struct INTERNAL_SDL_MessageBoxButtonData
+		private struct INTERNAL_SDL_MessageBoxButtonData
 		{
 			public SDL_MessageBoxButtonFlags flags;
 			public int buttonid;
@@ -422,7 +422,7 @@ namespace SDL2
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
-		internal struct INTERNAL_SDL_MessageBoxData
+		private struct INTERNAL_SDL_MessageBoxData
 		{
 			public SDL_MessageBoxFlags flags;
 			public IntPtr window;                 /* Parent window, can be NULL */
@@ -446,7 +446,7 @@ namespace SDL2
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_ShowMessageBox", CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int INTERNAL_SDL_ShowMessageBox([In()] ref INTERNAL_SDL_MessageBoxData messageboxdata, out int buttonid);
+		private static extern int INTERNAL_SDL_ShowMessageBox([In()] ref INTERNAL_SDL_MessageBoxData messageboxdata, out int buttonid);
 
 		public static unsafe int SDL_ShowMessageBox([In()] ref SDL_MessageBoxData messageboxdata, out int buttonid)
 		{
