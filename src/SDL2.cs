@@ -365,6 +365,150 @@ namespace SDL2
 		
 		#endregion
 		
+		#region SDL_messagebox.h
+
+		[Flags]
+		public enum SDL_MessageBoxFlags
+		{
+			SDL_MESSAGEBOX_ERROR        = 0x00000010,
+			SDL_MESSAGEBOX_WARNING      = 0x00000020,
+			SDL_MESSAGEBOX_INFORMATION  = 0x00000040
+		}
+
+		[Flags]
+		public enum SDL_MessageBoxButtonFlags
+		{
+			SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT = 0x00000001,
+			SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT = 0x00000002
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		internal struct INTERNAL_SDL_MessageBoxButtonData
+		{
+			public SDL_MessageBoxButtonFlags flags;
+			public int buttonid;
+			public IntPtr text; /* The UTF-8 button text */
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_MessageBoxButtonData
+		{
+			public SDL_MessageBoxButtonFlags flags;
+			public int buttonid;
+			public string text; /* The UTF-8 button text */
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_MessageBoxColor
+		{
+			public byte r, g, b;
+		}
+
+		public enum SDL_MessageBoxColorType
+		{
+			SDL_MESSAGEBOX_COLOR_BACKGROUND,
+			SDL_MESSAGEBOX_COLOR_TEXT,
+			SDL_MESSAGEBOX_COLOR_BUTTON_BORDER,
+			SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND,
+			SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED,
+			SDL_MESSAGEBOX_COLOR_MAX
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_MessageBoxColorScheme
+		{
+			[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = (int)SDL_MessageBoxColorType.SDL_MESSAGEBOX_COLOR_MAX)]
+				public SDL_MessageBoxColor[] colors;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		internal struct INTERNAL_SDL_MessageBoxData
+		{
+			public SDL_MessageBoxFlags flags;
+			public IntPtr window;                 /* Parent window, can be NULL */
+			public IntPtr title;              /* UTF-8 title */
+			public IntPtr message;            /* UTF-8 message text */
+			public int numbuttons;
+			public IntPtr buttons;
+			public IntPtr colorScheme;   /* Can be NULL to use system settings */
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_MessageBoxData
+		{
+			public SDL_MessageBoxFlags flags;
+			public IntPtr window;                 /* Parent window, can be NULL */
+			public string title;              /* UTF-8 title */
+			public string message;            /* UTF-8 message text */
+			public int numbuttons;
+			public SDL_MessageBoxButtonData[] buttons;
+			public SDL_MessageBoxColorScheme? colorScheme;   /* Can be NULL to use system settings */
+		}
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_ShowMessageBox", CallingConvention = CallingConvention.Cdecl)]
+		internal static extern int INTERNAL_SDL_ShowMessageBox([In()] ref INTERNAL_SDL_MessageBoxData messageboxdata, out int buttonid);
+
+		public static unsafe int SDL_ShowMessageBox([In()] ref SDL_MessageBoxData messageboxdata, out int buttonid)
+		{
+			var utf8 = LPUtf8StrMarshaler.GetInstance(null);
+
+			var data = new INTERNAL_SDL_MessageBoxData()
+			{
+				flags = messageboxdata.flags,
+				window = messageboxdata.window,
+				title = utf8.MarshalManagedToNative(messageboxdata.title),
+				message = utf8.MarshalManagedToNative(messageboxdata.message),
+				numbuttons = messageboxdata.numbuttons,
+			};
+
+			var buttons = new INTERNAL_SDL_MessageBoxButtonData[messageboxdata.numbuttons];
+			for (int i = 0; i < messageboxdata.numbuttons; i++)
+			{
+				buttons[i] = new INTERNAL_SDL_MessageBoxButtonData()
+				{
+					flags = messageboxdata.buttons[i].flags,
+					buttonid = messageboxdata.buttons[i].buttonid,
+					text = utf8.MarshalManagedToNative(messageboxdata.buttons[i].text),
+				};
+			}
+
+			if (messageboxdata.colorScheme != null)
+			{
+				data.colorScheme = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(SDL_MessageBoxColorScheme)));
+				Marshal.StructureToPtr(messageboxdata.colorScheme.Value, data.colorScheme, false);
+			}
+
+			int result;
+			fixed (INTERNAL_SDL_MessageBoxButtonData* buttonsPtr = &buttons[0])
+			{
+				data.buttons = (IntPtr)buttonsPtr;
+				result = INTERNAL_SDL_ShowMessageBox(ref data, out buttonid);
+			}
+
+			Marshal.FreeHGlobal(data.colorScheme);
+			for (int i = 0; i < messageboxdata.numbuttons; i++)
+			{
+				utf8.CleanUpNativeData(buttons[i].text);
+			}
+			utf8.CleanUpNativeData(data.message);
+			utf8.CleanUpNativeData(data.title);
+
+			return result;
+		}
+
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_ShowSimpleMessageBox(
+			SDL_MessageBoxFlags flags,
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+				string title,
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+				string message,
+			IntPtr window
+		);
+
+		#endregion
+
 		#region SDL_version.h, SDL_revision.h
 		
 		/* Similar to the headers, this is the version we're expecting to be
@@ -1326,8 +1470,8 @@ namespace SDL2
 					(SDL_PIXELTYPE_ENUM) SDL_PIXELTYPE(format);
 			return (
 				pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX1 ||
-			    pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX4 ||
-			    pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX8
+				pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX4 ||
+				pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX8
 			);
 		}
 		
@@ -1341,9 +1485,9 @@ namespace SDL2
 					(SDL_PIXELORDER_ENUM) SDL_PIXELORDER(format);
 			return (
 				pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_ARGB ||
-			    pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_RGBA ||
-			    pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_ABGR ||
-			    pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_BGRA
+				pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_RGBA ||
+				pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_ABGR ||
+				pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_BGRA
 			);
 		}
 		
@@ -2848,9 +2992,9 @@ namespace SDL2
 			SDL_SCANCODE_VOLUMEUP = 128,
 			SDL_SCANCODE_VOLUMEDOWN = 129,
 			/* not sure whether there's a reason to enable these */
-			/*     SDL_SCANCODE_LOCKINGCAPSLOCK = 130,  */
-			/*     SDL_SCANCODE_LOCKINGNUMLOCK = 131, */
-			/*     SDL_SCANCODE_LOCKINGSCROLLLOCK = 132, */
+			/*	SDL_SCANCODE_LOCKINGCAPSLOCK = 130,  */
+			/*	SDL_SCANCODE_LOCKINGNUMLOCK = 131, */
+			/*	SDL_SCANCODE_LOCKINGSCROLLLOCK = 132, */
 			SDL_SCANCODE_KP_COMMA = 133,
 			SDL_SCANCODE_KP_EQUALSAS400 = 134,
 
@@ -3386,18 +3530,18 @@ namespace SDL2
 		/* System cursor types */
 		public enum SDL_SystemCursor
 		{
-			SDL_SYSTEM_CURSOR_ARROW,     // Arrow
-			SDL_SYSTEM_CURSOR_IBEAM,     // I-beam
-			SDL_SYSTEM_CURSOR_WAIT,      // Wait
-			SDL_SYSTEM_CURSOR_CROSSHAIR, // Crosshair
-			SDL_SYSTEM_CURSOR_WAITARROW, // Small wait cursor (or Wait if not available)
-			SDL_SYSTEM_CURSOR_SIZENWSE,  // Double arrow pointing northwest and southeast
-			SDL_SYSTEM_CURSOR_SIZENESW,  // Double arrow pointing northeast and southwest
-			SDL_SYSTEM_CURSOR_SIZEWE,    // Double arrow pointing west and east
-			SDL_SYSTEM_CURSOR_SIZENS,    // Double arrow pointing north and south
-			SDL_SYSTEM_CURSOR_SIZEALL,   // Four pointed arrow pointing north, south, east, and west
-			SDL_SYSTEM_CURSOR_NO,        // Slashed circle or crossbones
-			SDL_SYSTEM_CURSOR_HAND,      // Hand
+			SDL_SYSTEM_CURSOR_ARROW,	// Arrow
+			SDL_SYSTEM_CURSOR_IBEAM,	// I-beam
+			SDL_SYSTEM_CURSOR_WAIT,		// Wait
+			SDL_SYSTEM_CURSOR_CROSSHAIR,	// Crosshair
+			SDL_SYSTEM_CURSOR_WAITARROW,	// Small wait cursor (or Wait if not available)
+			SDL_SYSTEM_CURSOR_SIZENWSE,	// Double arrow pointing northwest and southeast
+			SDL_SYSTEM_CURSOR_SIZENESW,	// Double arrow pointing northeast and southwest
+			SDL_SYSTEM_CURSOR_SIZEWE,	// Double arrow pointing west and east
+			SDL_SYSTEM_CURSOR_SIZENS,	// Double arrow pointing north and south
+			SDL_SYSTEM_CURSOR_SIZEALL,	// Four pointed arrow pointing north, south, east, and west
+			SDL_SYSTEM_CURSOR_NO,		// Slashed circle or crossbones
+			SDL_SYSTEM_CURSOR_HAND,		// Hand
 			SDL_NUM_SYSTEM_CURSORS
 		}
 
@@ -3480,16 +3624,16 @@ namespace SDL2
 			return (uint) (1 << ((int) X - 1));
 		}
 
-		public const uint SDL_BUTTON_LEFT =     1;
-		public const uint SDL_BUTTON_MIDDLE =   2;
-		public const uint SDL_BUTTON_RIGHT =    3;
-		public const uint SDL_BUTTON_X1 =       4;
-		public const uint SDL_BUTTON_X2 =       5;
-		public static readonly UInt32 SDL_BUTTON_LMASK =    SDL_BUTTON(SDL_BUTTON_LEFT);
-		public static readonly UInt32 SDL_BUTTON_MMASK =    SDL_BUTTON(SDL_BUTTON_MIDDLE);
-		public static readonly UInt32 SDL_BUTTON_RMASK =    SDL_BUTTON(SDL_BUTTON_RIGHT);
-		public static readonly UInt32 SDL_BUTTON_X1MASK =   SDL_BUTTON(SDL_BUTTON_X1);
-		public static readonly UInt32 SDL_BUTTON_X2MASK =   SDL_BUTTON(SDL_BUTTON_X2);
+		public const uint SDL_BUTTON_LEFT =	1;
+		public const uint SDL_BUTTON_MIDDLE =	2;
+		public const uint SDL_BUTTON_RIGHT =	3;
+		public const uint SDL_BUTTON_X1 =	4;
+		public const uint SDL_BUTTON_X2 =	5;
+		public static readonly UInt32 SDL_BUTTON_LMASK =	SDL_BUTTON(SDL_BUTTON_LEFT);
+		public static readonly UInt32 SDL_BUTTON_MMASK =	SDL_BUTTON(SDL_BUTTON_MIDDLE);
+		public static readonly UInt32 SDL_BUTTON_RMASK =	SDL_BUTTON(SDL_BUTTON_RIGHT);
+		public static readonly UInt32 SDL_BUTTON_X1MASK =	SDL_BUTTON(SDL_BUTTON_X1);
+		public static readonly UInt32 SDL_BUTTON_X2MASK =	SDL_BUTTON(SDL_BUTTON_X2);
 
 		#endregion
 		
@@ -4388,149 +4532,6 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_UnlockAudioDevice(uint dev);
 		
-		#endregion
-
-		#region SDL_messagebox.h
-
-		[Flags]
-		public enum SDL_MessageBoxFlags
-		{
-			SDL_MESSAGEBOX_ERROR        = 0x00000010,
-			SDL_MESSAGEBOX_WARNING      = 0x00000020,
-			SDL_MESSAGEBOX_INFORMATION  = 0x00000040
-		}
-
-		[Flags]
-		public enum SDL_MessageBoxButtonFlags
-		{
-			SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT = 0x00000001,
-			SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT = 0x00000002
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		internal struct INTERNAL_SDL_MessageBoxButtonData
-		{
-			public SDL_MessageBoxButtonFlags flags;
-			public int buttonid;
-			public IntPtr text; /* The UTF-8 button text */
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		public struct SDL_MessageBoxButtonData
-		{
-			public SDL_MessageBoxButtonFlags flags;
-			public int buttonid;
-			public string text; /* The UTF-8 button text */
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		public struct SDL_MessageBoxColor
-		{
-			public byte r, g, b;
-		}
-
-		public enum SDL_MessageBoxColorType
-		{
-			SDL_MESSAGEBOX_COLOR_BACKGROUND,
-			SDL_MESSAGEBOX_COLOR_TEXT,
-			SDL_MESSAGEBOX_COLOR_BUTTON_BORDER,
-			SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND,
-			SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED,
-			SDL_MESSAGEBOX_COLOR_MAX
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		public struct SDL_MessageBoxColorScheme
-		{
-			[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = (int)SDL_MessageBoxColorType.SDL_MESSAGEBOX_COLOR_MAX)]
-				public SDL_MessageBoxColor[] colors;
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		internal struct INTERNAL_SDL_MessageBoxData
-		{
-			public SDL_MessageBoxFlags flags;
-			public IntPtr window;                 /* Parent window, can be NULL */
-			public IntPtr title;              /* UTF-8 title */
-			public IntPtr message;            /* UTF-8 message text */
-			public int numbuttons;
-			public IntPtr buttons;
-			public IntPtr colorScheme;   /* Can be NULL to use system settings */
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		public struct SDL_MessageBoxData
-		{
-			public SDL_MessageBoxFlags flags;
-			public IntPtr window;                 /* Parent window, can be NULL */
-			public string title;              /* UTF-8 title */
-			public string message;            /* UTF-8 message text */
-			public int numbuttons;
-			public SDL_MessageBoxButtonData[] buttons;
-			public SDL_MessageBoxColorScheme? colorScheme;   /* Can be NULL to use system settings */
-		}
-
-		[DllImport(nativeLibName, EntryPoint = "SDL_ShowMessageBox", CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int INTERNAL_SDL_ShowMessageBox([In()] ref INTERNAL_SDL_MessageBoxData messageboxdata, out int buttonid);
-
-		public static unsafe int SDL_ShowMessageBox([In()] ref SDL_MessageBoxData messageboxdata, out int buttonid)
-		{
-			var utf8 = LPUtf8StrMarshaler.GetInstance(null);
-
-			var data = new INTERNAL_SDL_MessageBoxData()
-			{
-				flags = messageboxdata.flags,
-				window = messageboxdata.window,
-				title = utf8.MarshalManagedToNative(messageboxdata.title),
-				message = utf8.MarshalManagedToNative(messageboxdata.message),
-				numbuttons = messageboxdata.numbuttons,
-			};
-
-			var buttons = new INTERNAL_SDL_MessageBoxButtonData[messageboxdata.numbuttons];
-			for (int i = 0; i < messageboxdata.numbuttons; i++)
-			{
-				buttons[i] = new INTERNAL_SDL_MessageBoxButtonData()
-				{
-					flags = messageboxdata.buttons[i].flags,
-					buttonid = messageboxdata.buttons[i].buttonid,
-					text = utf8.MarshalManagedToNative(messageboxdata.buttons[i].text),
-				};
-			}
-
-			if (messageboxdata.colorScheme != null)
-			{
-				data.colorScheme = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(SDL_MessageBoxColorScheme)));
-				Marshal.StructureToPtr(messageboxdata.colorScheme.Value, data.colorScheme, false);
-			}
-
-			int result;
-			fixed (INTERNAL_SDL_MessageBoxButtonData* buttonsPtr = &buttons[0])
-			{
-				data.buttons = (IntPtr)buttonsPtr;
-				result = INTERNAL_SDL_ShowMessageBox(ref data, out buttonid);
-			}
-
-			Marshal.FreeHGlobal(data.colorScheme);
-			for (int i = 0; i < messageboxdata.numbuttons; i++)
-			{
-				utf8.CleanUpNativeData(buttons[i].text);
-			}
-			utf8.CleanUpNativeData(data.message);
-			utf8.CleanUpNativeData(data.title);
-
-			return result;
-		}
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_ShowSimpleMessageBox(
-			SDL_MessageBoxFlags flags,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string title,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string message,
-			IntPtr window
-		);
-
 		#endregion
 	}
 }
