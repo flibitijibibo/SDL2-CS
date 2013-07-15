@@ -38,7 +38,7 @@ namespace SDL2
 			_leaveAllocatedInstance = new LPUtf8StrMarshaler(true),
 			_defaultInstance = new LPUtf8StrMarshaler(false);
 
-		private static ICustomMarshaler GetInstance(string cookie)
+		public static ICustomMarshaler GetInstance(string cookie)
 		{
 			switch (cookie)
 			{
