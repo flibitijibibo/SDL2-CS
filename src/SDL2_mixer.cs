@@ -137,7 +137,7 @@ namespace SDL2
 			IntPtr b // void*
 		);
 		
-		public static void SDL_MIXER_VERSION(ref SDL.SDL_version X)
+		public static void SDL_MIXER_VERSION(out SDL.SDL_version X)
 		{
 			X.major = SDL_MIXER_MAJOR_VERSION;
 			X.minor = SDL_MIXER_MINOR_VERSION;
@@ -205,11 +205,18 @@ namespace SDL2
 		
 		/* IntPtr refers to a Mix_Chunk* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr Mix_QuickLoad_WAV(byte[] mem);
+		public static extern IntPtr Mix_QuickLoad_WAV(
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1)]
+				byte[] mem
+		);
 		
 		/* IntPtr refers to a Mix_Chunk* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern Mix_Chunk Mix_QuickLoad_RAW(byte[] mem, uint len);
+		public static extern Mix_Chunk Mix_QuickLoad_RAW(
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 1)]
+				byte[] mem,
+			uint len
+		);
 		
 		/* chunk refers to a Mix_Chunk* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
