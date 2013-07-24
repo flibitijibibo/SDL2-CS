@@ -176,9 +176,9 @@ namespace SDL2
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_QuerySpec(
-			ref int frequency,
-			ref ushort format,
-			ref int channels
+			out int frequency,
+			out ushort format,
+			out int channels
 		);
 		
 		/* These are for Mix_LoadWAV, which is a macro in the C header.
