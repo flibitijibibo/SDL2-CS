@@ -352,8 +352,8 @@ namespace SDL2
 		/* userdata refers to a void* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogGetOutputFunction(
-			ref SDL_LogOutputFunction callback,
-			ref IntPtr userdata
+			out SDL_LogOutputFunction callback,
+			out IntPtr userdata
 		);
 		
 		/* userdata refers to a void* */
@@ -533,7 +533,7 @@ namespace SDL2
 			public byte patch;
 		}
 		
-		public static void SDL_VERSION(ref SDL_version x)
+		public static void SDL_VERSION(out SDL_version x)
 		{
 			x.major = SDL_MAJOR_VERSION;
 			x.minor = SDL_MINOR_VERSION;
@@ -551,7 +551,7 @@ namespace SDL2
 		}
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		private static extern void SDL_GetVersion(ref SDL_version ver);
+		private static extern void SDL_GetVersion(out SDL_version ver);
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
@@ -692,8 +692,8 @@ namespace SDL2
 			int width,
 			int height,
 			SDL_WindowFlags window_flags,
-			ref IntPtr window,
-			ref IntPtr renderer
+			out IntPtr window,
+			out IntPtr renderer
 		);
 		
 		/* IntPtr refers to an SDL_Window*. data is a void* pointer. */
@@ -715,13 +715,13 @@ namespace SDL2
 		public static extern IntPtr SDL_GetClosestDisplayMode(
 			int displayIndex,
 			ref SDL_DisplayMode mode,
-			ref SDL_DisplayMode closest
+			out SDL_DisplayMode closest
 		);
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetCurrentDisplayMode(
 			int displayIndex,
-			ref SDL_DisplayMode mode
+			out SDL_DisplayMode mode
 		);
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -731,20 +731,20 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetDesktopDisplayMode(
 			int displayIndex,
-			ref SDL_DisplayMode mode
+			out SDL_DisplayMode mode
 		);
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetDisplayBounds(
 			int displayIndex,
-			ref SDL_Rect rect
+			out SDL_Rect rect
 		);
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetDisplayMode(
 			int displayIndex,
 			int modeIndex,
-			ref SDL_DisplayMode mode
+			out SDL_DisplayMode mode
 		);
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -788,7 +788,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetWindowDisplayMode(
 			IntPtr window,
-			ref SDL_DisplayMode mode
+			out SDL_DisplayMode mode
 		);
 		
 		/* window refers to an SDL_Window* */
@@ -803,9 +803,12 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetWindowGammaRamp(
 			IntPtr window,
-			ref ushort red,
-			ref ushort green,
-			ref ushort blue
+			[Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
+				ushort[] red,
+			[Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
+				ushort[] green,
+			[Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
+				ushort[] blue
 		);
 		
 		/* window refers to an SDL_Window* */
@@ -826,16 +829,16 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_GetWindowPosition(
 			IntPtr window,
-			ref int x,
-			ref int y
+			out int x,
+			out int y
 		);
 		
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_GetWindowSize(
 			IntPtr window,
-			ref int w,
-			ref int h
+			out int w,
+			out int h
 		);
 		
 		/* IntPtr refers to an SDL_Surface*, window to an SDL_Window* */
@@ -853,8 +856,8 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GL_BindTexture(
 			IntPtr texture,
-			ref float texw,
-			ref float texh
+			out float texw,
+			out float texh
 		);
 		
 		/* IntPtr and window refer to an SDL_GLContext and SDL_Window* */
@@ -881,7 +884,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GL_GetAttribute(
 			SDL_GLattr attr,
-			ref int value
+			out int value
 		);
 		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -968,9 +971,12 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetWindowGammaRamp(
 			IntPtr window,
-			ref ushort red,
-			ref ushort green,
-			ref ushort blue
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
+				ushort[] red,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
+				ushort[] green,
+			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
+				ushort[] blue
 		);
 		
 		/* window refers to an SDL_Window* */
