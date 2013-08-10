@@ -4104,8 +4104,8 @@ namespace SDL2
 			// Replay
 			public uint length;
 			// Rumble
-			ushort large_magnitude;
-			ushort small_magnitude;
+			public ushort large_magnitude;
+			public ushort small_magnitude;
 		}
 		
 		[StructLayout(LayoutKind.Sequential)]
