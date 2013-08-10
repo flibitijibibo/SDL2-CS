@@ -3979,7 +3979,7 @@ namespace SDL2
 		/* SDL_HapticEffect type */
 		public const ushort SDL_HAPTIC_CONSTANT =	(1 << 0);
 		public const ushort SDL_HAPTIC_SINE =		(1 << 1);
-		public const ushort SDL_HAPTIC_SQUARE =		(1 << 2);
+		public const ushort SDL_HAPTIC_LEFTRIGHT =	(1 << 2);
 		public const ushort SDL_HAPTIC_TRIANGLE =	(1 << 3);
 		public const ushort SDL_HAPTIC_SAWTOOTHUP =	(1 << 4);
 		public const ushort SDL_HAPTIC_SAWTOOTHDOWN =	(1 << 5);
@@ -4095,6 +4095,18 @@ namespace SDL2
 			public ushort fade_length;
 			public ushort fade_level;
 		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_HapticLeftRight
+		{
+			// Header
+			public ushort type;
+			// Replay
+			public uint length;
+			// Rumble
+			ushort large_magnitude;
+			ushort small_magnitude;
+		}
 		
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_HapticCustom
@@ -4133,6 +4145,8 @@ namespace SDL2
 			public SDL_HapticCondition condition;
 			[FieldOffset(0)]
 			public SDL_HapticRamp ramp;
+			[FieldOffset(0)]
+			public SDL_HapticLeftRight leftright;
 			[FieldOffset(0)]
 			public SDL_HapticCustom custom;
 		}
