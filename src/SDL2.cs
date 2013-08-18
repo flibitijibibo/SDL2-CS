@@ -145,6 +145,8 @@ namespace SDL2
 			"SDL_XINPUT_ENABLED";
 		public const string SDL_HINT_GAMECONTROLLERCONFIG =
 			"SDL_GAMECONTROLLERCONFIG";
+		public const string SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS =
+			"SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS";
 		public const string SDL_HINT_ALLOW_TOPMOST =
 			"SDL_ALLOW_TOPMOST";
 		
@@ -2447,7 +2449,7 @@ namespace SDL2
 			public SDL_EventType type;
 			public UInt32 timestamp;
 			public UInt32 windowID;
-			public fixed char text[SDL_TEXTEDITINGEVENT_TEXT_SIZE];
+			public fixed byte text[SDL_TEXTEDITINGEVENT_TEXT_SIZE];
 			public Int32 start;
 			public Int32 length;
 		}
@@ -2458,7 +2460,7 @@ namespace SDL2
 			public SDL_EventType type;
 			public UInt32 timestamp;
 			public UInt32 windowID;
-			public fixed char text[SDL_TEXTINPUTEVENT_TEXT_SIZE];
+			public fixed byte text[SDL_TEXTINPUTEVENT_TEXT_SIZE];
 		}
 
 		/* Mouse motion event structure (event.motion.*) */
