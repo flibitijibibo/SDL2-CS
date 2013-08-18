@@ -2332,8 +2332,8 @@ namespace SDL2
 		#region SDL_events.h
 
 		/* General keyboard/mouse state definitions. */
-		public const byte SDL_PRESSED =		0;
-		public const byte SDL_RELEASED =	1;
+		public const byte SDL_PRESSED =		1;
+		public const byte SDL_RELEASED =	0;
 
 		/* Default size is according to SDL2 default. */
 		public const int SDL_TEXTEDITINGEVENT_TEXT_SIZE = 32;
