@@ -1246,6 +1246,15 @@ namespace SDL2
 			ref SDL_Rect srcrect,
 			ref SDL_Rect dstrect
 		);
+
+        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SDL_RenderCopy(
+            IntPtr renderer,
+            IntPtr texture,
+            IntPtr srcrect,
+            ref SDL_Rect dstrect
+        );
 		
 		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
