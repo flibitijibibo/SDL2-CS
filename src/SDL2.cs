@@ -1247,10 +1247,11 @@ namespace SDL2
 			ref SDL_Rect dstrect
 		);
 
-		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
-		/* internally, this function contains logic to use default values when source
-		and destination rectangles are passed as NULL */
-		/* this overload allows for IntPtr.Zero (null) to be passed for source rectangle */
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
+		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderCopy(
 			IntPtr renderer,
@@ -1259,10 +1260,11 @@ namespace SDL2
 			ref SDL_Rect dstrect
 		);
 
-		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
-		/* internally, this function contains logic to use default values when source
-		and destination rectangles are passed as NULL */
-		/* this overload allows for IntPtr.Zero (null) to be passed for destination rectangle */
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
+		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderCopy(
 			IntPtr renderer,
@@ -1271,10 +1273,11 @@ namespace SDL2
 			IntPtr dstrect
 		);
 
-		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
-		/* internally, this function contains logic to use default values when source
-		and destination rectangles are passed as NULL */
-		/* this overload allows for IntPtr.Zero (null) to be passed for both rectangles */
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * this overload allows for IntPtr.Zero (null) to be passed for both SDL_Rects.
+		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderCopy(
 			IntPtr renderer,
