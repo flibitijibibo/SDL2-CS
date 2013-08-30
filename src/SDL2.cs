@@ -4605,14 +4605,15 @@ namespace SDL2
 
 		#region SDL_systimer.h
 
-		/* system timers rely on different OS mechanisms depending on which
-		 * OS the library is compiled against */
+		/* System timers rely on different OS mechanisms depending on
+		 * which operating system SDL2 is compiled against.
+		 */
 
-		/* delays the thread's processing based on the milliseconds parameter */
+		/* Delays the thread's processing based on the milliseconds parameter */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_Delay(UInt32 ms);
 
-		/* returns the milliseconds that have passed since SDL was initialized */
+		/* Returns the milliseconds that have passed since SDL was initialized */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetTicks();
 
