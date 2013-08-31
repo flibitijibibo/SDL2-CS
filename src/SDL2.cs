@@ -36,11 +36,16 @@ using System.Runtime.InteropServices;
 
 namespace SDL2
 {
+	/// <summary>
+	/// Entry point for all SDL-related (non-extension) types and methods
+	/// </summary>
 	public static class SDL
 	{
 		#region SDL2# Variables
 		
-		/* Used by DllImport to load the native library. */
+		/// <summary>
+		/// Used by DllImport to load the native library.
+		/// </summary>
 		private const string nativeLibName = "SDL2.dll";
 		
 		#endregion
@@ -68,6 +73,12 @@ namespace SDL2
 		 * the phrase "THIS IS AN RWops FUNCTION!"
 		 */
 		
+		/// <summary>
+		/// Use this function to create a new SDL_RWops structure for reading from and/or writing to a named file. 
+		/// </summary>
+		/// <param name="file">a UTF-8 string representing the filename to open</param>
+		/// <param name="mode">an ASCII string representing the mode to be used for opening the file; see Remarks for details</param>
+		/// <returns>Returns a pointer to the SDL_RWops structure that is created, or NULL on failure; call SDL_GetError() for more information.</returns>
 		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile", CallingConvention = CallingConvention.Cdecl)]
 		internal static extern IntPtr INTERNAL_SDL_RWFromFile(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
@@ -80,6 +91,9 @@ namespace SDL2
 
 		#region SDL_main.h
 
+		/// <summary>
+		/// Use this function to circumvent failure of SDL_Init() when not using SDL_main() as an entry point.
+		/// </summary>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetMainReady();
 
@@ -100,18 +114,67 @@ namespace SDL2
 			SDL_INIT_GAMECONTROLLER
 		);
 		
+		/// <summary>
+		/// Use this function to initialize the SDL library. 
+		/// This must be called before using any other SDL function. 
+		/// </summary>
+		/// <param name="flags">subsystem initialization flags; see Remarks for details</param>
+		/// <returns>Returns 0 on success or a negative error code on failure. 
+		/// Call <see cref="SDL_GetError()"/> for more information.</returns>
+		/// <remarks>The Event Handling, File I/O, and Threading subsystems are initialized by default. 
+		/// You must specifically initialize other subsystems if you use them in your application.</remarks>
+		/// <remarks>Unless the SDL_INIT_NOPARACHUTE flag is set, it will install cleanup signal handlers 
+		/// for some commonly ignored fatal signals (like SIGSEGV). </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_Init(uint flags);
 		
+		/// <summary>
+		/// Use this function to initialize specific SDL subsystems. 
+		/// </summary>
+		/// <param name="flags">any of the flags used by SDL_Init(); see Remarks for details</param>
+		/// <returns>Returns 0 on success or a negative error code on failure. 
+		/// Call <see cref="SDL_GetError()"/> for more information.</returns>
+		/// <remarks>After SDL has been initialized with <see cref="SDL_Init()"/> you may initialize 
+		/// uninitialized subsystems with <see cref="SDL_InitSubSystem()"/>.</remarks>
+		/// <remarks>If you want to initialize subsystems separately you would call <see cref="SDL_Init(0)"/> 
+		/// followed by <see cref="SDL_InitSubSystem()"/> with the desired subsystem flag. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_InitSubSystem(uint flags);
 		
+		/// <summary>
+		/// Use this function to clean up all initialized subsystems. 
+		/// You should call it upon all exit conditions. 
+		/// </summary>
+		/// <remarks>You should call this function even if you have already shutdown each initialized 
+		/// subsystem with <see cref="SDL_QuitSubSystem()"/>.</remarks>
+		/// <remarks>If you start a subsystem using a call to that subsystem's init function (for example 
+		/// <see cref="SDL_VideoInit()"/>) instead of <see cref="SDL_Init()"/> or <see cref="SDL_InitSubSystem()"/>, 
+		/// then you must use that subsystem's quit function (<see cref="SDL_VideoQuit()"/>) to shut it down 
+		/// before calling <see cref="SDL_Quit()"/>.</remarks>
+		/// <remarks>You can use this function with atexit() to ensure that it is run when your application is 
+		/// shutdown, but it is not wise to do this from a library or other dynamically loaded code. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_Quit();
 		
+		/// <summary>
+		/// Use this function to shut down specific SDL subsystems. 
+		/// </summary>
+		/// <param name="flags">any of the flags used by <see cref="SDL_Init()"/>; see Remarks for details</param>
+		/// <remarks>If you start a subsystem using a call to that subsystem's init function (for example 
+		/// <see cref="SDL_VideoInit()"/>) instead of <see cref="SDL_Init()"/> or <see cref="SDL_InitSubSystem()"/>, 
+		/// then you must use that subsystem's quit function (<see cref="SDL_VideoQuit()"/>) to shut it down 
+		/// before calling <see cref="SDL_Quit()"/>.</remarks>
+		/// <remarks>You can use this function with atexit() to en
+		/// <remarks>You still need to call <see cref="SDL_Quit()"/> even if you close all open subsystems with SDL_QuitSubSystem(). </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_QuitSubSystem(uint flags);
 		
+		/// <summary>
+		/// Use this function to return a mask of the specified subsystems which have previously been initialized. 
+		/// </summary>
+		/// <param name="flags">any of the flags used by <see cref="SDL_Init()"/>; see Remarks for details</param>
+		/// <returns>If flags is 0 it returns a mask of all initialized subsystems, otherwise it returns the 
+		/// initialization status of the specified subsystems. The return value does not include SDL_INIT_NOPARACHUTE.</returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_WasInit(uint flags);
 		
@@ -157,9 +220,19 @@ namespace SDL2
 			SDL_HINT_OVERRIDE
 		}
 		
+		/// <summary>
+		/// Use this function to clear all hints. 
+		/// </summary>
+		/// <remarks>This function is automatically called during <see cref="SDL_Quit()"/>. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_ClearHints();
 		
+		/// <summary>
+		/// Use this function to get the value of a hint. 
+		/// </summary>
+		/// <param name="name">the hint to query; see the list of hints on 
+		/// <a href="http://wiki.libsdl.org/moin.cgi/CategoryHints#Hints">CategoryHints</a> for details</param>
+		/// <returns>Returns the string value of a hint or NULL if the hint isn't set.</returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
 		public static extern string SDL_GetHint(
@@ -167,6 +240,16 @@ namespace SDL2
 				string name
 		);
 
+		/// <summary>
+		/// Use this function to set a hint with normal priority. 
+		/// </summary>
+		/// <param name="name">the hint to query; see the list of hints on 
+		/// <a href="http://wiki.libsdl.org/moin.cgi/CategoryHints#Hints">CategoryHints</a> for details</param>
+		/// <param name="value">the value of the hint variable</param>
+		/// <returns>Returns SDL_TRUE if the hint was set, SDL_FALSE otherwise.</returns>
+		/// <remarks>Hints will not be set if there is an existing override hint or environment 
+		/// variable that takes precedence. You can use <see cref="SDL_SetHintWithPriority()"/> to set the hint with 
+		/// override priority instead.</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_SetHint(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
@@ -175,6 +258,17 @@ namespace SDL2
 				string value
 		);
 		
+		/// <summary>
+		/// Use this function to set a hint with a specific priority. 
+		/// </summary>
+		/// <param name="name">the hint to query; see the list of hints on 
+		/// <a href="http://wiki.libsdl.org/moin.cgi/CategoryHints#Hints">CategoryHints</a> for details</param>
+		/// <param name="value">the value of the hint variable</param>
+		/// <param name="priority">the <see cref="SDL_HintPriority"/> level for the hint</param>
+		/// <returns>Returns SDL_TRUE if the hint was set, SDL_FALSE otherwise.</returns>
+		/// <remarks>The priority controls the behavior when setting a hint that already has a value. 
+		/// Hints will replace existing hints of their priority and lower. Environment variables are 
+		/// considered to have override priority. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_SetHintWithPriority(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
@@ -188,13 +282,32 @@ namespace SDL2
 		
 		#region SDL_error.h
 		
+		/// <summary>
+		/// Use this function to clear any previous error message. 
+		/// </summary>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_ClearError();
 		
+		/// <summary>
+		/// Use this function to retrieve a message about the last error that occurred. 
+		/// </summary>
+		/// <returns>Returns a message with information about the specific error that occurred, 
+		/// or an empty string if there hasn't been an error since the last call to <see cref="SDL_ClearError()"/>.
+		/// Without calling <see cref="SDL_ClearError()"/>, the message is only applicable when an SDL function 
+		/// has signaled an error. You must check the return values of SDL function calls to determine 
+		/// when to appropriately call <see cref="SDL_GetError()"/>. 
+		/// This string is statically allocated and must not be freed by the application.</returns>
+		/// <remarks>It is possible for multiple errors to occur before calling SDL_GetError(). Only the last error is returned. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
 		public static extern string SDL_GetError();
 
+		/// <summary>
+		/// Use this function to set the SDL error string. 
+		/// </summary>
+		/// <param name="fmt">a printf() style message format string </param>
+		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
+		/// <remarks>Calling this function will replace any previous error message that was set.</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetError(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
@@ -240,6 +353,9 @@ namespace SDL2
 		public const int SDL_LOG_CATEGORY_CUSTOM = 19;
 		/* End nameless enum SDL_LOG_CATEGORY */
 		
+		/// <summary>
+		/// An enumeration of the predefined log priorities. 
+		/// </summary>
 		public enum SDL_LogPriority
 		{
 			SDL_LOG_PRIORITY_VERBOSE = 1,
@@ -251,6 +367,15 @@ namespace SDL2
 			SDL_NUM_LOG_PRIORITIES
 		}
 		
+		/// <summary>
+		/// Used as a callback for <see cref="SDL_LogGetOutputFunction()"/> and <see cref="SDL_LogSetOutputFunction()"/>
+		/// </summary>
+		/// <param name="userdata">what was passed as userdata to <see cref="SDL_LogSetOutputFunction()"/></param>
+		/// <param name="category">the category of the message; see Remarks for details</param>
+		/// <param name="priority">the priority of the message; see Remarks for details</param>
+		/// <param name="message">the message being output</param>
+		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
+		/// <remarks>The priority can be one of SDL_LOG_PRIORITY*</remarks>
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void SDL_LogOutputFunction(
 			IntPtr userdata, // void*
@@ -259,6 +384,11 @@ namespace SDL2
 			IntPtr message // const char*
 		);
 		
+		/// <summary>
+		/// Use this function to log a message with SDL_LOG_CATEGORY_APPLICATION and SDL_LOG_PRIORITY_INFO. 
+		/// </summary>
+		/// <param name="fmt">a printf() style message format string</param>
+		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_Log(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
@@ -266,6 +396,13 @@ namespace SDL2
 			__arglist
 		);
 		
+		/// <summary>
+		/// Use this function to log a message with SDL_LOG_PRIORITY_VERBOSE. 
+		/// </summary>
+		/// <param name="category">the category of the message; see Remarks for details</param>
+		/// <param name="fmt">a printf() style message format string</param>
+		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
+		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogVerbose(
 			int category,
@@ -274,6 +411,13 @@ namespace SDL2
 			__arglist
 		);
 		
+		/// <summary>
+		/// Use this function to log a message with SDL_LOG_PRIORITY_DEBUG. 
+		/// </summary>
+		/// <param name="category">the category of the message; see Remarks for details</param>
+		/// <param name="fmt">a printf() style message format string</param>
+		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
+		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogDebug(
 			int category,
@@ -282,6 +426,13 @@ namespace SDL2
 			__arglist
 		);
 		
+		/// <summary>
+		/// Use this function to log a message with SDL_LOG_PRIORITY_INFO. 
+		/// </summary>
+		/// <param name="category">the category of the message; see Remarks for details</param>
+		/// <param name="fmt">a printf() style message format string</param>
+		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
+		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogInfo(
 			int category,
@@ -290,6 +441,13 @@ namespace SDL2
 			__arglist
 		);
 		
+		/// <summary>
+		/// Use this function to log a message with SDL_LOG_PRIORITY_WARN. 
+		/// </summary>
+		/// <param name="category">the category of the message; see Remarks for details</param>
+		/// <param name="fmt">a printf() style message format string</param>
+		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
+		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogWarn(
 			int category,
@@ -298,6 +456,13 @@ namespace SDL2
 			__arglist
 		);
 		
+		/// <summary>
+		/// Use this function to log a message with SDL_LOG_PRIORITY_ERROR. 
+		/// </summary>
+		/// <param name="category">the category of the message; see Remarks for details</param>
+		/// <param name="fmt">a printf() style message format string</param>
+		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
+		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogError(
 			int category,
@@ -306,6 +471,13 @@ namespace SDL2
 			__arglist
 		);
 		
+		/// <summary>
+		/// Use this function to log a message with SDL_LOG_PRIORITY_CRITICAL. 
+		/// </summary>
+		/// <param name="category">the category of the message; see Remarks for details</param>
+		/// <param name="fmt">a printf() style message format string</param>
+		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
+		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogCritical(
 			int category,
@@ -314,6 +486,15 @@ namespace SDL2
 			__arglist
 		);
 		
+		/// <summary>
+		/// Use this function to log a message with the specified category and priority. 
+		/// </summary>
+		/// <param name="category">the category of the message; see Remarks for details</param>
+		/// <param name="priority">the priority of the message; see Remarks for details</param>
+		/// <param name="fmt">a printf() style message format string</param>
+		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
+		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
+		/// <remarks>The priority can be one of SDL_LOG_PRIORITY*</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogMessage(
 			int category,
@@ -323,6 +504,14 @@ namespace SDL2
 			__arglist
 		);
 		
+		/// <summary>
+		/// Use this function to log a message with the specified category and priority. 
+		/// This version of <see cref="SDL_LogMessage"/> uses a stdarg variadic argument list. 
+		/// </summary>
+		/// <param name="category">the category of the message; see Remarks for details</param>
+		/// <param name="priority">the priority of the message; see Remarks for details</param>
+		/// <param name="fmt">a printf() style message format string</param>
+		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogMessageV(
 			int category,
@@ -332,26 +521,53 @@ namespace SDL2
 			__arglist
 		);
 		
+		/// <summary>
+		/// Use this function to get the priority of a particular log category. 
+		/// </summary>
+		/// <param name="category">the category to query; see Remarks for details</param>
+		/// <returns>Returns the <see cref="SDL_LogPriority"/> for the requested category; see Remarks for details. </returns>
+		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
+		/// <remarks>The returned priority will be one of SDL_LOG_PRIORITY*</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_LogPriority SDL_LogGetPriority(
 			int category
 		);
 		
+		/// <summary>
+		/// Use this function to set the priority of a particular log category. 
+		/// </summary>
+		/// <param name="category">the category to query; see Remarks for details</param>
+		/// <param name="priority">the <see cref="SDL_LogPriority"/> of the message; see Remarks for details</param>
+		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
+		/// <remarks>The priority can be one of SDL_LOG_PRIORITY*</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogSetPriority(
 			int category,
 			SDL_LogPriority priority
 		);
 		
+		/// <summary>
+		/// Use this function to set the priority of all log categories. 
+		/// </summary>
+		/// <param name="priority">the <see cref="SDL_LogPriority"/> of the message; see Remarks for details</param>
+		/// <remarks>The priority can be one of SDL_LOG_PRIORITY*</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogSetAllPriority(
 			SDL_LogPriority priority
 		);
 		
+		/// <summary>
+		/// Use this function to reset all priorities to default. 
+		/// </summary>
+		/// <remarks>This is called in <see cref="SDL_Quit()"/>. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogResetPriorities();
 		
-		/* userdata refers to a void* */
+		/// <summary>
+		/// Use this function to get the current log output function. 
+		/// </summary>
+		/// <param name="callback">a pointer filled in with the current log callback; see Remarks for details</param>
+		/// <param name="userdata">a pointer filled in with the pointer that is passed to callback (refers to void*)</param>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogGetOutputFunction(
 			out SDL_LogOutputFunction callback,
@@ -359,6 +575,11 @@ namespace SDL2
 		);
 		
 		/* userdata refers to a void* */
+		/// <summary>
+		/// Use this function to replace the default log output function with one of your own. 
+		/// </summary>
+		/// <param name="callback">the function to call instead of the default; see Remarks for details</param>
+		/// <param name="userdata">a pointer that is passed to callback (refers to void*)</param>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogSetOutputFunction(
 			SDL_LogOutputFunction callback,
@@ -427,29 +648,41 @@ namespace SDL2
 		private struct INTERNAL_SDL_MessageBoxData
 		{
 			public SDL_MessageBoxFlags flags;
-			public IntPtr window;                 /* Parent window, can be NULL */
-			public IntPtr title;              /* UTF-8 title */
-			public IntPtr message;            /* UTF-8 message text */
+			public IntPtr window;				/* Parent window, can be NULL */
+			public IntPtr title;				/* UTF-8 title */
+			public IntPtr message;				/* UTF-8 message text */
 			public int numbuttons;
 			public IntPtr buttons;
-			public IntPtr colorScheme;   /* Can be NULL to use system settings */
+			public IntPtr colorScheme;			/* Can be NULL to use system settings */
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_MessageBoxData
 		{
 			public SDL_MessageBoxFlags flags;
-			public IntPtr window;                 /* Parent window, can be NULL */
-			public string title;              /* UTF-8 title */
-			public string message;            /* UTF-8 message text */
+			public IntPtr window;							/* Parent window, can be NULL */
+			public string title;							/* UTF-8 title */
+			public string message;							/* UTF-8 message text */
 			public int numbuttons;
 			public SDL_MessageBoxButtonData[] buttons;
-			public SDL_MessageBoxColorScheme? colorScheme;   /* Can be NULL to use system settings */
+			public SDL_MessageBoxColorScheme? colorScheme;  /* Can be NULL to use system settings */
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="messageboxdata"></param>
+		/// <param name="buttonid"></param>
+		/// <returns></returns>
 		[DllImport(nativeLibName, EntryPoint = "SDL_ShowMessageBox", CallingConvention = CallingConvention.Cdecl)]
 		private static extern int INTERNAL_SDL_ShowMessageBox([In()] ref INTERNAL_SDL_MessageBoxData messageboxdata, out int buttonid);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="messageboxdata"></param>
+		/// <param name="buttonid"></param>
+		/// <returns></returns>
 		public static unsafe int SDL_ShowMessageBox([In()] ref SDL_MessageBoxData messageboxdata, out int buttonid)
 		{
 			var utf8 = LPUtf8StrMarshaler.GetInstance(null);
@@ -498,7 +731,14 @@ namespace SDL2
 			return result;
 		}
 
-		/* window refers to an SDL_Window* */
+		/// <summary>
+		/// Use this function to display a simple message box. 
+		/// </summary>
+		/// <param name="flags">An <see cref="SDL_MessageBoxFlag"/>; see Remarks for details;</param>
+		/// <param name="title">UTF-8 title text</param>
+		/// <param name="message">UTF-8 message text</param>
+		/// <param name="window">the parent window, or NULL for no parent (refers to a <see cref="SDL_Window"/></param>
+		/// <returns>0 on success or a negative error code on failure; call SDL_GetError() for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_ShowSimpleMessageBox(
 			SDL_MessageBoxFlags flags,
@@ -527,6 +767,14 @@ namespace SDL2
 			SDL_PATCHLEVEL
 		);
 		
+		/// <summary>
+		/// A structure that contains information about the version of SDL in use. 
+		/// </summary>
+		/// <remarks>Represents the library's version as three levels: </remarks>
+		/// <remarks>major revision (increments with massive changes, additions, and enhancements) </remarks>
+		/// <remarks>minor revision (increments with backwards-compatible changes to the major revision), and </remarks>
+		/// <remarks>patchlevel (increments with fixes to the minor revision)</remarks>
+		/// <remarks><see cref="SDL_VERSION"/> can be used to populate this structure with information</remarks>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_version
 		{
@@ -535,6 +783,10 @@ namespace SDL2
 			public byte patch;
 		}
 		
+		/// <summary>
+		/// Use this macro to determine the SDL version your program was compiled against. 
+		/// </summary>
+		/// <param name="x">an <see cref="SDL_version"/> structure to initialize</param>
 		public static void SDL_VERSION(out SDL_version x)
 		{
 			x.major = SDL_MAJOR_VERSION;
@@ -542,23 +794,59 @@ namespace SDL2
 			x.patch = SDL_PATCHLEVEL;
 		}
 		
+		/// <summary>
+		/// Use this macro to convert separate version components into a single numeric value. 
+		/// </summary>
+		/// <param name="X">major version; reported in thousands place</param>
+		/// <param name="Y">minor version; reported in hundreds place</param>
+		/// <param name="Z">update version (patchlevel); reported in tens and ones places</param>
+		/// <returns></returns>
+		/// <remarks>This assumes that there will never be more than 100 patchlevels.</remarks>
+		/// <remarks>Example: SDL_VERSIONNUM(1,2,3) -> (1203)</remarks>
 		public static int SDL_VERSIONNUM(int X, int Y, int Z)
 		{
 			return (X * 1000) + (Y * 100) + Z;
 		}
 		
+		/// <summary>
+		/// Use this macro to determine whether the SDL version compiled against is at least as new as the specified version. 
+		/// </summary>
+		/// <param name="X">major version</param>
+		/// <param name="Y">minor version</param>
+		/// <param name="Z">update version (patchlevel)</param>
+		/// <returns>This macro will evaluate to true if compiled with SDL version at least X.Y.Z. </returns>
 		public static bool SDL_VERSION_ATLEAST(int X, int Y, int Z)
 		{
 			return (SDL_COMPILEDVERSION >= SDL_VERSIONNUM(X, Y, Z));
 		}
 		
+		/// <summary>
+		/// Use this function to get the version of SDL that is linked against your program. 
+		/// </summary>
+		/// <param name="ver">the <see cref="SDL_version"/> structure that contains the version information</param>
+		/// <remarks>This function may be called safely at any time, even before SDL_Init(). </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		private static extern void SDL_GetVersion(out SDL_version ver);
 		
+		/// <summary>
+		/// Use this function to get the code revision of SDL that is linked against your program. 
+		/// </summary>
+		/// <returns>Returns an arbitrary string, uniquely identifying the exact revision 
+		/// of the SDL library in use. </returns>
+		/// <remarks>The revision is a string including sequential revision number that is 
+		/// incremented with each commit, and a hash of the last code change.</remarks>
+		/// <remarks>Example: hg-5344:94189aa89b54</remarks>
+		/// <remarks>This value is the revision of the code you are linked with and may be 
+		/// different from the code you are compiling with, which is found in the constant SDL_REVISION.</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
 		public static extern string SDL_GetRevision();
 
+		/// <summary>
+		/// Use this function to get the revision number of SDL that is linked against your program. 
+		/// </summary>
+		/// <returns>Returns a number uniquely identifying the exact revision of the SDL library in use.</returns>
+		/// <remarks>This is an incrementing number based on commits to hg.libsdl.org.</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetRevisionNumber();
 		
@@ -567,6 +855,9 @@ namespace SDL2
 		#region SDL_video.h
 		
 		/* Actually, this is from SDL_blendmode.h */
+		/// <summary>
+		/// An enumeration of blend modes used in SDL_RenderCopy() and drawing operations. 
+		/// </summary>
 		[Flags]
 		public enum SDL_BlendMode
 		{
@@ -576,6 +867,9 @@ namespace SDL2
 			SDL_BLENDMODE_MOD =	0x00000004
 		}
 		
+		/// <summary>
+		/// An enumeration of OpenGL configuration attributes. 
+		/// </summary>
 		public enum SDL_GLattr
 		{
 			SDL_GL_RED_SIZE,
@@ -603,6 +897,9 @@ namespace SDL2
 			SDL_GL_SHARE_WITH_CURRENT_CONTEXT
 		}
 
+		/// <summary>
+		/// An enumeration of OpenGL profiles. 
+		/// </summary>
 		[Flags]
 		public enum SDL_GLprofile
 		{
@@ -611,6 +908,9 @@ namespace SDL2
 			SDL_GL_CONTEXT_PROFILE_ES				= 0x0004
 		}
 		
+		/// <summary>
+		/// An enumeration of window events. 
+		/// </summary>
 		public enum SDL_WindowEventID : byte
 		{
 			SDL_WINDOWEVENT_NONE,
@@ -630,6 +930,9 @@ namespace SDL2
 			SDL_WINDOWEVENT_CLOSE,
 		}
 		
+		/// <summary>
+		/// An enumeration of window states. 
+		/// </summary>
 		[Flags]
 		public enum SDL_WindowFlags
 		{
@@ -674,6 +977,9 @@ namespace SDL2
 			return (X & 0xFFFF0000) == SDL_WINDOWPOS_CENTERED_MASK;
 		}
 		
+		/// <summary>
+		/// A structure that describes a display mode. 
+		/// </summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_DisplayMode
 		{
@@ -684,7 +990,18 @@ namespace SDL2
 			public IntPtr driverdata; // void*
 		}
 		
-		/* IntPtr refers to an SDL_Window* */
+		/// <summary>
+		/// Use this function to create a window with the specified position, dimensions, and flags. 
+		/// </summary>
+		/// <param name="title">the title of the window, in UTF-8 encoding</param>
+		/// <param name="x">the x position of the window, SDL_WINDOWPOS_CENTERED, or SDL_WINDOWPOS_UNDEFINED</param>
+		/// <param name="y">the y position of the window, SDL_WINDOWPOS_CENTERED, or SDL_WINDOWPOS_UNDEFINED</param>
+		/// <param name="w">the width of the window</param>
+		/// <param name="h">the height of the window</param>
+		/// <param name="flags">0, or one or more <see cref="SDL_WindowFlags"/> OR'd together; 
+		/// see Remarks for details</param>
+		/// <returns>Returns the window that was created or NULL on failure; call <see cref="SDL_GetError()"/> 
+		/// for more information. (refers to an <see cref="SDL_Window"/>)</returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_CreateWindow(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
@@ -696,7 +1013,15 @@ namespace SDL2
 			SDL_WindowFlags flags
 		);
 		
-		/* window and renderer refer to an SDL_Window* and SDL_Renderer* */
+		/// <summary>
+		/// Use this function to create a window and default renderer. 
+		/// </summary>
+		/// <param name="width">The width of the window</param>
+		/// <param name="height">The height of the window</param>
+		/// <param name="window_flags">The flags used to create the window (see <see cref="SDL_CreateWindow()"/>)</param>
+		/// <param name="window">A pointer filled with the window, or NULL on error (<see cref="SDL_Window*"/>)</param>
+		/// <param name="renderer">A pointer filled with the renderer, or NULL on error <see cref="(SDL_Renderer*)"/></param>
+		/// <returns>Returns 0 on success, or -1 on error; call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_CreateWindowAndRenderer(
 			int width,
@@ -706,21 +1031,51 @@ namespace SDL2
 			out IntPtr renderer
 		);
 		
-		/* IntPtr refers to an SDL_Window*. data is a void* pointer. */
+		/// <summary>
+		/// Use this function to create an SDL window from an existing native window. 
+		/// </summary>
+		/// <param name="data">a pointer to driver-dependent window creation data, typically your native window cast to a void*</param>
+		/// <returns>Returns the window (<see cref="SDL_Window"/>) that was created or NULL on failure; 
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_CreateWindowFrom(IntPtr data);
 		
-		/* window refers to an SDL_Window* */
+		/// <summary>
+		/// Use this function to destroy a window. 
+		/// </summary>
+		/// <param name="window">the window to destroy (<see cref="SDL_Window"/>)</param>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_DestroyWindow(IntPtr window);
 		
+		/// <summary>
+		/// Use this function to prevent the screen from being blanked by a screen saver. 
+		/// </summary>
+		/// <remarks>If you disable the screensaver, it is automatically re-enabled when SDL quits. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_DisableScreenSaver();
 		
+		/// <summary>
+		/// Use this function to allow the screen to be blanked by a screen saver. 
+		/// </summary>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_EnableScreenSaver();
 		
 		/* IntPtr refers to an SDL_DisplayMode. Just use closest. */
+		/// <summary>
+		/// Use this function to get the closest match to the requested display mode. 
+		/// </summary>
+		/// <param name="displayIndex">the index of the display to query</param>
+		/// <param name="mode">an <see cref="SDL_DisplayMode"/> structure containing the desired display mode </param>
+		/// <param name="closest">an <see cref="SDL_DisplayMode"/> structure filled in with 
+		/// the closest match of the available display modes </param>
+		/// <returns>Returns the passed in value closest or NULL if no matching video mode was available;
+		/// (refers to a <see cref="SDL_DisplayMode"/>)
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
+		/// <remarks>The available display modes are scanned and closest is filled in with the closest mode 
+		/// matching the requested mode and returned. The mode format and refresh rate default to the desktop 
+		/// mode if they are set to 0. The modes are scanned with size being first priority, format being 
+		/// second priority, and finally checking the refresh rate. If all the available modes are too small, 
+		/// then NULL is returned. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetClosestDisplayMode(
 			int displayIndex,
@@ -728,28 +1083,75 @@ namespace SDL2
 			out SDL_DisplayMode closest
 		);
 		
+		/// <summary>
+		/// Use this function to get information about the current display mode. 
+		/// </summary>
+		/// <param name="displayIndex">the index of the display to query</param>
+		/// <param name="mode">an <see cref="SDL_DisplayMode"/> structure filled in with the current display mode</param>
+		/// <returns>Returns 0 on success or a negative error code on failure; 
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
+		/// <remarks>There's a difference between this function and <see cref="SDL_GetDesktopDisplayMode"/> when SDL 
+		/// runs fullscreen and has changed the resolution. In that case this function will return the 
+		/// current display mode, and not the previous native display mode. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetCurrentDisplayMode(
 			int displayIndex,
 			out SDL_DisplayMode mode
 		);
 		
+		/// <summary>
+		/// Use this function to return the name of the currently initialized video driver. 
+		/// </summary>
+		/// <returns>Returns the name of the current video driver or NULL if no driver has been initialized. </returns>
+		/// <remarks>There's a difference between this function and <see cref="SDL_GetCurrentDisplayMode"/> when SDL 
+		/// runs fullscreen and has changed the resolution. In that case this function will return the 
+		/// previous native display mode, and not the current display mode. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
 		public static extern string SDL_GetCurrentVideoDriver();
 
+		/// <summary>
+		/// Use this function to get information about the desktop display mode. 
+		/// </summary>
+		/// <param name="displayIndex">the index of the display to query</param>
+		/// <param name="mode">an <see cref="SDL_DisplayMode"/> structure filled in with the current display mode</param>
+		/// <returns>Returns 0 on success or a negative error code on failure; 
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
+		/// <remarks>There's a difference between this function and <see cref="SDL_GetCurrentDisplayMode"/> when SDL 
+		/// runs fullscreen and has changed the resolution. In that case this function will return the 
+		/// previous native display mode, and not the current display mode. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetDesktopDisplayMode(
 			int displayIndex,
 			out SDL_DisplayMode mode
 		);
 		
+		/// <summary>
+		/// Use this function to get the desktop area represented by a display, with the primary display located at 0,0. 
+		/// </summary>
+		/// <param name="displayIndex">the index of the display to query</param>
+		/// <param name="rect">the <see cref="SDL_Rect"/> structure filled in with the display bounds</param>
+		/// <returns>Returns 0 on success or a negative error code on failure;
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetDisplayBounds(
 			int displayIndex,
 			out SDL_Rect rect
 		);
 		
+		/// <summary>
+		/// Use this function to get information about a specific display mode. 
+		/// </summary>
+		/// <param name="displayIndex">the index of the display to query</param>
+		/// <param name="modeIndex">the index of the display mode to query</param>
+		/// <param name="mode">an <see cref="SDL_DisplayMode"/> structure filled in with the mode at modeIndex</param>
+		/// <returns>Returns 0 on success or a negative error code on failure; 
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
+		/// <remarks>The display modes are sorted in this priority:
+		/// <remarks>bits per pixel -> more colors to fewer colors</remarks>
+		/// <remarks>width -> largest to smallest</remarks>
+		/// <remarks>height -> largest to smallest</remarks>
+		/// <remarks>refresh rate -> highest to lowest</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetDisplayMode(
 			int displayIndex,
@@ -757,30 +1159,61 @@ namespace SDL2
 			out SDL_DisplayMode mode
 		);
 		
+		/// <summary>
+		/// Use this function to return the number of available display modes. 
+		/// </summary>
+		/// <param name="displayIndex">the index of the display to query</param>
+		/// <returns>Returns a number >= 1 on success or a negative error code on failure; 
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetNumDisplayModes(
 			int displayIndex
 		);
 		
+		/// <summary>
+		/// Use this function to return the number of available video displays. 
+		/// </summary>
+		/// <returns>Returns a number >= 1 or a negative error code on failure;
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetNumVideoDisplays();
 		
+		/// <summary>
+		/// Use this function to get the number of video drivers compiled into SDL. 
+		/// </summary>
+		/// <returns>Returns a number >= 1 on success or a negative error code on failure;
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetNumVideoDrivers();
 		
+		/// <summary>
+		/// Use this function to get the name of a built in video driver. 
+		/// </summary>
+		/// <param name="index">the index of a video driver</param>
+		/// <returns>Returns the name of the video driver with the given index. </returns>
+		/// <remarks>The video drivers are presented in the order in which they are normally checked during initialization. </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
 		public static extern string SDL_GetVideoDriver(
 			int index
 		);
 
-		/* window refers to an SDL_Window* */
+		/// <summary>
+		/// Use this function to get the brightness (gamma correction) for a window. 
+		/// </summary>
+		/// <param name="window">the window to query (<see cref="SDL_Window"/>)</param>
+		/// <returns>Returns the brightness for the window where 0.0 is completely dark and 1.0 is normal brightness. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern float SDL_GetWindowBrightness(
 			IntPtr window
 		);
 		
-		/* IntPtr refers to void* data. window refers to an SDL_Window*. */
+		/// <summary>
+		/// Use this function to retrieve the data pointer associated with a window. 
+		/// </summary>
+		/// <param name="window">the window to query (<see cref="SDL_Window"/>)</param>
+		/// <param name="name">the name of the pointer</param>
+		/// <returns>Returns the value associated with name. (void*)</returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetWindowData(
 			IntPtr window,
@@ -788,24 +1221,45 @@ namespace SDL2
 				string name
 		);
 		
-		/* window refers to an SDL_Window* */
+		/// <summary>
+		/// Use this function to get the index of the display associated with a window. 
+		/// </summary>
+		/// <param name="window">the window to query (<see cref="SDL_Window"/>)</param>
+		/// <returns>Returns the index of the display containing the center of the window 
+		/// on success or a negative error code on failure; 
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetWindowDisplayIndex(
 			IntPtr window
 		);
 		
-		/* window refers to an SDL_Window* */
+		/// <summary>
+		/// Use this function to fill in information about the display mode to use when a window is visible at fullscreen. 
+		/// </summary>
+		/// <param name="window">the window to query (<see cref="SDL_Window"/>)</param>
+		/// <param name="mode">an <see cref="SDL_DisplayMode"/> structure filled in with the fullscreen display mode</param>
+		/// <returns>Returns 0 on success or a negative error code on failure; 
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetWindowDisplayMode(
 			IntPtr window,
 			out SDL_DisplayMode mode
 		);
 		
-		/* window refers to an SDL_Window* */
+		/// <summary>
+		/// Use this function to get the window flags. 
+		/// </summary>
+		/// <param name="window">the window to query (<see cref="SDL_Window"/>)</param>
+		/// <returns>Returns a mask of the <see cref="SDL_WindowFlags"/> associated with window; see Remarks for details.</returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_GetWindowFlags(IntPtr window);
 		
-		/* IntPtr refers to an SDL_Window* */
+		/// <summary>
+		/// Use this function to get a window from a stored ID. 
+		/// </summary>
+		/// <param name="id">the ID of the window</param>
+		/// <returns>Returns the window associated with id or NULL if it doesn't exist (<see cref="SDL_Window"/>);
+		/// call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetWindowFromID(uint id);
 		
