@@ -5147,23 +5147,27 @@ namespace SDL2
 		}
 
 		[StructLayout(LayoutKind.Explicit)]
-		public struct SDL_SysWMinfo
+		public struct INTERNAL_SysWMDriverUnion
 		{
 			[FieldOffset(0)]
-			public SDL_version version;
-			[FieldOffset(3)]
-			public SDL_SYSWM_TYPE subsystem;
-			[FieldOffset(7)]
 			public INTERNAL_windows_wminfo win;
-			[FieldOffset(7)]
+			[FieldOffset(0)]
 			public INTERNAL_x11_wminfo x11;
-			[FieldOffset(7)]
+			[FieldOffset(0)]
 			public INTERNAL_directfb_wminfo dfb;
-			[FieldOffset(7)]
+			[FieldOffset(0)]
 			public INTERNAL_cocoa_wminfo cocoa;
-			[FieldOffset(7)]
+			[FieldOffset(0)]
 			public INTERNAL_uikit_wminfo uikit;
 			// private int dummy;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_SysWMinfo
+		{
+			public SDL_version version;
+			public SDL_SYSWM_TYPE subsystem;
+			public INTERNAL_SysWMDriverUnion info;
 		}
 
 		/* window refers to an SDL_Window* */
