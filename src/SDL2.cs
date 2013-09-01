@@ -5166,6 +5166,13 @@ namespace SDL2
 			// private int dummy;
 		}
 
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_GetWindowWMInfo(
+			IntPtr window,
+			ref SDL_SysWMinfo info
+		);
+
 		#endregion
 	}
 }
