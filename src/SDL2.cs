@@ -5072,6 +5072,74 @@ namespace SDL2
 		public static extern UInt32 SDL_GetTicks();
 
 		#endregion
+
+		#region SDL_syswm.h
+
+		public enum SDL_SYSWM_TYPE
+		{
+			SDL_SYSWM_UNKNOWN,
+			SDL_SYSWM_WINDOWS,
+			SDL_SYSWM_X11,
+			SDL_SYSWM_DIRECTFB,
+			SDL_SYSWM_COCOA,
+			SDL_SYSWM_UIKIT
+		}
+
+		// FIXME: I wish these weren't public...
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_windows_wminfo
+		{
+			public IntPtr window; // Refers to an HWND
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_x11_wminfo
+		{
+			public IntPtr display; // Refers to a Display*
+			public IntPtr window; // Refers to a Window (XID, use ToInt64!)
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_directfb_wminfo
+		{
+			public IntPtr dfb; // Refers to an IDirectFB*
+			public IntPtr window; // Refers to an IDirectFBWindow*
+			public IntPtr surface; // Refers to an IDirectFBSurface*
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_cocoa_wminfo
+		{
+			public IntPtr window; // Refers to an NSWindow*
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_uikit_wminfo
+		{
+			public IntPtr window; // Refers to a UIWindow*
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		public struct SDL_SysWMinfo
+		{
+			[FieldOffset(0)]
+			public SDL_version version;
+			[FieldOffset(3)]
+			SDL_SYSWM_TYPE subsystem;
+			[FieldOffset(7)]
+			public INTERNAL_windows_wminfo win;
+			[FieldOffset(7)]
+			public INTERNAL_x11_wminfo x11;
+			[FieldOffset(7)]
+			public INTERNAL_directfb_wminfo dfb;
+			[FieldOffset(7)]
+			public INTERNAL_cocoa_wminfo cocoa;
+			[FieldOffset(7)]
+			public INTERNAL_uikit_wminfo uikit;
+			// private int dummy;
+		}
+
+		#endregion
 	}
 }
 
