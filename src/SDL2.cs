@@ -31,9 +31,6 @@ using System;
 using System.Runtime.InteropServices;
 #endregion
 
-/* We have lots of padding fields, which we want private */
-#pragma warning disable 0169
-
 namespace SDL2
 {
 	/// <summary>
@@ -2907,6 +2904,8 @@ namespace SDL2
 			public UInt32 timestamp;
 		}
 
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
 		/* Window state change event data (event.window.*) */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_WindowEvent
@@ -2915,13 +2914,16 @@ namespace SDL2
 			public UInt32 timestamp;
 			public UInt32 windowID;
 			public SDL_WindowEventID windowEvent; // event, lolC#
-			byte padding1;
-			byte padding2;
-			byte padding3;
+			private byte padding1;
+			private byte padding2;
+			private byte padding3;
 			public Int32 data1;
 			public Int32 data2;
 		}
-		
+#pragma warning restore 0169
+
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
 		/* Keyboard button event structure (event.key.*) */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_KeyboardEvent
@@ -2931,10 +2933,11 @@ namespace SDL2
 			public UInt32 windowID;
 			public byte state;
 			public byte repeat; /* non-zero if this is a repeat */
-			byte padding2;
-			byte padding3;
+			private byte padding2;
+			private byte padding3;
 			public SDL_Keysym keysym;
 		}
+#pragma warning restore 0169
 
 		[StructLayout(LayoutKind.Sequential)]
 		public unsafe struct SDL_TextEditingEvent
@@ -2956,6 +2959,8 @@ namespace SDL2
 			public fixed byte text[SDL_TEXTINPUTEVENT_TEXT_SIZE];
 		}
 
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
 		/* Mouse motion event structure (event.motion.*) */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_MouseMotionEvent
@@ -2965,15 +2970,18 @@ namespace SDL2
 			public UInt32 windowID;
 			public UInt32 which;
 			public byte state; /* bitmask of buttons */
-			byte padding1;
-			byte padding2;
-			byte padding3;
+			private byte padding1;
+			private byte padding2;
+			private byte padding3;
 			public Int32 x;
 			public Int32 y;
 			public Int32 xrel;
 			public Int32 yrel;
 		}
+#pragma warning restore 0169
 
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
 		/* Mouse button event structure (event.button.*) */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_MouseButtonEvent
@@ -2984,11 +2992,12 @@ namespace SDL2
 			public UInt32 which;
 			public byte button; /* button id */
 			public byte state; /* SDL_PRESSED or SDL_RELEASED */
-			byte padding1;
-			byte padding2;
+			private byte padding1;
+			private byte padding2;
 			public Int32 x;
 			public Int32 y;
 		}
+#pragma warning restore 0169
 
 		/* Mouse wheel event structure (event.wheel.*) */
 		[StructLayout(LayoutKind.Sequential)]
@@ -3002,6 +3011,8 @@ namespace SDL2
 			public Int32 y; /* amount scrolled vertically */
 		}
 
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
 		/* Joystick axis motion event structure (event.jaxis.*) */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_JoyAxisEvent
@@ -3010,13 +3021,16 @@ namespace SDL2
 			public UInt32 timestamp;
 			public Int32 which; /* SDL_JoystickID */
 			public byte axis;
-			byte padding1;
-			byte padding2;
-			byte padding3;
+			private byte padding1;
+			private byte padding2;
+			private byte padding3;
 			public Int16 axisValue; /* value, lolC# */
 			public UInt16 padding4;
 		}
+#pragma warning restore 0169
 
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
 		/* Joystick trackball motion event structure (event.jball.*) */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_JoyBallEvent
@@ -3025,13 +3039,16 @@ namespace SDL2
 			public UInt32 timestamp;
 			public Int32 which; /* SDL_JoystickID */
 			public byte ball;
-			byte padding1;
-			byte padding2;
-			byte padding3;
+			private byte padding1;
+			private byte padding2;
+			private byte padding3;
 			public Int16 xrel;
 			public Int16 yrel;
 		}
+#pragma warning restore 0169
 
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
 		/* Joystick hat position change event struct (event.jhat.*) */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_JoyHatEvent
@@ -3041,10 +3058,13 @@ namespace SDL2
 			public Int32 which; /* SDL_JoystickID */
 			public byte hat; /* index of the hat */
 			public byte hatValue; /* value, lolC# */
-			byte padding1;
-			byte padding2;
+			private byte padding1;
+			private byte padding2;
 		}
+#pragma warning restore 0169
 
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
 		/* Joystick button event structure (event.jbutton.*) */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_JoyButtonEvent
@@ -3054,9 +3074,10 @@ namespace SDL2
 			public Int32 which; /* SDL_JoystickID */
 			public byte button;
 			public byte state; /* SDL_PRESSED or SDL_RELEASED */
-			byte padding1;
-			byte padding2;
+			private byte padding1;
+			private byte padding2;
 		}
+#pragma warning restore 0169
 
 		/* Joystick device event structure (event.jdevice.*) */
 		[StructLayout(LayoutKind.Sequential)]
@@ -3067,6 +3088,8 @@ namespace SDL2
 			public Int32 which; /* SDL_JoystickID */
 		}
 
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
 		/* Game controller axis motion event (event.caxis.*) */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_ControllerAxisEvent
@@ -3075,13 +3098,16 @@ namespace SDL2
 			public UInt32 timestamp;
 			public Int32 which; /* SDL_JoystickID */
 			public byte axis;
-			byte padding1;
-			byte padding2;
-			byte padding3;
+			private byte padding1;
+			private byte padding2;
+			private byte padding3;
 			public Int16 axisValue; /* value, lolC# */
-			UInt16 padding4;
+			private UInt16 padding4;
 		}
+#pragma warning restore 0169
 
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
 		/* Game controller button event (event.cbutton.*) */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_ControllerButtonEvent
@@ -3091,9 +3117,10 @@ namespace SDL2
 			public Int32 which; /* SDL_JoystickID */
 			public byte button;
 			public byte state;
-			byte padding1;
-			byte padding2;
+			private byte padding1;
+			private byte padding2;
 		}
+#pragma warning restore 0169
 
 		/* Game controller device event (event.cdevice.*) */
 		[StructLayout(LayoutKind.Sequential)]
@@ -5125,7 +5152,7 @@ namespace SDL2
 			[FieldOffset(0)]
 			public SDL_version version;
 			[FieldOffset(3)]
-			SDL_SYSWM_TYPE subsystem;
+			public SDL_SYSWM_TYPE subsystem;
 			[FieldOffset(7)]
 			public INTERNAL_windows_wminfo win;
 			[FieldOffset(7)]
@@ -5142,5 +5169,3 @@ namespace SDL2
 		#endregion
 	}
 }
-
-#pragma warning restore 0169
