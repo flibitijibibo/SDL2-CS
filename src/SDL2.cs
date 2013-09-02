@@ -1658,15 +1658,18 @@ namespace SDL2
 			out byte b
 		);
 		
-		/* texture refers to an SDL_Texture*, pixels to a void* */
 		/// <summary>
 		/// Use this function to lock a portion of the texture for write-only pixel access. 
 		/// </summary>
-		/// <param name="texture"></param>
-		/// <param name="rect"></param>
-		/// <param name="pixels"></param>
-		/// <param name="pitch"></param>
-		/// <returns></returns>
+		/// <param name="texture">the texture to lock for access, which was created with 
+		/// SDL_TEXTUREACCESS_STREAMING (refers to a SDL_Texture*)</param>
+		/// <param name="rect">an SDL_Rect structure representing the area to lock for access; 
+		/// NULL to lock the entire texture </param>
+		/// <param name="pixels">this is filled in with a pointer to the locked pixels, appropriately 
+		/// offset by the locked area (refers to a void*)</param>
+		/// <param name="pitch">this is filled in with the pitch of the locked pixels </param>
+		/// <returns>Returns 0 on success or a negative error code if the texture is not valid or 
+		/// was not created with SDL_TEXTUREACCESS_STREAMING; call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_LockTexture(
 			IntPtr texture,
@@ -1675,11 +1678,23 @@ namespace SDL2
 			out int pitch
 		);
 
-		/* texture refers to an SDL_Texture*, pixels to a void* */
+		/// <summary>
+		/// Use this function to lock a portion of the texture for write-only pixel access. This overload
+		/// allows for passing an IntPtr.Zero (null) rect value to lock the entire texture.
+		/// </summary>
+		/// <param name="texture">the texture to lock for access, which was created with 
+		/// SDL_TEXTUREACCESS_STREAMING (refers to a SDL_Texture*)</param>
+		/// <param name="rect">an SDL_Rect structure representing the area to lock for access; 
+		/// NULL to lock the entire texture </param>
+		/// <param name="pixels">this is filled in with a pointer to the locked pixels, appropriately 
+		/// offset by the locked area (refers to a void*)</param>
+		/// <param name="pitch">this is filled in with the pitch of the locked pixels </param>
+		/// <returns>Returns 0 on success or a negative error code if the texture is not valid or 
+		/// was not created with SDL_TEXTUREACCESS_STREAMING; call <see cref="SDL_GetError()"/> for more information. </returns>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_LockTexture(
 			IntPtr texture,
-			ref SDL_Rect rect,
+			IntPtr rect,
 			out IntPtr pixels,
 			out int pitch
 		);
