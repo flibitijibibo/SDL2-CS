@@ -1659,6 +1659,23 @@ namespace SDL2
 		);
 		
 		/* texture refers to an SDL_Texture*, pixels to a void* */
+		/// <summary>
+		/// Use this function to lock a portion of the texture for write-only pixel access. 
+		/// </summary>
+		/// <param name="texture"></param>
+		/// <param name="rect"></param>
+		/// <param name="pixels"></param>
+		/// <param name="pitch"></param>
+		/// <returns></returns>
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_LockTexture(
+			IntPtr texture,
+			ref SDL_Rect rect,
+			out IntPtr pixels,
+			out int pitch
+		);
+
+		/* texture refers to an SDL_Texture*, pixels to a void* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_LockTexture(
 			IntPtr texture,
