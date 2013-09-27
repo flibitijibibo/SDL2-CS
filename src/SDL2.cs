@@ -904,7 +904,20 @@ namespace SDL2
 			SDL_GL_CONTEXT_PROFILE_COMPATIBILITY	= 0x0002,
 			SDL_GL_CONTEXT_PROFILE_ES				= 0x0004
 		}
-		
+
+		/// <summary>
+		/// This enumeration is used in conjunction with SDL_GL_SetAttribute
+		/// and SDL_GL_CONTEXT_FLAGS. Multiple flags can be OR'd together. 
+		/// </summary>
+		[Flags]
+		public enum SDL_GLcontext
+		{
+			SDL_GL_CONTEXT_DEBUG_FLAG				= 0x0001,
+			SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG	= 0x0002,
+			SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG		= 0x0004,
+			SDL_GL_CONTEXT_RESET_ISOLATION_FLAG		= 0x0008
+		}
+
 		/// <summary>
 		/// An enumeration of window events. 
 		/// </summary>
