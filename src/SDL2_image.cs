@@ -36,14 +36,14 @@ namespace SDL2
 	public static class SDL_image
 	{
 		#region SDL2# Variables
-		
+
 		/* Used by DllImport to load the native library. */
 		private const string nativeLibName = "SDL2_image.dll";
-		
+
 		#endregion
-		
+
 		#region SDL_image.h
-		
+
 		/* Similar to the headers, this is the version we're expecting to be
 		 * running with. You will likely want to check this somewhere in your
 		 * program!
@@ -51,7 +51,7 @@ namespace SDL2
 		public const int SDL_IMAGE_MAJOR_VERSION =	2;
 		public const int SDL_IMAGE_MINOR_VERSION =	0;
 		public const int SDL_IMAGE_PATCHLEVEL =		0;
-		
+
 		[Flags]
 		public enum IMG_InitFlags
 		{
@@ -60,14 +60,14 @@ namespace SDL2
 			IMG_INIT_TIF =	0x00000004,
 			IMG_INIT_WEBP =	0x00000008
 		}
-		
+
 		public static void SDL_IMAGE_VERSION(out SDL.SDL_version X)
 		{
 			X.major = SDL_IMAGE_MAJOR_VERSION;
 			X.minor = SDL_IMAGE_MINOR_VERSION;
 			X.patch = SDL_IMAGE_PATCHLEVEL;
 		}
-		
+
 		[DllImport(nativeLibName, EntryPoint = "IMG_LinkedVersion", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_IMG_LinkedVersion();
 		public static SDL.SDL_version IMG_LinkedVersion()
@@ -80,20 +80,20 @@ namespace SDL2
 			);
 			return result;
 		}
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int IMG_Init(IMG_InitFlags flags);
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void IMG_Quit();
-		
+
 		/* IntPtr refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_Load(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string file
 		);
-		
+
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_LoadTexture(
@@ -101,17 +101,17 @@ namespace SDL2
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string file
 		);
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int IMG_InvertAlpha(int on);
-		
+
 		/* IntPtr refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_ReadXPMFromArray(
 			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)]
 				string[] xpm
 		);
-		
+
 		#endregion
 	}
 }
