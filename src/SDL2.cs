@@ -2585,12 +2585,99 @@ namespace SDL2
 		}
 
 		/* src and dst refer to an SDL_Surface* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlit", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_BlitSurface(
 			IntPtr src,
 			ref SDL_Rect srcrect,
 			IntPtr dst,
 			ref SDL_Rect dstrect
+		);
+
+		/* src and dst refer to an SDL_Surface*
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
+		 */
+		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlit", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_BlitSurface(
+			IntPtr src,
+			IntPtr srcrect,
+			IntPtr dst,
+			ref SDL_Rect dstrect
+		);
+
+		/* src and dst refer to an SDL_Surface*
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
+		 */
+		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlit", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_BlitSurface(
+			IntPtr src,
+			ref SDL_Rect srcrect,
+			IntPtr dst,
+			IntPtr dstrect
+		);
+
+		/* src and dst refer to an SDL_Surface*
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for both SDL_Rects.
+		 */
+		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlit", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_BlitSurface(
+			IntPtr src,
+			IntPtr srcrect,
+			IntPtr dst,
+			IntPtr dstrect
+		);
+
+		/* src and dst refer to an SDL_Surface* */
+		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_BlitSurfaceScaled(
+			IntPtr src,
+			ref SDL_Rect srcrect,
+			IntPtr dst,
+			ref SDL_Rect dstrect
+		);
+
+		/* src and dst refer to an SDL_Surface*
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
+		 */
+		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_BlitSurfaceScaled(
+			IntPtr src,
+			IntPtr srcrect,
+			IntPtr dst,
+			ref SDL_Rect dstrect
+		);
+
+		/* src and dst refer to an SDL_Surface*
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
+		 */
+		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_BlitSurfaceScaled(
+			IntPtr src,
+			ref SDL_Rect srcrect,
+			IntPtr dst,
+			IntPtr dstrect
+		);
+
+		/* src and dst refer to an SDL_Surface*
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for both SDL_Rects.
+		 */
+		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_BlitSurfaceScaled(
+			IntPtr src,
+			IntPtr srcrect,
+			IntPtr dst,
+			IntPtr dstrect
 		);
 
 		/* src and dst are void* pointers */
