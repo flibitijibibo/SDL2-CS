@@ -252,6 +252,18 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>2 Channels, IMA4 ADPCM encoded data. Requires Extension: AL_EXT_IMA4</summary>
         StereoIma4Ext = 0x1301,
 
+        /// <summary>1 Channel, 64-sample MSADPCM encoded data. Requires Extension: AL_EXT_MSADPCM</summary>
+        MonoMsadpcm64Ext = 0x1302,
+
+        /// <summary>2 Channels, 64-sample MSADPCM encoded data. Requires Extension: AL_EXT_MSADPCM</summary>
+        StereoMsadpcm64Ext = 0x1303,
+
+        /// <summary>1 Channel, 128-sample MSADPCM encoded data. Requires Extension: AL_EXT_MSADPCM</summary>
+        MonoMsadpcm128Ext = 0x1304,
+
+        /// <summary>2 Channels, 128-sample MSADPCM encoded data. Requires Extension: AL_EXT_MSADPCM</summary>
+        StereoMsadpcm128Ext = 0x1305,
+
         /// <summary>1 Channel, single-precision floating-point data. Requires Extension: AL_EXT_float32</summary>
         MonoFloat32Ext = 0x10010,
 
