@@ -3794,6 +3794,7 @@ namespace SDL2
 		}
 
 		#endregion
+
 		#region SDL_keycode.h
 
 		public const int SDLK_SCANCODE_MASK = (1 << 30);
@@ -5308,6 +5309,17 @@ namespace SDL2
 			IntPtr window,
 			ref SDL_SysWMinfo info
 		);
+
+		#endregion
+
+		#region SDL_cpuinfo.h
+
+		/// <summary>
+		/// This function returns the amount of RAM configured in the system, in MB.
+		/// </summary>
+		/// <returns></returns>
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetSystemRAM();
 
 		#endregion
 	}
