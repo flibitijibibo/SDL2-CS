@@ -5326,9 +5326,14 @@ namespace SDL2
 		/// </summary>
 		/// <returns>string of base dir in UTF-8 encoding</returns>
 		/// <remarks>The underlying C string is owned by the application,
-		/// and can be NULL on some platforms.</remarks>
+		/// and can be NULL on some platforms.
+		///
+		/// This function is not necessarily fast, so you should only
+		/// call it once and save the string if you need it.
+		///
+		/// This function is only available in SDL 2.0.1 and later.</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 		public static extern string SDL_GetBasePath();
 
 		/// <summary>
@@ -5347,9 +5352,14 @@ namespace SDL2
 		/// <returns>UTF-8 string of user dir in platform-dependent notation. NULL
 		/// if there's a problem (creating directory failed, etc).</returns>
 		/// <remarks>The underlying C string is owned by the application,
-		/// and can be NULL on some platforms. .NET provides some similar functions.</remarks>
+		/// and can be NULL on some platforms. .NET provides some similar functions.
+		///
+		/// This function is not necessarily fast, so you should only
+		/// call it once and save the string if you need it.
+		///
+		/// This function is only available in SDL 2.0.1 and later.</remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 		public static extern string SDL_GetPrefPath(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 			string org,
