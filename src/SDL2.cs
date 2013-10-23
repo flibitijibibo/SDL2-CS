@@ -3794,7 +3794,7 @@ namespace SDL2
 		}
 
 		#endregion
-		
+
 		#region SDL_keycode.h
 
 		public const int SDLK_SCANCODE_MASK = (1 << 30);
