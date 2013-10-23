@@ -5375,7 +5375,10 @@ namespace SDL2
 		/// <summary>
 		/// This function returns the amount of RAM configured in the system, in MB.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>The amount of RAM configured in the system, in MB.</returns>
+		/// <remarks>
+		/// This function is only available in SDL 2.0.1 and later.
+		/// </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetSystemRAM();
 
