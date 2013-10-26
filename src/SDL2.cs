@@ -185,6 +185,8 @@ namespace SDL2
 			"SDL_RENDER_DRIVER";
 		public const string SDL_HINT_RENDER_OPENGL_SHADERS =
 			"SDL_RENDER_OPENGL_SHADERS";
+		public const string SDL_HINT_RENDER_DIRECT3D_THREADSAFE =
+			"SDL_RENDER_DIRECT3D_THREADSAFE";
 		public const string SDL_HINT_RENDER_VSYNC =
 			"SDL_RENDER_VSYNC";
 		public const string SDL_HINT_VIDEO_X11_XVIDMODE =
@@ -209,6 +211,10 @@ namespace SDL2
 			"SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS";
 		public const string SDL_HINT_ALLOW_TOPMOST =
 			"SDL_ALLOW_TOPMOST";
+		public const string SDL_HINT_TIMER_RESOLUTION =
+			"SDL_TIMER_RESOLUTION";
+		public const string SDL_HINT_VIDEO_HIGHDPI_DISABLED =
+			"SDL_VIDEO_HIGHDPI_DISABLED";
 
 		public enum SDL_HintPriority
 		{
@@ -961,6 +967,7 @@ namespace SDL2
 			SDL_WINDOW_FULLSCREEN_DESKTOP =
 				(SDL_WINDOW_FULLSCREEN | 0x00001000),
 			SDL_WINDOW_FOREIGN =		0x00000800,
+			SDL_WINDOW_ALLOW_HIGHDPI =	0x00002000	/* Only available in 2.0.1 */
 		}
 
 		public const int SDL_WINDOWPOS_UNDEFINED_MASK =	0x1FFF0000;
@@ -1372,6 +1379,22 @@ namespace SDL2
 			IntPtr context
 		);
 
+		/* IntPtr refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GL_GetCurrentWindow();
+
+		/* IntPtr refers to an SDL_Context */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GL_GetCurrentContext();
+
+		/* window refers to an SDL_Window*, This function is only available in SDL 2.0.1 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_GL_GetDrawableSize(
+			IntPtr window,
+			out int w,
+			out int h
+		);
+		
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GL_SetAttribute(
 			SDL_GLattr attr,
@@ -5223,6 +5246,14 @@ namespace SDL2
 		/* System timers rely on different OS mechanisms depending on
 		 * which operating system SDL2 is compiled against.
 		 */
+
+		/* Compare tick values, return true if A has passed B. Introduced in SDL 2.0.1,
+		 * but does not require it (it was a macro).
+		 */
+		public static bool SDL_TICKS_PASSED(UInt32 A, UInt32 B)
+		{
+			return ((Int32)(B - A) <= 0);
+		}
 
 		/* Delays the thread's processing based on the milliseconds parameter */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
