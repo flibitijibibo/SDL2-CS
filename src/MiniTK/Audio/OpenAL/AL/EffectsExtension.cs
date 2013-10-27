@@ -1241,6 +1241,7 @@ namespace OpenTK.Audio.OpenAL
         {
             _valid = false;
 
+            /* flibit commented this out. It's obsolete!
             if (AudioContext.CurrentContext == null)
                 throw new InvalidOperationException("AL.LoadAll() needs a current AudioContext.");
 
@@ -1250,6 +1251,7 @@ namespace OpenTK.Audio.OpenAL
                 return;
             }
             // Console.WriteLine("ALC_EXT_EFX found. Efx can be used.");
+            */
 
             try
             {
