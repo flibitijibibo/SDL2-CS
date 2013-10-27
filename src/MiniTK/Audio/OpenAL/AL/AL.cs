@@ -1507,7 +1507,7 @@ namespace OpenTK.Audio.OpenAL
         }*/
 
         [CLSCompliant(false), DllImport(AL.Lib, EntryPoint = "alBufferiv", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
-        public static extern void Buffer(int bid, ALBufferiv param, uint[] param);
+        public static extern void Buffer(int bid, ALBufferiv param, uint[] value);
 
         #endregion Set Buffer parameters
 
