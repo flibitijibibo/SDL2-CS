@@ -46,6 +46,12 @@ namespace OpenTK.Audio.OpenAL
         Orientation = 0x100F,
     }
 
+    //<summary>A list of valid Integer Vector Buffer/GetBuffer parameters</summary>
+    public enum ALBufferiv : int
+    {
+        LoopPointsSoft = 0x2015,
+    }
+
     ///<summary>A list of valid 32-bit Float Source/GetSource parameters</summary>
     public enum ALSourcef : int
     {
