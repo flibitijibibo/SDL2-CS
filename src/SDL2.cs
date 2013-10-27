@@ -177,6 +177,14 @@ namespace SDL2
 
 		#endregion
 
+		#region SDL_platform.h
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+		public static extern string SDL_GetPlatform();
+
+		#endregion
+
 		#region SDL_hints.h
 
 		public const string SDL_HINT_FRAMEBUFFER_ACCELERATION =
