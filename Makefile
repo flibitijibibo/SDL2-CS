@@ -95,8 +95,8 @@ MINITK = \
 
 build: clean
 	mkdir bin
-	cp SDL2#.dll.config bin
-	dmcs /unsafe -debug -out:bin/SDL2#.dll -target:library $(SDL2) $(MINITK) $(DEPS)
+	cp SDL2-CS.dll.config bin
+	dmcs /unsafe -debug -out:bin/SDL2-CS.dll -target:library $(SDL2) $(MINITK) $(DEPS)
 
 clean:
 	rm -rf bin

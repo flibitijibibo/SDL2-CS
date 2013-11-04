@@ -8,7 +8,7 @@
     <ProjectGuid>{85480198-8711-4355-830E-72FD794AD3F6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>SDL2</RootNamespace>
-    <AssemblyName>SDL2#</AssemblyName>
+    <AssemblyName>SDL2-CS</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -158,7 +158,7 @@
     <Compile Include="src\LPUtf8StrMarshaler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SDL2#.dll.config">
+    <None Include="SDL2-CS.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
