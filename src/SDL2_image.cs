@@ -112,6 +112,14 @@ namespace SDL2
 				string[] xpm
 		);
 
+		/* surface refers to an SDL_Surface* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int IMG_SavePNG(
+			IntPtr surface,
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+				string file
+		);
+
 		#endregion
 	}
 }
