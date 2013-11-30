@@ -1896,6 +1896,14 @@ namespace SDL2
 
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_RenderGetLogicalSize(
+			IntPtr renderer,
+			out int w,
+			out int h
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderGetViewport(
 			IntPtr renderer,
 			out SDL_Rect rect
@@ -1913,6 +1921,14 @@ namespace SDL2
 			uint format,
 			IntPtr pixels,
 			int pitch
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderSetLogicalSize(
+			IntPtr renderer,
+			int w,
+			int h
 		);
 
 		/* renderer refers to an SDL_Renderer* */
