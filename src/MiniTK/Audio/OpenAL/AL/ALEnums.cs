@@ -270,6 +270,12 @@ namespace OpenTK.Audio.OpenAL
         /// <summary>2 Channels, 128-sample MSADPCM encoded data. Requires Extension: AL_EXT_MSADPCM</summary>
         StereoMsadpcm128Ext = 0x1305,
 
+        /// <summary>1 Channel, 256-sample MSADPCM encoded data. Requires Extension: AL_EXT_MSADPCM</summary>
+        MonoMsadpcm256Ext = 0x1306,
+
+        /// <summary>2 Channels, 256-sample MSADPCM encoded data. Requires Extension: AL_EXT_MSADPCM</summary>
+        StereoMsadpcm256Ext = 0x1307,
+
         /// <summary>1 Channel, single-precision floating-point data. Requires Extension: AL_EXT_float32</summary>
         MonoFloat32Ext = 0x10010,
 
