@@ -209,6 +209,8 @@ namespace SDL2
 			"SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS";
 		public const string SDL_HINT_ALLOW_TOPMOST =
 			"SDL_ALLOW_TOPMOST";
+		public const string SDL_HINT_RENDER_SCALE_QUALITY =
+			"SDL_HINT_RENDER_SCALE_QUALITY";
 
 		public enum SDL_HintPriority
 		{
