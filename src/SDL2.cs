@@ -223,6 +223,8 @@ namespace SDL2
 			"SDL_TIMER_RESOLUTION";
 		public const string SDL_HINT_VIDEO_HIGHDPI_DISABLED =
 			"SDL_VIDEO_HIGHDPI_DISABLED";
+		public const string SDL_HINT_RENDER_SCALE_QUALITY =
+			"SDL_HINT_RENDER_SCALE_QUALITY";
 
 		public enum SDL_HintPriority
 		{
