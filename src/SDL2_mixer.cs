@@ -95,15 +95,6 @@ namespace SDL2
 			MUS_MODPLUG
 		}
 
-		[StructLayout(LayoutKind.Sequential)]
-		public struct Mix_Chunk
-		{
-			public int allocated;
-			public IntPtr abuf; // Uint8*
-			public uint alen;
-			public byte volume;
-		}
-
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate void MixFuncDelegate(
 			IntPtr udata, // void*
@@ -212,7 +203,7 @@ namespace SDL2
 
 		/* IntPtr refers to a Mix_Chunk* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern Mix_Chunk Mix_QuickLoad_RAW(
+		public static extern IntPtr Mix_QuickLoad_RAW(
 			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 1)]
 				byte[] mem,
 			uint len
