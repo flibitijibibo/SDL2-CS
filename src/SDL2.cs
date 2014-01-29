@@ -2684,7 +2684,7 @@ namespace SDL2
 
 		/* src and dst refer to an SDL_Surface* */
 		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_BlitSurfaceScaled(
+		public static extern int SDL_BlitScaled(
 			IntPtr src,
 			ref SDL_Rect srcrect,
 			IntPtr dst,
@@ -2697,7 +2697,7 @@ namespace SDL2
 		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
 		 */
 		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_BlitSurfaceScaled(
+		public static extern int SDL_BlitScaled(
 			IntPtr src,
 			IntPtr srcrect,
 			IntPtr dst,
@@ -2710,7 +2710,7 @@ namespace SDL2
 		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
 		 */
 		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_BlitSurfaceScaled(
+		public static extern int SDL_BlitScaled(
 			IntPtr src,
 			ref SDL_Rect srcrect,
 			IntPtr dst,
@@ -2723,7 +2723,7 @@ namespace SDL2
 		 * This overload allows for IntPtr.Zero (null) to be passed for both SDL_Rects.
 		 */
 		[DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_BlitSurfaceScaled(
+		public static extern int SDL_BlitScaled(
 			IntPtr src,
 			IntPtr srcrect,
 			IntPtr dst,
