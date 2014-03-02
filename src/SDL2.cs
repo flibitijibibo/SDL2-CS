@@ -225,6 +225,8 @@ namespace SDL2
 			"SDL_VIDEO_HIGHDPI_DISABLED";
 		public const string SDL_HINT_RENDER_SCALE_QUALITY =
 			"SDL_HINT_RENDER_SCALE_QUALITY";
+		public const string SDL_HINT_MOUSE_RELATIVE_MODE_WARP =
+			"SDL_HINT_MOUSE_RELATIVE_MODE_WARP";
 
 		public enum SDL_HintPriority
 		{
