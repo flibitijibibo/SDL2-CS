@@ -231,8 +231,6 @@ namespace SDL2
 		/* Only available in SDL 2.0.2 or higher */
 		public const string SDL_HINT_CTRL_CLICK_EMULATE_RIGHT_CLICK =
 			"SDL_CTRL_CLICK_EMULATE_RIGHT_CLICK";
-		public const string SDL_HINT_VIDEO_FULLSCREEN_SPACES =
-			"SDL_VIDEO_FULLSCREEN_SPACES";
 		public const string SDL_HINT_VIDEO_WIN_D3DCOMPILER =
 			"SDL_VIDEO_WIN_D3DCOMPILER";
 		public const string SDL_HINT_MOUSE_RELATIVE_MODE_WARP =
