@@ -227,6 +227,8 @@ namespace SDL2
 			"SDL_HINT_RENDER_SCALE_QUALITY";
 		public const string SDL_HINT_MOUSE_RELATIVE_MODE_WARP =
 			"SDL_HINT_MOUSE_RELATIVE_MODE_WARP";
+		public const string SDL_HINT_VIDEO_ALLOW_SCREENSAVER =
+			"SDL_HINT_VIDEO_ALLOW_SCREENSAVER";
 
 		public enum SDL_HintPriority
 		{
