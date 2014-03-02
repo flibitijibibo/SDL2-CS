@@ -3200,8 +3200,8 @@ namespace SDL2
 			public UInt32 which;
 			public byte button; /* button id */
 			public byte state; /* SDL_PRESSED or SDL_RELEASED */
+			public byte clicks; /* 1 for single-click, 2 for double-click, etc. */
 			private byte padding1;
-			private byte padding2;
 			public Int32 x;
 			public Int32 y;
 		}
