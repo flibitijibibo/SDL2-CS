@@ -1492,7 +1492,6 @@ namespace OpenTK.Audio.OpenAL
 
         // AL_API void AL_APIENTRY alBufferf( ALuint bid, ALenum param, ALfloat value );
         // AL_API void AL_APIENTRY alBufferfv( ALuint bid, ALenum param, const ALfloat* values );
-        // AL_API void AL_APIENTRY alBufferi( ALuint bid, ALenum param, ALint value );
         // AL_API void AL_APIENTRY alBuffer3i( ALuint bid, ALenum param, ALint value1, ALint value2, ALint value3 );
         // AL_API void AL_APIENTRY alBuffer3f( ALuint bid, ALenum param, ALfloat value1, ALfloat value2, ALfloat value3 );
         */
@@ -1505,6 +1504,9 @@ namespace OpenTK.Audio.OpenAL
         {
             Buffer3f( bid, param, values.X, values.Y, values.Z );
         }*/
+
+        [CLSCompliant(false), DllImport(AL.Lib, EntryPoint = "alBufferi", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
+        public static extern void Buffer(int bid, ALBufferi param, uint value);
 
         [CLSCompliant(false), DllImport(AL.Lib, EntryPoint = "alBufferiv", ExactSpelling = true, CallingConvention = AL.Style), SuppressUnmanagedCodeSecurity()]
         public static extern void Buffer(int bid, ALBufferiv param, uint[] value);
