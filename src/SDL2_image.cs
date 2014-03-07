@@ -94,6 +94,14 @@ namespace SDL2
 				string file
 		);
 
+		/* src refers to an SDL_RWops*, IntPtr to an SDL_Surface* */
+		/* THIS IS A PUBLIC RWops FUNCTION! */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_Load_RW(
+			IntPtr src,
+			int freesrc
+		);
+
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_LoadTexture(
@@ -118,6 +126,15 @@ namespace SDL2
 			IntPtr surface,
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string file
+		);
+
+		/* surface refers to an SDL_Surface*, dst to an SDL_RWops* */
+		/* THIS IS A PUBLIC RWops FUNCTION! */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int IMG_SavePNG_RW(
+			IntPtr surface,
+			IntPtr dst,
+			int freedst
 		);
 
 		#endregion
