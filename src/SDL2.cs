@@ -64,7 +64,7 @@ namespace SDL2
 
 		#region SDL_rwops.h
 
-		/* Note about SDL2# and RWops:
+		/* Note about SDL2# and Internal RWops:
 		 * These functions are currently not supported for public use.
 		 * They are only meant to be used internally in functions marked with
 		 * the phrase "THIS IS AN RWops FUNCTION!"
@@ -83,6 +83,14 @@ namespace SDL2
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string mode
 		);
+
+		/* These are the public RWops functions. They should be used by
+		 * functions marked with the phrase "THIS IS A PUBLIC RWops FUNCTION!"
+		 */
+
+		/* IntPtr refers to an SDL_RWops */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RWFromMem(byte[] mem, int size);
 
 		#endregion
 
