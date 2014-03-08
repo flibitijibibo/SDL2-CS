@@ -216,7 +216,7 @@ namespace SDL2
 		public const string SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS =
 			"SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS";
 		public const string SDL_HINT_IDLE_TIMER_DISABLED =
-			"SDL_IOS_DLE_TIMER_DISABLED";
+			"SDL_IOS_IDLE_TIMER_DISABLED";
 		public const string SDL_HINT_ORIENTATIONS =
 			"SDL_IOS_ORIENTATIONS";
 		public const string SDL_HINT_XINPUT_ENABLED =
@@ -229,10 +229,28 @@ namespace SDL2
 			"SDL_ALLOW_TOPMOST";
 		public const string SDL_HINT_TIMER_RESOLUTION =
 			"SDL_TIMER_RESOLUTION";
+		public const string SDL_HINT_RENDER_SCALE_QUALITY =
+			"SDL_RENDER_SCALE_QUALITY";
+
+		/* Only available in SDL 2.0.1 or higher */
 		public const string SDL_HINT_VIDEO_HIGHDPI_DISABLED =
 			"SDL_VIDEO_HIGHDPI_DISABLED";
-		public const string SDL_HINT_RENDER_SCALE_QUALITY =
-			"SDL_HINT_RENDER_SCALE_QUALITY";
+
+		/* Only available in SDL 2.0.2 or higher */
+		public const string SDL_HINT_CTRL_CLICK_EMULATE_RIGHT_CLICK =
+			"SDL_CTRL_CLICK_EMULATE_RIGHT_CLICK";
+		public const string SDL_HINT_VIDEO_WIN_D3DCOMPILER =
+			"SDL_VIDEO_WIN_D3DCOMPILER";
+		public const string SDL_HINT_MOUSE_RELATIVE_MODE_WARP =
+			"SDL_MOUSE_RELATIVE_MODE_WARP";
+		public const string SDL_HINT_VIDEO_WINDOW_SHARE_PIXEL_FORMAT =
+			"SDL_VIDEO_WINDOW_SHARE_PIXEL_FORMAT";
+		public const string SDL_HINT_VIDEO_ALLOW_SCREENSAVER =
+			"SDL_VIDEO_ALLOW_SCREENSAVER";
+		public const string SDL_HINT_ACCELEROMETER_AS_JOYSTICK =
+			"SDL_ACCELEROMETER_AS_JOYSTICK";
+		public const string SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES =
+			"SDL_VIDEO_MAC_FULLSCREEN_SPACES";
 
 		public enum SDL_HintPriority
 		{
@@ -1380,6 +1398,10 @@ namespace SDL2
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string extension
 		);
+
+		/* Only available in SDL 2.0.2 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_GL_ResetAttributes();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GL_GetAttribute(
@@ -3076,6 +3098,10 @@ namespace SDL2
 			/* Drag and drop events */
 			SDL_DROPFILE =			0x1000,
 
+			/* Render events */
+			/* Only available in SDL 2.0.2 or higher */
+			SDL_RENDER_TARGETS_RESET =	0x2000,
+
 			/* Events SDL_USEREVENT through SDL_LASTEVENT are for
 			 * your use, and should be allocated with
 			 * SDL_RegisterEvents()
@@ -3182,8 +3208,8 @@ namespace SDL2
 			public UInt32 which;
 			public byte button; /* button id */
 			public byte state; /* SDL_PRESSED or SDL_RELEASED */
+			public byte clicks; /* 1 for single-click, 2 for double-click, etc. */
 			private byte padding1;
-			private byte padding2;
 			public Int32 x;
 			public Int32 y;
 		}
@@ -4614,7 +4640,19 @@ namespace SDL2
 				string mappingString
 		);
 
-		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerMappingForGUID", CallingConvention = CallingConvention.Cdecl)]
+		/* THIS IS AN RWops FUNCTION! */
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerAddMappingsFromRW", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_SDL_GameControllerAddMappingsFromRW(
+			IntPtr rw,
+			int freerw
+		);
+		public static int SDL_GameControllerAddMappingsFromFile(string file)
+		{
+			IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "rb");
+			return INTERNAL_SDL_GameControllerAddMappingsFromRW(rwops, 1);
+		}
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
 		public static extern string SDL_GameControllerMappingForGUID(
 			SDL_JoystickGUID guid
@@ -5475,6 +5513,13 @@ namespace SDL2
 		#endregion
 
 		#region SDL_cpuinfo.h
+
+		/// <summary>
+		/// This function returns the number of CPU cores available.
+		/// </summary>
+		/// <returns>The number of CPU cores available.</returns>
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetCPUCount();
 
 		/// <summary>
 		/// This function returns the amount of RAM configured in the system, in MB.
