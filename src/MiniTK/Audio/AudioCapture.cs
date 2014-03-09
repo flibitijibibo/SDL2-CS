@@ -80,7 +80,7 @@ namespace OpenTK.Audio
         public AudioCapture(string deviceName, int frequency, ALFormat sampleFormat, int bufferSize)
         {
             if (!AudioDeviceEnumerator.IsOpenALSupported)
-                throw new DllNotFoundException("openal32.dll");
+                throw new DllNotFoundException("soft_oal.dll");
             if (frequency <= 0)
                 throw new ArgumentOutOfRangeException("frequency");
             if (bufferSize <= 0)
