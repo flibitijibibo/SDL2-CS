@@ -4219,7 +4219,7 @@ namespace SDL2
 		 * with the current keyboard layout.
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_GetKeyFromScancode(SDL_Scancode scancode);
+		public static extern SDL_Keycode SDL_GetKeyFromScancode(SDL_Scancode scancode);
 
 		/* Get the scancode for the given keycode */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
