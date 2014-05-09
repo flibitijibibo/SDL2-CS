@@ -93,10 +93,23 @@ MINITK = \
 
 # Targets
 
-build: clean
-	mkdir bin
-	cp SDL2-CS.dll.config bin
-	dmcs /unsafe -debug -out:bin/SDL2-CS.dll -target:library $(SDL2) $(MINITK) $(DEPS)
+debug: clean-debug
+	mkdir -p bin/debug
+	cp SDL2-CS.dll.config bin/debug
+	dmcs /unsafe -debug -out:bin/debug/SDL2-CS.dll -target:library $(SDL2) $(MINITK) $(DEPS)
 
-clean:
+clean-debug:
+	rm -rf bin/debug
+
+release: clean-release
+	mkdir -p bin/release
+	cp SDL2-CS.dll.config bin/release
+	dmcs /unsafe -optimize -out:bin/release/SDL2-CS.dll -target:library $(SDL2) $(MINITK) $(DEPS)
+
+clean-release:
+	rm -rf bin/release
+
+clean: clean-debug clean-release
 	rm -rf bin
+
+all: debug release
