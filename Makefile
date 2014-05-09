@@ -104,7 +104,7 @@ clean-debug:
 release: clean-release
 	mkdir -p bin/release
 	cp SDL2-CS.dll.config bin/release
-	dmcs /unsafe -out:bin/release/SDL2-CS.dll -target:library $(SDL2) $(MINITK) $(DEPS)
+	dmcs /unsafe -optimize -out:bin/release/SDL2-CS.dll -target:library $(SDL2) $(MINITK) $(DEPS)
 
 clean-release:
 	rm -rf bin/release
