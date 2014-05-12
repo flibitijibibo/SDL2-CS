@@ -4441,12 +4441,6 @@ namespace SDL2
 		public const byte SDL_HAT_LEFTUP =	SDL_HAT_LEFT | SDL_HAT_UP;
 		public const byte SDL_HAT_LEFTDOWN =	SDL_HAT_LEFT | SDL_HAT_DOWN;
 
-		[StructLayout(LayoutKind.Sequential)]
-		public unsafe struct SDL_JoystickGUID
-		{
-			public fixed byte data[16];
-		}
-
 		/* joystick refers to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_JoystickClose(IntPtr joystick);
@@ -4534,25 +4528,25 @@ namespace SDL2
 		public static extern int SDL_NumJoysticks();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_JoystickGUID SDL_JoystickGetDeviceGUID(
+		public static extern Guid SDL_JoystickGetDeviceGUID(
 			int device_index
 		);
 
 		/* joystick refers to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_JoystickGUID SDL_JoystickGetGUID(
+		public static extern Guid SDL_JoystickGetGUID(
 			IntPtr joystick
 		);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_JoystickGetGUIDString(
-			SDL_JoystickGUID guid,
-			char[] pszGUID,
+			Guid guid,
+			byte[] pszGUID,
 			int cbGUID
 		);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_JoystickGUID SDL_JoystickGetGUIDFromString(
+		public static extern Guid SDL_JoystickGetGUIDFromString(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string pchGUID
 		);
@@ -4654,8 +4648,9 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
 		public static extern string SDL_GameControllerMappingForGUID(
-			SDL_JoystickGUID guid
+			Guid guid
 		);
+
 		/* gamecontroller refers to an SDL_GameController* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
