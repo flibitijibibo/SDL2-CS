@@ -4547,8 +4547,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_JoystickGetGUIDString(
 			SDL_JoystickGUID guid,
-			[MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				System.Text.StringBuilder pszGUID,
+			char[] pszGUID,
 			int cbGUID
 		);
 
