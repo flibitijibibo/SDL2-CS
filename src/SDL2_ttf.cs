@@ -101,6 +101,7 @@ namespace SDL2
 		);
 
 		/* IntPtr refers to a SDL_RWops* */
+		/* THIS IS AN RWops FUNCTION! */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_OpenFontRW(
 			IntPtr src,
@@ -118,6 +119,7 @@ namespace SDL2
 		);
 
 		/* IntPtr refers to a SDL_RWops* */
+		/* THIS IS AN RWops FUNCTION! */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_OpenFontIndexRW(
 			IntPtr src,
