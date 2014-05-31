@@ -100,11 +100,28 @@ namespace SDL2
 			int ptsize
 		);
 
+		/* IntPtr refers to a SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr TTF_OpenFontRW(
+			IntPtr src,
+			int freesrc,
+			int ptsize
+		);
+
 		/* IntPtr refers to a TTF_Font* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_OpenFontIndex(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string file,
+			int ptsize,
+			long index
+		);
+
+		/* IntPtr refers to a SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr TTF_OpenFontIndexRW(
+			IntPtr src,
+			int freesrc,
 			int ptsize,
 			long index
 		);
