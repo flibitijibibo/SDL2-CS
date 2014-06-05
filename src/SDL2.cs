@@ -1928,6 +1928,13 @@ namespace SDL2
 
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_RenderGetClipRect(
+			IntPtr renderer,
+			out SDL_Rect rect
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_RenderGetLogicalSize(
 			IntPtr renderer,
 			out int w,
@@ -1953,6 +1960,22 @@ namespace SDL2
 			uint format,
 			IntPtr pixels,
 			int pitch
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderSetClipRect(
+			IntPtr renderer,
+			ref SDL_Rect rect
+		);
+
+		/* renderer refers to an SDL_Renderer*
+		 * This overload allows for IntPtr.Zero (null) to be passed for rect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderSetClipRect(
+			IntPtr renderer,
+			IntPtr rect
 		);
 
 		/* renderer refers to an SDL_Renderer* */
