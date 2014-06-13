@@ -1345,6 +1345,22 @@ namespace SDL2
 
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_GetWindowMaximumSize(
+			IntPtr window,
+			out int max_w,
+			out int max_h
+		);
+
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_GetWindowMinimumSize(
+			IntPtr window,
+			out int min_w,
+			out int min_h
+		);
+
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_GetWindowPosition(
 			IntPtr window,
 			out int x,
@@ -1434,7 +1450,7 @@ namespace SDL2
 			out int w,
 			out int h
 		);
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GL_SetAttribute(
 			SDL_GLattr attr,
@@ -1529,6 +1545,22 @@ namespace SDL2
 		public static extern void SDL_SetWindowIcon(
 			IntPtr window,
 			IntPtr icon
+		);
+
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetWindowMaximumSize(
+			IntPtr window,
+			int max_w,
+			int max_h
+		);
+
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetWindowMinimumSize(
+			IntPtr window,
+			int min_w,
+			int min_h
 		);
 
 		/* window refers to an SDL_Window* */
