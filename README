@@ -38,6 +38,18 @@ be exactly as they are done in the C library, with little-to-no concern for
 names will indicate which library file the function/type/value exists in, and
 everything else will be as close to the C version as technically possible.
 
+Using MiniTK
+------------
+To use the OpenGL/OpenAL bindings, simply use them as you were with OpenTK,
+but after calling SDL_GL_CreateContext, add the following lines:
+
+OpenTK.Graphics.GraphicsContext.CurrentContext = yourContextIntPtr;
+GL.LoadAll();
+
+This will load the OpenTK entry points. It is strongly recommended that you
+load your own entry points using SDL_GL_GetProcAddress and delegates, but
+this has been provided for OpenTK compatibility.
+
 Roadmap
 -------
 To see the current roadmap for SDL2#, visit the GitHub issues page:
