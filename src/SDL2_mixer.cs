@@ -176,15 +176,16 @@ namespace SDL2
 		 * THIS IS AN RWops FUNCTION!
 		 */
 		/* IntPtr refers to a Mix_Chunk* */
-		[DllImport(nativeLibName, EntryPoint = "Mix_LoadWAV_RW", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_Mix_LoadWAV_RW(
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr Mix_LoadWAV_RW(
 			IntPtr src,
 			int freesrc
 		);
+		
 		public static IntPtr Mix_LoadWAV(string file)
 		{
 			IntPtr rwops = SDL.INTERNAL_SDL_RWFromFile(file, "rb");
-			return INTERNAL_Mix_LoadWAV_RW(rwops, 1);
+			return Mix_LoadWAV_RW(rwops, 1);
 		}
 
 		/* IntPtr refers to a Mix_Music* */
