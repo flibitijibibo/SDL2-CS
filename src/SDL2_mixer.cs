@@ -172,8 +172,8 @@ namespace SDL2
 			out int channels
 		);
 
-		/* IntPtr refers to a Mix_Chunk* */
-		/* THIS IS AN RWops FUNCTION! */
+		/* src refers to an SDL_RWops*, IntPtr to a Mix_Chunk* */
+		/* THIS IS A PUBLIC RWops FUNCTION! */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr Mix_LoadWAV_RW(
 			IntPtr src,
@@ -181,6 +181,7 @@ namespace SDL2
 		);
 		
 		/* IntPtr refers to a Mix_Chunk* */
+		/* This is an RWops macro in the C header. */
 		public static IntPtr Mix_LoadWAV(string file)
 		{
 			IntPtr rwops = SDL.INTERNAL_SDL_RWFromFile(file, "rb");
