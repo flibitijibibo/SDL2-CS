@@ -5413,7 +5413,7 @@ namespace SDL2
 
 		#endregion
 
-		#region SDL_systimer.h
+		#region SDL_timer.h
 
 		/* System timers rely on different OS mechanisms depending on
 		 * which operating system SDL2 is compiled against.
@@ -5434,6 +5434,29 @@ namespace SDL2
 		/* Returns the milliseconds that have passed since SDL was initialized */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetTicks();
+
+		/* Get the current value of the high resolution counter */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt64 SDL_GetPerformanceCounter();
+
+		/* Get the count per second of the high resolution counter */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt64 SDL_GetPerformanceFrequency();
+
+		/* param refers to a void* */
+		public delegate UInt32 SDL_TimerCallback(UInt32 interval, IntPtr param);
+
+		/* int refers to an SDL_TimerID, param to a void* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_AddTimer(
+			UInt32 interval,
+			SDL_TimerCallback callback,
+			IntPtr param
+		);
+
+		/* id refers to an SDL_TimerID */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_RemoveTimer(int id);
 
 		#endregion
 
