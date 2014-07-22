@@ -17,8 +17,8 @@ http://wiki.libsdl.org/moin.fcg/FrontPage
 
 About the C# Wrapper
 --------------------
-The C# wrapper was written to be used for MonoGame's desktop platforms. However,
-this is written in a way that can be used for any general C# application.
+The C# wrapper was written to be used for FNA's platform support. However, this
+is written in a way that can be used for any general C# application.
 
 The wrapper provides bindings for the following libraries:
 - SDL2
