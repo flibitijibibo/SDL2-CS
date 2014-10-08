@@ -865,7 +865,7 @@ namespace SDL2
 		/// <param name="ver">the <see cref="SDL_version"/> structure that contains the version information</param>
 		/// <remarks>This function may be called safely at any time, even before SDL_Init(). </remarks>
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		private static extern void SDL_GetVersion(out SDL_version ver);
+		public static extern void SDL_GetVersion(out SDL_version ver);
 
 		/// <summary>
 		/// Use this function to get the code revision of SDL that is linked against your program.
