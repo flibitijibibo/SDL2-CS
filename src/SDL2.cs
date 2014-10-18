@@ -1003,7 +1003,26 @@ namespace SDL2
 			SDL_WINDOW_FULLSCREEN_DESKTOP =
 				(SDL_WINDOW_FULLSCREEN | 0x00001000),
 			SDL_WINDOW_FOREIGN =		0x00000800,
-			SDL_WINDOW_ALLOW_HIGHDPI =	0x00002000	/* Only available in 2.0.1 */
+			SDL_WINDOW_ALLOW_HIGHDPI =	0x00002000,	/* Only available in 2.0.1 */
+			SDL_WINDOW_MOUSE_CAPTURE =	0x00004000,	/* Only available in 2.0.4 */
+		}
+
+		/// <summary>
+		/// Possible return values from the SDL_HitTest callback.
+		/// This is only available in 2.0.4.
+		/// </summary>
+		public enum SDL_HitTestResult
+		{
+			SDL_HITTEST_NORMAL,		/* Region is normal. No special properties. */
+			SDL_HITTEST_DRAGGABLE,		/* Region can drag entire window. */
+			SDL_HITTEST_RESIZE_TOPLEFT,
+			SDL_HITTEST_RESIZE_TOP,
+			SDL_HITTEST_RESIZE_TOPRIGHT,
+			SDL_HITTEST_RESIZE_RIGHT,
+			SDL_HITTEST_RESIZE_BOTTOMRIGHT,
+			SDL_HITTEST_RESIZE_BOTTOM,
+			SDL_HITTEST_RESIZE_BOTTOMLEFT,
+			SDL_HITTEST_RESIZE_LEFT
 		}
 
 		public const int SDL_WINDOWPOS_UNDEFINED_MASK =	0x1FFF0000;
@@ -1043,6 +1062,10 @@ namespace SDL2
 			public int refresh_rate;
 			public IntPtr driverdata; // void*
 		}
+
+		/* win refers to an SDL_Window*, area to a cosnt SDL_Point*, data to a void* */
+		/* Only available in 2.0.4 */
+		public delegate SDL_HitTestResult SDL_HitTest(IntPtr win, IntPtr area, IntPtr data);
 
 		/// <summary>
 		/// Use this function to create a window with the specified position, dimensions, and flags.
@@ -1619,6 +1642,15 @@ namespace SDL2
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_VideoQuit();
+
+		/* window refers to an SDL_Window*, callback_data to a void* */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetWindowHitTest(
+			IntPtr window,
+			SDL_HitTest callback,
+			IntPtr callback_data
+		);
 
 		#endregion
 
@@ -2650,6 +2682,10 @@ namespace SDL2
 			public int w;
 			public int h;
 		}
+
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_PointInRect(ref SDL_Point p, ref SDL_Rect r);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_EnclosePoints(
@@ -4394,20 +4430,24 @@ namespace SDL2
 		public static extern UInt32 SDL_GetMouseState(IntPtr x, IntPtr y);
 
 		/* Get the current state of the mouse, in relation to the desktop */
+		/* Only available in 2.0.4 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetGlobalMouseState(out int x, out int y);
 
 		/* Get the current state of the mouse, in relation to the desktop */
+		/* Only available in 2.0.4 */
 		/* This overload allows for passing NULL to x */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, out int y);
 
 		/* Get the current state of the mouse, in relation to the desktop */
+		/* Only available in 2.0.4 */
 		/* This overload allows for passing NULL to y */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetGlobalMouseState(out int x, IntPtr y);
 
 		/* Get the current state of the mouse, in relation to the desktop */
+		/* Only available in 2.0.4 */
 		/* This overload allows for passing NULL to both x and y */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, IntPtr y);
@@ -4422,12 +4462,18 @@ namespace SDL2
 		public static extern void SDL_WarpMouseInWindow(IntPtr window, int x, int y);
 
 		/* Set the mouse cursor's position in global screen space */
+		/* Only available in 2.0.4 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_WarpMouseGlobal(int x, int y);
 
 		/* Enable/Disable relative mouse mode (grabs mouse, rel coords) */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetRelativeMouseMode(SDL_bool enabled);
+
+		/* Capture the mouse, to track input outside an SDL window */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_CaptureMouse(SDL_bool enabled);
 
 		/* Query if the relative mouse mode is enabled */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
