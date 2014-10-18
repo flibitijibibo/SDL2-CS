@@ -4375,9 +4375,23 @@ namespace SDL2
 		public static extern IntPtr SDL_GetMouseFocus();
 
 		/* Get the current state of the mouse */
-		/* NOTE: Not sure if x,y should be 'ref', as SDL accepts null */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetMouseState(out int x, out int y);
+
+		/* Get the current state of the mouse */
+		/* This overload allows for passing NULL to x */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetMouseState(IntPtr x, out int y);
+
+		/* Get the current state of the mouse */
+		/* This overload allows for passing NULL to y */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetMouseState(out int x, IntPtr y);
+
+		/* Get the current state of the mouse */
+		/* This overload allows for passing NULL to both x and y */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetMouseState(IntPtr x, IntPtr y);
 
 		/* Get the mouse state with relative coords*/
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
