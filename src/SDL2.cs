@@ -4393,6 +4393,25 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetMouseState(IntPtr x, IntPtr y);
 
+		/* Get the current state of the mouse, in relation to the desktop */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(out int x, out int y);
+
+		/* Get the current state of the mouse, in relation to the desktop */
+		/* This overload allows for passing NULL to x */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, out int y);
+
+		/* Get the current state of the mouse, in relation to the desktop */
+		/* This overload allows for passing NULL to y */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(out int x, IntPtr y);
+
+		/* Get the current state of the mouse, in relation to the desktop */
+		/* This overload allows for passing NULL to both x and y */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, IntPtr y);
+
 		/* Get the mouse state with relative coords*/
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetRelativeMouseState(out int x, out int y);
@@ -4401,6 +4420,10 @@ namespace SDL2
 		/* window is an SDL_Window pointer */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_WarpMouseInWindow(IntPtr window, int x, int y);
+
+		/* Set the mouse cursor's position in global screen space */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_WarpMouseGlobal(int x, int y);
 
 		/* Enable/Disable relative mouse mode (grabs mouse, rel coords) */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
