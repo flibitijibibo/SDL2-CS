@@ -4294,7 +4294,7 @@ namespace SDL2
 
 		/* Get the scancode for the given keycode */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_GetScancodeFromKey(SDL_Keycode key);
+		public static extern SDL_Scancode SDL_GetScancodeFromKey(SDL_Keycode key);
 
 		/* Wrapper for SDL_GetScancodeName */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
