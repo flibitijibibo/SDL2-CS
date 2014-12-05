@@ -2101,6 +2101,16 @@ namespace SDL2
 			int pitch
 		);
 
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_RenderTargetSupported(
+			IntPtr renderer
+		);
+
+		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetRenderTarget(IntPtr renderer);
+
 		#endregion
 
 		#region SDL_pixels.h
