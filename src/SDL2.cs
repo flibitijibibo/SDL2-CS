@@ -1744,6 +1744,14 @@ namespace SDL2
 			out SDL_RendererInfo info
 		);
 
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetRendererOutputSize(
+			IntPtr renderer,
+			out int w,
+			out int h
+		);
+
 		/* texture refers to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetTextureAlphaMod(
