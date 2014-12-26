@@ -1973,6 +1973,15 @@ namespace SDL2
 			ref SDL_Rect rect
 		);
 
+		/* renderer refers to an SDL_Renderer*, rect to an SDL_Rect*.
+		 * This overload allows for IntPtr.Zero (null) to be passed for rect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderDrawRect(
+			IntPtr renderer,
+			IntPtr rect
+		);
+
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawRects(
@@ -1987,6 +1996,15 @@ namespace SDL2
 		public static extern int SDL_RenderFillRect(
 			IntPtr renderer,
 			ref SDL_Rect rect
+		);
+
+		/* renderer refers to an SDL_Renderer*, rect to an SDL_Rect*.
+		 * This overload allows for IntPtr.Zero (null) to be passed for rect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderFillRect(
+			IntPtr renderer,
+			IntPtr rect
 		);
 
 		/* renderer refers to an SDL_Renderer* */
