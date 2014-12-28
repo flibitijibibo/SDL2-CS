@@ -102,12 +102,48 @@ namespace SDL2
 			int freesrc
 		);
 
+		/* src refers to an SDL_RWops*, IntPtr to an SDL_Surface* */
+		/* THIS IS A PUBLIC RWops FUNCTION! */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadTyped_RW(
+			IntPtr src,
+			int freesrc,
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+				string type
+		);
+
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_LoadTexture(
 			IntPtr renderer,
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string file
+		);
+
+		/* renderer refers to an SDL_Renderer*.
+		 * src refers to an SDL_RWops*.
+		 * IntPtr to an SDL_Texture*.
+		 */
+		/* THIS IS A PUBLIC RWops FUNCTION! */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadTexture_RW(
+			IntPtr renderer,
+			IntPtr src,
+			int freesrc
+		);
+
+		/* renderer refers to an SDL_Renderer*.
+		 * src refers to an SDL_RWops*.
+		 * IntPtr to an SDL_Texture*.
+		 */
+		/* THIS IS A PUBLIC RWops FUNCTION! */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadTextureTyped_RW(
+			IntPtr renderer,
+			IntPtr src,
+			int freesrc,
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+				string type
 		);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
