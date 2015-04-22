@@ -6,6 +6,9 @@ License
 -------
 SDL2 and SDL2# are released under the zlib license. See LICENSE for details.
 
+SDL2# currently uses parts of OpenTK, which is released under the MIT license.
+See opentk.LICENSE for details.
+
 About SDL2
 ----------
 For more information about SDL2, visit the SDL wiki:
@@ -23,6 +26,8 @@ The wrapper provides bindings for the following libraries:
 - SDL2_mixer
 - SDL2_ttf
 
+We also provide bindings for OpenGL and OpenAL, taken from OpenTK.
+
 Note that SDL2# will not provide every single SDL2 function. This is due to
 limitations in the C# language that would cause major conflicts with the native
 SDL2 library and its extensions.
@@ -32,6 +37,18 @@ be exactly as they are done in the C library, with little-to-no concern for
 "appropriate" C# style. The namespace indicates that this is SDL2, the class
 names will indicate which library file the function/type/value exists in, and
 everything else will be as close to the C version as technically possible.
+
+Using MiniTK
+------------
+To use the OpenGL/OpenAL bindings, simply use them as you were with OpenTK,
+but after calling SDL_GL_CreateContext, add the following lines:
+
+OpenTK.Graphics.GraphicsContext.CurrentContext = yourContextIntPtr;
+GL.LoadAll();
+
+This will load the OpenTK entry points. It is strongly recommended that you
+load your own entry points using SDL_GL_GetProcAddress and delegates, but
+this has been provided for OpenTK compatibility.
 
 Roadmap
 -------
