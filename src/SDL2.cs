@@ -1,7 +1,7 @@
 #region License
 /* SDL2# - C# Wrapper for SDL2
  *
- * Copyright (c) 2013-2014 Ethan Lee.
+ * Copyright (c) 2013-2015 Ethan Lee.
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
