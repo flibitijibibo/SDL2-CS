@@ -252,6 +252,16 @@ namespace SDL2
 		public const string SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES =
 			"SDL_VIDEO_MAC_FULLSCREEN_SPACES";
 
+		/* Only available in SDL 2.0.4 or higher */
+		public const string SDL_HINT_NO_SIGNAL_HANDLERS =
+			"SDL_NO_SIGNAL_HANDLERS";
+		public const string SDL_HINT_IME_INTERNAL_EDITING =
+			"SDL_IME_INTERNAL_EDITING";
+		public const string SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH =
+			"SDL_ANDROID_SEPARATE_MOUSE_AND_TOUCH";
+		public const string SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT =
+			"SDL_EMSCRIPTEN_KEYBOARD_ELEMENT";
+
 		public enum SDL_HintPriority
 		{
 			SDL_HINT_DEFAULT,
@@ -934,7 +944,8 @@ namespace SDL2
 			SDL_GL_CONTEXT_FLAGS,
 			SDL_GL_CONTEXT_PROFILE_MASK,
 			SDL_GL_SHARE_WITH_CURRENT_CONTEXT,
-			SDL_GL_FRAMEBUFFER_SRGB_CAPABLE
+			SDL_GL_FRAMEBUFFER_SRGB_CAPABLE,
+			SDL_GL_CONTEXT_RELEASE_BEHAVIOR
 		}
 
 		/// <summary>
@@ -1652,6 +1663,11 @@ namespace SDL2
 			IntPtr callback_data
 		);
 
+		/* IntPtr refers to an SDL_Window* */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetGrabbedWindow();
+
 		#endregion
 
 		#region SDL_render.h
@@ -2168,6 +2184,11 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetRenderTarget(IntPtr renderer);
+
+		/* renderer refers to an SDL_Renderer* */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_RenderIsClipEnabled(IntPtr renderer);
 
 		#endregion
 
@@ -3241,9 +3262,16 @@ namespace SDL2
 			/* Drag and drop events */
 			SDL_DROPFILE =			0x1000,
 
+			/* Audio hotplug events */
+			/* Only available in SDL 2.0.4 or higher */
+			SDL_AUDIODEVICEADDED =		0x1100,
+			SDL_AUDIODEVICEREMOVED,
+
 			/* Render events */
 			/* Only available in SDL 2.0.2 or higher */
 			SDL_RENDER_TARGETS_RESET =	0x2000,
+			/* Only available in SDL 2.0.4 or higher */
+			SDL_RENDER_DEVICE_RESET,
 
 			/* Events SDL_USEREVENT through SDL_LASTEVENT are for
 			 * your use, and should be allocated with
@@ -3253,6 +3281,13 @@ namespace SDL2
 
 			/* The last event, used for bouding arrays. */
 			SDL_LASTEVENT =			0xFFFF
+		}
+
+		/* Only available in 2.0.4 or higher */
+		public enum SDL_MouseWheelDirection : uint
+		{
+			SDL_MOUSEHWEEL_NORMAL,
+			SDL_MOUSEWHEEL_FLIPPED
 		}
 
 		/* Fields shared by every event */
@@ -3368,6 +3403,7 @@ namespace SDL2
 			public UInt32 which;
 			public Int32 x; /* amount scrolled horizontally */
 			public Int32 y; /* amount scrolled vertically */
+			public UInt32 direction; /* Set to one of the SDL_MOUSEWHEEL_* defines */
 		}
 
 // Ignore private members used for padding in this struct
@@ -5530,6 +5566,25 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_UnlockAudioDevice(uint dev);
 
+		/* dev refers to an SDL_AudioDeviceID, data to a void* */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_QueueAudio(
+			uint dev,
+			IntPtr data,
+			UInt32 len
+		);
+
+		/* dev refers to an SDL_AudioDeviceID */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetQueuedAudioSize(uint dev);
+
+		/* dev refers to an SDL_AudioDeviceID */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_ClearQueuedAudio(uint dev);
+
 		#endregion
 
 		#region SDL_timer.h
@@ -5596,6 +5651,7 @@ namespace SDL2
 		public struct INTERNAL_windows_wminfo
 		{
 			public IntPtr window; // Refers to an HWND
+			public IntPtr hdc; // Refers to an HDC
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -5625,6 +5681,28 @@ namespace SDL2
 			public IntPtr window; // Refers to a UIWindow*
 		}
 
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_wayland_wminfo
+		{
+			public IntPtr display; // Refers to a wl_display*
+			public IntPtr surface; // Refers to a wl_surface*
+			public IntPtr shell_surface; // Refers to a wl_shell_surface*
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_mir_wminfo
+		{
+			public IntPtr connection; // Refers to a MirConnection*
+			public IntPtr surface; // Refers to a MirSurface*
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_android_wminfo
+		{
+			public IntPtr window; // Refers to an ANativeWindow
+			public IntPtr surface; // Refers to an EGLSurface
+		}
+
 		[StructLayout(LayoutKind.Explicit)]
 		public struct INTERNAL_SysWMDriverUnion
 		{
@@ -5638,6 +5716,12 @@ namespace SDL2
 			public INTERNAL_cocoa_wminfo cocoa;
 			[FieldOffset(0)]
 			public INTERNAL_uikit_wminfo uikit;
+			[FieldOffset(0)]
+			public INTERNAL_wayland_wminfo wl;
+			[FieldOffset(0)]
+			public INTERNAL_mir_wminfo mir;
+			[FieldOffset(0)]
+			public INTERNAL_android_wminfo android;
 			// private int dummy;
 		}
 
