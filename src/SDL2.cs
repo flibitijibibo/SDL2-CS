@@ -4536,7 +4536,7 @@ namespace SDL2
 		/* Set the mouse cursor's position in global screen space */
 		/* Only available in 2.0.4 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_WarpMouseGlobal(int x, int y);
+		public static extern int SDL_WarpMouseGlobal(int x, int y);
 
 		/* Enable/Disable relative mouse mode (grabs mouse, rel coords) */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
