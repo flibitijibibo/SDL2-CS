@@ -80,7 +80,7 @@ namespace SDL2
 				throw new ArgumentException("ManagedObj must be a string.", "ManagedObj");
 			}
 			var bytes = Encoding.UTF8.GetBytes(str);
-			var mem = Marshal.AllocHGlobal(bytes.Length + 1);
+			var mem = SDL.SDL_malloc((IntPtr) bytes.Length + 1);
 			Marshal.Copy(bytes, 0, mem, bytes.Length);
 			((byte*)mem)[bytes.Length] = 0;
 			return mem;
@@ -94,7 +94,7 @@ namespace SDL2
 		{
 			if (!_leaveAllocated)
 			{
-				Marshal.FreeHGlobal(pNativeData);
+				SDL.SDL_free(pNativeData);
 			}
 		}
 

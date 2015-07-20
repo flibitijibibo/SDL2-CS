@@ -60,6 +60,14 @@ namespace SDL2
 			SDL_TRUE = 1
 		}
 
+		/* malloc/free are used by the marshaler! -flibit */
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern IntPtr SDL_malloc(IntPtr size);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern void SDL_free(IntPtr memblock);
+
 		#endregion
 
 		#region SDL_rwops.h
