@@ -995,7 +995,7 @@ namespace SDL2
 		/// An enumeration of window states.
 		/// </summary>
 		[Flags]
-		public enum SDL_WindowFlags
+		public enum SDL_WindowFlags : uint
 		{
 			SDL_WINDOW_FULLSCREEN =		0x00000001,
 			SDL_WINDOW_OPENGL =		0x00000002,
@@ -1633,7 +1633,7 @@ namespace SDL2
 		#region SDL_render.h
 
 		[Flags]
-		public enum SDL_RendererFlags
+		public enum SDL_RendererFlags : uint
 		{
 			SDL_RENDERER_SOFTWARE =		0x00000001,
 			SDL_RENDERER_ACCELERATED =	0x00000002,
@@ -1680,7 +1680,7 @@ namespace SDL2
 		public static extern IntPtr SDL_CreateRenderer(
 			IntPtr window,
 			int index,
-			uint flags
+			SDL_RendererFlags flags
 		);
 
 		/* IntPtr refers to an SDL_Renderer*, surface to an SDL_Surface* */
