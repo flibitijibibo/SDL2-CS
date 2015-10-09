@@ -30,7 +30,7 @@ using System.Runtime.InteropServices;
 
 namespace SDL2
 {
-	internal unsafe class LPUtf8StrMarshaler : ICustomMarshaler
+	public unsafe class LPUtf8StrMarshaler : ICustomMarshaler
 	{
 		public const string LeaveAllocated = "LeaveAllocated";
 
