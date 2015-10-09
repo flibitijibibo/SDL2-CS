@@ -78,6 +78,34 @@ namespace SDL2
 		 * the phrase "THIS IS AN RWops FUNCTION!"
 		 */
 
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate Int64 rwSize(IntPtr rw);
+		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate Int64 rwSeek(IntPtr rw, Int64 offset, int whence);
+		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate int rwRead(IntPtr rw, IntPtr Ptr, int size, int maxnum);
+		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate int rwWrite(IntPtr rw, IntPtr Ptr, int size, int num);
+		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate int rwClose(IntPtr rw);
+		
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_RWOps
+		{
+			public rwSize size;
+			public rwSeek seek;
+			public rwRead read;
+			public rwWrite write;
+			public rwClose close;
+			public int type;
+			public IntPtr data1;
+			public IntPtr data2;
+		}
+		
 		/// <summary>
 		/// Use this function to create a new SDL_RWops structure for reading from and/or writing to a named file.
 		/// </summary>
@@ -99,6 +127,14 @@ namespace SDL2
 		/* IntPtr refers to an SDL_RWops */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RWFromMem(byte[] mem, int size);
+
+		/* IntPtr refers to an SDL_RWops */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_AllocRW();
+
+		/* rw refers to an SDL_RWops */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_FreeRW(IntPtr rw);
 
 		#endregion
 
@@ -1402,6 +1438,23 @@ namespace SDL2
 			out float texh
 		);
 
+		/* texture refers to an SDL_Texture* 
+		   IntPtr overloads for texw and texh to allow nulls */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GL_BindTexture(
+			IntPtr texture,
+			IntPtr texw,
+			IntPtr texh
+		);
+
+		/* texture refers to an SDL_Texture* 
+		   passes IntPtr.Zero for texw and texh */
+		public static int SDL_GL_BindTexture(
+			IntPtr texture)
+		{
+			return SDL_GL_BindTexture(texture, IntPtr.Zero, IntPtr.Zero);
+		}
+
 		/* IntPtr and window refer to an SDL_GLContext and SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GL_CreateContext(IntPtr window);
@@ -1409,6 +1462,12 @@ namespace SDL2
 		/* context refers to an SDL_GLContext */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_GL_DeleteContext(IntPtr context);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GL_LoadLibrary(
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+				string path
+		);
 
 		/* IntPtr refers to a function pointer */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1673,6 +1732,11 @@ namespace SDL2
 			public fixed uint texture_formats[16];
 			public int max_texture_width;
 			public int max_texture_height;
+			public uint Format(int index) {
+				fixed (uint* buffer = texture_formats) {
+					return buffer[index];
+				}
+			}
 		}
 
 		/* IntPtr refers to an SDL_Renderer*, window to an SDL_Window* */
@@ -1682,6 +1746,19 @@ namespace SDL2
 			int index,
 			SDL_RendererFlags flags
 		);
+		
+		public static int SDL_RendererIndex(string name)
+		{
+			int count = SDL_GetNumRenderDrivers();
+			for (int i = 0; i < count; ++i)
+			{
+				SDL_RendererInfo info;
+				SDL_GetRenderDriverInfo(i, out info);
+				if (Marshal.PtrToStringAnsi(info.name) == name)
+					return i;
+			}
+			return -1;
+		}
 
 		/* IntPtr refers to an SDL_Renderer*, surface to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1906,6 +1983,32 @@ namespace SDL2
 			SDL_RendererFlip flip
 		);
 
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*
+		   Adding IntPtr overloads to allow for a simple flipped blit*/
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			ref SDL_Rect srcrect,
+			ref SDL_Rect dstrect,
+			double angle,
+			IntPtr center,
+			SDL_RendererFlip flip
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*
+		   Adding IntPtr overloads to allow for a simple flipped blit*/
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			ref SDL_Rect dstrect,
+			double angle,
+			IntPtr center,
+			SDL_RendererFlip flip
+		);
+
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawLine(
@@ -2077,6 +2180,13 @@ namespace SDL2
 
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderSetViewport(
+			IntPtr renderer,
+			IntPtr rect
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetRenderDrawBlendMode(
 			IntPtr renderer,
 			SDL_BlendMode blendMode
@@ -2091,6 +2201,14 @@ namespace SDL2
 			byte b,
 			byte a
 		);
+		
+		public static int SDL_SetRenderDrawColor(
+			IntPtr renderer,
+			SDL_Color color
+		)
+		{
+			return SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+		}
 
 		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2544,12 +2662,31 @@ namespace SDL2
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
+		public unsafe struct SDL_ColorArray
+		{
+			public fixed uint values[256];
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_Palette
 		{
 			public int ncolors;
 			public IntPtr colors;
 			public int version;
 			public int refcount;
+			
+			public SDL_Color Color(int index) {
+				var colors = (SDL_ColorArray)Marshal.PtrToStructure(this.colors, typeof(SDL_ColorArray));
+				unsafe {
+					uint value = colors.values[index];
+					SDL_Color result;
+					result.r = (byte)(value & 0x000000FF);
+					result.g = (byte)((value & 0x0000FF00) >> 8);
+					result.b = (byte)((value & 0x00FF0000) >> 16);
+					result.a = (byte)((value & 0xFF000000) >> 24);
+					return result;
+				}
+			}
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -2573,6 +2710,12 @@ namespace SDL2
 			public byte Ashift;
 			public int refcount;
 			public IntPtr next; // SDL_PixelFormat*
+
+			public SDL_Palette Palette {
+				get {
+					return (SDL_Palette)Marshal.PtrToStructure(this.palette, typeof(SDL_Palette));
+				}
+			}
 		}
 
 		/* IntPtr refers to an SDL_PixelFormat* */
@@ -2644,6 +2787,23 @@ namespace SDL2
 			byte a
 		);
 
+		/* format refers to an SDL_Surface* */
+		public static uint SDL_MapRGBAFromSurface(
+			IntPtr surface,
+			byte r,
+			byte g,
+			byte b,
+			byte a
+		)
+		{
+			SDL_Surface sur;
+			sur = (SDL_Surface) Marshal.PtrToStructure(
+				surface,
+				typeof(SDL_Surface)
+			);
+			return SDL_MapRGBA(sur.format, r, g, b, a);
+		}
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_MasksToPixelFormatEnum(
 			int bpp,
@@ -2673,6 +2833,16 @@ namespace SDL2
 			int ncolors
 		);
 
+		/* palette refers to an SDL_Palette* 
+			colors refers to a color array from an existing palette */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetPaletteColors(
+			IntPtr palette,
+			IntPtr colors,
+			int firstcolor,
+			int ncolors
+		);
+
 		/* format and palette refer to an SDL_PixelFormat* and SDL_Palette* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetPixelFormatPalette(
@@ -2698,6 +2868,19 @@ namespace SDL2
 			public int y;
 			public int w;
 			public int h;
+			
+			public SDL_Rect(int x, int y, int w, int h)
+			{
+				this.x = x;
+				this.y = y;
+				this.w = w;
+				this.h = h;
+			}
+			
+			public override string ToString()
+			{
+				return string.Format("[SDL_Rect X={0}, Y={1}, W={2}, H={3}]", x, y, w, h);
+			}
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2771,6 +2954,23 @@ namespace SDL2
 			public SDL_Rect clip_rect;
 			public IntPtr map; // SDL_BlitMap*
 			public int refcount;
+
+			public SDL_PixelFormat Format {
+				get {
+					return (SDL_PixelFormat)Marshal.PtrToStructure(this.format, typeof(SDL_PixelFormat));
+				}
+			}
+		}
+		
+		public static void SDL_AcquireSurface(IntPtr surface)
+		{
+			SDL_Surface sur;
+			sur = (SDL_Surface) Marshal.PtrToStructure(
+				surface,
+				typeof(SDL_Surface)
+			);
+			++sur.refcount;
+			Marshal.StructureToPtr(sur, surface, false);
 		}
 
 		/* surface refers to an SDL_Surface* */
@@ -2944,6 +3144,15 @@ namespace SDL2
 		public static extern int SDL_FillRect(
 			IntPtr dst,
 			ref SDL_Rect rect,
+			uint color
+		);
+
+		/* dst refers to an SDL_Surface* 
+		   This overload allows a null (IntPtr.Zero) to be passed to rect */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_FillRect(
+			IntPtr dst,
+			IntPtr rect,
 			uint color
 		);
 
@@ -5633,7 +5842,7 @@ namespace SDL2
 		/// files (preferences and save games, etc) that are specific to your
 		/// application. This directory is unique per user, per application.
 		///
-		/// This function will decide the appropriate location in the native filesystemÂ¸
+		/// This function will decide the appropriate location in the native filesystem¸
 		/// create the directory if necessary, and return a string of the absolute
 		/// path to the directory in UTF-8 encoding.
 		/// </summary>
@@ -5679,5 +5888,17 @@ namespace SDL2
 		public static extern int SDL_GetSystemRAM();
 
 		#endregion
+		
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_CreateMutex();
+		
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_LockMutex(IntPtr mutex);
+		
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_UnlockMutex(IntPtr mutex);
+		
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_DestroyMutex(IntPtr mutex);
 	}
 }
