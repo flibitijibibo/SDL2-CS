@@ -32,7 +32,7 @@ namespace SDL2
     /// <summary>
     /// .NET representation of a UTF8 string. Mostly used for marshalling between .NET and UTF-8.
     /// </summary>
-    public unsafe struct UTF8String : IDisposable
+    public unsafe class UTF8String : IDisposable
     {
 #region Initialization
         /// <summary>

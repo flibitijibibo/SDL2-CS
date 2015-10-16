@@ -189,7 +189,9 @@ namespace SDL2
 		public static IntPtr Mix_LoadMUS( string file)
 		{
 			UTF8String fileUTF8 = new UTF8String(file);
-			return Mix_LoadMUSNative(fileUTF8.Handle); 
+			IntPtr res = Mix_LoadMUSNative(fileUTF8.Handle); 
+			fileUTF8.Dispose();
+			return res;
 		}
 		[DllImport(nativeLibName, EntryPoint = "Mix_LoadMUS", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr Mix_LoadMUSNative( IntPtr file);
@@ -457,7 +459,9 @@ namespace SDL2
 		public static int Mix_SetMusicCMD( string command)
 		{
 			UTF8String commandUTF8 = new UTF8String(command);
-			return Mix_SetMusicCMDNative(commandUTF8.Handle); 
+			int res = Mix_SetMusicCMDNative(commandUTF8.Handle); 
+			commandUTF8.Dispose();
+			return res;
 		}
 		[DllImport(nativeLibName, EntryPoint = "Mix_SetMusicCMD", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetMusicCMDNative( IntPtr command);
@@ -471,7 +475,9 @@ namespace SDL2
 		public static int Mix_SetSoundFonts( string paths)
 		{
 			UTF8String pathsUTF8 = new UTF8String(paths);
-			return Mix_SetSoundFontsNative(pathsUTF8.Handle); 
+			int res = Mix_SetSoundFontsNative(pathsUTF8.Handle); 
+			pathsUTF8.Dispose();
+			return res;
 		}
 		[DllImport(nativeLibName, EntryPoint = "Mix_SetSoundFonts", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetSoundFontsNative( IntPtr paths);
