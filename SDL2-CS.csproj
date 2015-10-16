@@ -98,8 +98,5 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
-  <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
   <Import Project="$(MSBuildThisFileDirectory)\CoreFX\configs\CoreCLR.CSharp.targets" />
 </Project>

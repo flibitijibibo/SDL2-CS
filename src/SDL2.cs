@@ -82,26 +82,21 @@ namespace SDL2
 		 * the phrase "THIS IS AN RWops FUNCTION!"
 		 */
 
-	    /// <summary>
-	    /// Use this function to create a new SDL_RWops structure for reading from and/or writing to a named file.
-	    /// </summary>
-	    /// <param name="file">a UTF-8 string representing the filename to open</param>
-	    /// <param name="mode">an ASCII string representing the mode to be used for opening the file; see Remarks for details</param>
-	    /// <returns>Returns a pointer to the SDL_RWops structure that is created, or NULL on failure; call SDL_GetError() for more information.</returns>
-	    public static IntPtr SDL_RWFromFile(string file, string mode)
-	    {
-	        UTF8String fileUTF8 = new UTF8String(file);
-            UTF8String modeUTF8 = new UTF8String(mode);
-
-	        IntPtr res = SDL_RWFromFileNative(fileUTF8.Handle, modeUTF8.Handle);
-
-            fileUTF8.Dispose();
-            modeUTF8.Dispose();
-
-            return res;
-	    }
-	    [DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile", CallingConvention = CallingConvention.Cdecl)]
-	    public static extern IntPtr SDL_RWFromFileNative(IntPtr fileUtf8Str, IntPtr modeUtf8Str);
+		/// <summary>
+		/// Use this function to create a new SDL_RWops structure for reading from and/or writing to a named file.
+		/// </summary>
+		/// <param name="file">a UTF-8 string representing the filename to open</param>
+		/// <param name="mode">an ASCII string representing the mode to be used for opening the file; see Remarks for details</param>
+		/// <returns>Returns a pointer to the SDL_RWops structure that is created, or NULL on failure; call SDL_GetError() for more information.</returns>
+		public static IntPtr SDL_RWFromFile(string file, string mode)
+		{
+			UTF8String fileUTF8 = new UTF8String(file);
+			UTF8String modeUTF8 = new UTF8String(mode);
+			IntPtr res = SDL_RWFromFileNative(fileUTF8.Handle, modeUTF8.Handle);
+			return res;
+		}
+		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RWFromFileNative(IntPtr fileUtf8Str, IntPtr modeUtf8Str);
 
 		/* These are the public RWops functions. They should be used by
 		 * functions marked with the phrase "THIS IS A PUBLIC RWops FUNCTION!"
@@ -665,8 +660,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		[Flags]
 		public enum SDL_MessageBoxFlags : uint
 		{
-			SDL_MESSAGEBOX_ERROR        = 0x00000010,
-			SDL_MESSAGEBOX_WARNING      = 0x00000020,
+			SDL_MESSAGEBOX_ERROR		= 0x00000010,
+			SDL_MESSAGEBOX_WARNING	  = 0x00000020,
 			SDL_MESSAGEBOX_INFORMATION  = 0x00000040
 		}
 
@@ -757,33 +752,33 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <returns></returns>
 		public static unsafe int SDL_ShowMessageBox([In()] ref SDL_MessageBoxData messageboxdata, out int buttonid)
 		{
-            UTF8String titleUTF8 = new UTF8String(messageboxdata.title);
-            UTF8String messageUTF8 = new UTF8String(messageboxdata.message);
-		    var data = new INTERNAL_SDL_MessageBoxData()
-		    {
-		        flags = messageboxdata.flags,
-		        window = messageboxdata.window,
-		        title = titleUTF8.Handle,
-		        message = messageUTF8.Handle,
-		        numbuttons = messageboxdata.numbuttons
-		    };
+			UTF8String titleUTF8 = new UTF8String(messageboxdata.title);
+			UTF8String messageUTF8 = new UTF8String(messageboxdata.message);
+			var data = new INTERNAL_SDL_MessageBoxData()
+			{
+				flags = messageboxdata.flags,
+				window = messageboxdata.window,
+				title = titleUTF8.Handle,
+				message = messageUTF8.Handle,
+				numbuttons = messageboxdata.numbuttons
+			};
 
 			var buttons = new INTERNAL_SDL_MessageBoxButtonData[messageboxdata.numbuttons];
-		    var buttonTextUTF8 = new UTF8String[messageboxdata.numbuttons];
+			var buttonTextUTF8 = new UTF8String[messageboxdata.numbuttons];
 			for (int i = 0; i < messageboxdata.numbuttons; i++)
 			{
-			    buttonTextUTF8[i] = new UTF8String(messageboxdata.buttons[i].text);
-			    buttons[i] = new INTERNAL_SDL_MessageBoxButtonData()
-			    {
-			        flags = messageboxdata.buttons[i].flags,
-			        buttonid = messageboxdata.buttons[i].buttonid,
-			        text = buttonTextUTF8[i].Handle
-			    };
+				buttonTextUTF8[i] = new UTF8String(messageboxdata.buttons[i].text);
+				buttons[i] = new INTERNAL_SDL_MessageBoxButtonData()
+				{
+					flags = messageboxdata.buttons[i].flags,
+					buttonid = messageboxdata.buttons[i].buttonid,
+					text = buttonTextUTF8[i].Handle
+				};
 			}
 
 			if (messageboxdata.colorScheme != null)
 			{
-				data.colorScheme = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(SDL_MessageBoxColorScheme)));
+				data.colorScheme = Marshal.AllocHGlobal(Marshal.SizeOf<SDL_MessageBoxColorScheme>());
 				Marshal.StructureToPtr(messageboxdata.colorScheme.Value, data.colorScheme, false);
 			}
 
@@ -799,8 +794,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 			{
 				buttonTextUTF8[i].Dispose();
 			}
-            messageUTF8.Dispose();
-            titleUTF8.Dispose();
+			messageUTF8.Dispose();
+			titleUTF8.Dispose();
 
 			return result;
 		}
@@ -2818,10 +2813,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		public static bool SDL_MUSTLOCK(IntPtr surface)
 		{
 			SDL_Surface sur;
-			sur = (SDL_Surface) Marshal.PtrToStructure(
-				surface,
-				typeof(SDL_Surface)
-			);
+			sur = (SDL_Surface) Marshal.PtrToStructure<SDL_Surface>(surface);
 			return (sur.flags & SDL_RLEACCEL) != 0;
 		}
 
@@ -3511,7 +3503,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 			public SDL_EventType type;
 			public UInt32 timestamp;
 			public Int32 which; /* joystick id for ADDED, else
-					       instance id */
+						   instance id */
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -5489,10 +5481,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 				out audio_buf,
 				out audio_len
 			);
-			result = (SDL_AudioSpec) Marshal.PtrToStructure(
-				result_ptr,
-				typeof(SDL_AudioSpec)
-			);
+		    result = (SDL_AudioSpec) Marshal.PtrToStructure<SDL_AudioSpec>(result_ptr);
 			return result;
 		}
 
