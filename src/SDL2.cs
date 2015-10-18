@@ -1109,7 +1109,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// see Remarks for details</param>
 		/// <returns>Returns the window that was created or NULL on failure; call <see cref="SDL_GetError()"/>
 		/// for more information. (refers to an <see cref="SDL_Window"/>)</returns>
-		public static IntPtr SDL_CreateWindowNative( string title, int x, int y, int w, int h, SDL_WindowFlags flags)
+		public static IntPtr SDL_CreateWindow( string title, int x, int y, int w, int h, SDL_WindowFlags flags)
 		{
 			UTF8String titleUTF8 = new UTF8String(title);
 			IntPtr res = SDL_CreateWindowNative(titleUTF8.Handle, x, y, w, h, flags);
