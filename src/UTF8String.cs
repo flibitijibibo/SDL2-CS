@@ -44,19 +44,19 @@ namespace SDL2
             if (s != null)
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(s);
-                int nb = bytes.Length;
-                IntPtr lPtr = SDL.SDL_malloc((IntPtr) (nb + 1));
+                int nb = bytes.Length + 1;
+                IntPtr lPtr = SDL.SDL_malloc((IntPtr) nb);
                 if (lPtr == IntPtr.Zero)
                 {
                     throw new OutOfMemoryException("Cannot Allocate UTF8String");
                 }
                 else
                 {
-                    Marshal.Copy(bytes, 0, lPtr, bytes.Length);
-                    ((byte*) lPtr)[bytes.Length] = 0;
+                    Marshal.Copy(bytes, 0, lPtr, nb - 1);
+                    ((byte*) lPtr)[nb - 1] = 0;
                 }
                 _handle = lPtr;
-                _capacity = bytes.Length;
+                _capacity = nb;
             }
             else
             {
@@ -115,13 +115,26 @@ namespace SDL2
         /// <returns></returns>
         public string String()
         {
+#if NET46
             return (_handle == IntPtr.Zero ? null : Encoding.UTF8.GetString((byte*) _handle, _capacity - 1));
+#else
+            if (_handle == IntPtr.Zero)
+            {
+                return null;
+            }
+            else
+            {
+                byte[] bytes = new byte[_capacity - 1];
+                Marshal.Copy(_handle, bytes, 0, _capacity - 1);
+                return Encoding.UTF8.GetString(bytes);
+            }
+#endif
         }
 #endregion
 
 #region Measurements
         /// <summary>
-        /// Number of bytes of allocated unmanaged data.
+        /// Number of bytes of allocated unmanaged data (i.e. including the null-terminator).
         /// </summary>
         public int Capacity { get { return _capacity; } }
 
@@ -135,21 +148,21 @@ namespace SDL2
             if (s != null)
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(s);
-                int nb = bytes.Length;
-                if (nb + 1 > Capacity)
+                int nb = bytes.Length + 1;
+                if (nb > _capacity)
                 {
-                    IntPtr lPtr = SDL.SDL_realloc(_handle, (IntPtr) (nb + 1));
+                    IntPtr lPtr = SDL.SDL_realloc(_handle, (IntPtr) nb);
                     if (lPtr == IntPtr.Zero)
                     {
                         Dispose();
                         throw new OutOfMemoryException("Cannot reallocate UTF8String");
                     }
                     _handle = lPtr;
-                    _capacity = nb + 1;
+                    _capacity = nb;
                 }
 
-                Marshal.Copy(bytes, 0, _handle, nb);
-                ((byte*) _handle)[nb] = 0;
+                Marshal.Copy(bytes, 0, _handle, nb - 1);
+                ((byte*) _handle)[nb - 1] = 0;
             }
             else
             {
@@ -180,11 +193,5 @@ namespace SDL2
         private IntPtr _handle;
 #endregion
 
-        [ContractInvariantMethod]
-        private void ClassInvariant()
-        {
-            //			Contract.Invariant (_handle != IntPtr.Zero, "internal pointer not null");
-            //			Contract.Invariant (_capacity >= 0, "capacity non-negative");
-        }
     }
 }

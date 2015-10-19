@@ -28,7 +28,6 @@
 
 #region Using Statements
 using System;
-using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 #endregion
 
@@ -796,7 +795,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 			if (messageboxdata.colorScheme != null)
 			{
-				data.colorScheme = Marshal.AllocHGlobal(Marshal.SizeOf<SDL_MessageBoxColorScheme>());
+				data.colorScheme = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(SDL_MessageBoxColorScheme)));
 				Marshal.StructureToPtr(messageboxdata.colorScheme.Value, data.colorScheme, false);
 			}
 
@@ -2846,7 +2845,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		public static bool SDL_MUSTLOCK(IntPtr surface)
 		{
 			SDL_Surface sur;
-			sur = (SDL_Surface) Marshal.PtrToStructure<SDL_Surface>(surface);
+			sur = (SDL_Surface) Marshal.PtrToStructure(surface, typeof(SDL_Surface));
 			return (sur.flags & SDL_RLEACCEL) != 0;
 		}
 
@@ -5530,7 +5529,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 				out audio_buf,
 				out audio_len
 			);
-		    result = (SDL_AudioSpec) Marshal.PtrToStructure<SDL_AudioSpec>(result_ptr);
+		    result = (SDL_AudioSpec) Marshal.PtrToStructure(result_ptr, typeof(SDL_AudioSpec));
 			return result;
 		}
 
