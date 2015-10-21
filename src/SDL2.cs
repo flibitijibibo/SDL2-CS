@@ -107,6 +107,10 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RWFromMem(byte[] mem, int size);
 
+		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromMem", CallingConvention = CallingConvention.Cdecl)]
+		public unsafe static extern IntPtr SDL_RWFromMemNative(byte *mem, int size);
+
+
 		#endregion
 
 		#region SDL_main.h
@@ -270,7 +274,43 @@ namespace SDL2
 		public const string SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES =
 			"SDL_VIDEO_MAC_FULLSCREEN_SPACES";
 
-		public enum SDL_HintPriority
+        /* Only available in SDL 2.0.3 or higher */
+	    public const string SDL_HINT_RENDER_DIRECT3D11_DEBUG =
+	        "SDL_RENDER_DIRECT3D11_DEBUG";
+        public const string SDL_HINT_WINRT_PRIVACY_POLICY_URL =
+            "SDL_WINRT_PRIVACY_POLICY_URL";
+        public const string SDL_HINT_WINRT_PRIVACY_POLICY_LABEL =
+            "SDL_WINRT_PRIVACY_POLICY_LABEL";
+        public const string SDL_HINT_WINRT_HANDLE_BACK_BUTTON =
+            "SDL_WINRT_HANDLE_BACK_BUTTON";
+
+        /* Only available in SDL 2.0.4 or higher */
+        public const string SDL_HINT_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN =
+	        "SDL_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN";
+	    public const string SDL_HINT_WINDOWS_ENABLE_MESSAGELOOP =
+	        "SDL_WINDOWS_ENABLE_MESSAGELOOP";
+        public const string SDL_HINT_XINPUT_USE_OLD_JOYSTICK_MAPPING =
+            "SDL_XINPUT_USE_OLD_JOYSTICK_MAPPING";
+        public const string SDL_HINT_THREAD_STACK_SIZE =
+            "SDL_THREAD_STACK_SIZE";
+        public const string SDL_HINT_MAC_BACKGROUND_APP =
+            "SDL_MAC_BACKGROUND_APP";
+        public const string SDL_HINT_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION =
+            "SDL_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION";
+        public const string SDL_HINT_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION =
+            "SDL_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION";
+        public const string SDL_HINT_IME_INTERNAL_EDITING =
+            "SDL_IME_INTERNAL_EDITING";
+        public const string SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH =
+            "SDL_ANDROID_SEPARATE_MOUSE_AND_TOUCH";
+        public const string SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT =
+            "SDL_EMSCRIPTEN_KEYBOARD_ELEMENT";
+        public const string SDL_HINT_NO_SIGNAL_HANDLERS =
+            "SDL_NO_SIGNAL_HANDLERS";
+        public const string SDL_HINT_WINDOWS_NO_CLOSE_ON_ALT_F4 =
+            "SDL_WINDOWS_NO_CLOSE_ON_ALT_F4";
+
+        public enum SDL_HintPriority
 		{
 			SDL_HINT_DEFAULT,
 			SDL_HINT_NORMAL,
