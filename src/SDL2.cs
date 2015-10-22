@@ -4600,6 +4600,27 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 			int hot_y
 		);
 
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_CreateCursor(
+			byte [] data,
+			byte [] mask,
+			int w,
+			int h,
+			int hot_x,
+			int hot_y
+		);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public unsafe static extern IntPtr SDL_CreateCursor(
+			byte * data,
+			byte * mask,
+			int w,
+			int h,
+			int hot_x,
+			int hot_y
+		);
+
+
 		/* Create a cursor from an SDL_Surface */
 		/* IntPtr refers to an SDL_Cursor*, surface to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
