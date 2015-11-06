@@ -126,7 +126,7 @@ namespace SDL2
             {
                 byte[] bytes = new byte[_capacity - 1];
                 Marshal.Copy(_handle, bytes, 0, _capacity - 1);
-                return Encoding.UTF8.GetString(bytes);
+                return Encoding.UTF8.GetString(bytes, 0, _capacity - 1);
             }
 #endif
         }
