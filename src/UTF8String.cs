@@ -29,169 +29,302 @@ using System.Diagnostics.Contracts;
 
 namespace SDL2
 {
-    /// <summary>
-    /// .NET representation of a UTF8 string. Mostly used for marshalling between .NET and UTF-8.
-    /// </summary>
-    public unsafe class UTF8String : IDisposable
-    {
+	/// <summary>
+	/// Provides a wrapper around the <see cref="UTF8String"/> struct that will automatically free the external memory when not referenced.
+	/// Mostly used to provide reusable buffers of UTF8String.
+	/// </summary>
+	public class UTF8StringCell: IDisposable
+	{
+
+		/// <summary>
+		/// Initialize current with <paramref name="s"/>
+		/// </summary>
+		/// <param name="s">String to use for initializing current.</param>
+		public UTF8StringCell(string s)
+		{
+			_item = new UTF8String(s);
+		}
+
+		/// <summary>
+		/// Access to the underlying unmanaged memory.
+		/// </summary>
+		public IntPtr Handle
+		{
+			get { return _item.Handle; }
+		}
+
+		/// <summary>
+		/// .NET string representation of current UTF-8 encoded string.
+		/// </summary>
+		public string String()
+		{
+			return _item.String();
+		}
+
+		/// <summary>
+		/// Set current with <paramref name="s"/>.
+		/// </summary>
+		/// <param name="s">String to convert into UTF-8.</param>
+		public void SetString(string s)
+		{
+			_item.SetString(s);
+		}
+
+		/// <summary>
+		/// Free external memory held by current.
+		/// </summary>
+		public void Dispose()
+		{
+			if (_item.Handle != IntPtr.Zero)
+			{
+				_item.Dispose();
+			}
+		}
+
+		/// <summary>
+		/// Finalizer to free external memory held by current if not already done.
+		/// </summary>
+		~UTF8StringCell() {
+			Dispose();
+		 }
+
+		/// <summary>
+		/// Explicit interface implementation of the Dispose pattern.
+		/// </summary>
+		 void IDisposable.Dispose()
+		{
+			Dispose();
+			// No need to have the finalizer running now.
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Content of cell.
+		/// </summary>
+		internal UTF8String _item;
+	}
+
+	/// <summary>
+	/// .NET representation of a UTF8 string. Mostly used for marshalling between .NET and UTF-8.
+	/// </summary>
+	public unsafe struct UTF8String : IDisposable
+	{
 #region Initialization
-        /// <summary>
-        /// Initialize instance with .NET string <see cref="s"/>
-        /// </summary>
-        /// <param name="s">.NET string to wrap into a UTF8 sequence of unmanaged bytes.</param>
-        public UTF8String(string s)
-        {
-            if (s != null)
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(s);
-                int nb = bytes.Length + 1;
-                IntPtr lPtr = SDL.SDL_malloc((IntPtr) nb);
-                if (lPtr == IntPtr.Zero)
-                {
-                    throw new OutOfMemoryException("Cannot Allocate UTF8String");
-                }
-                else
-                {
-                    Marshal.Copy(bytes, 0, lPtr, nb - 1);
-                    ((byte*) lPtr)[nb - 1] = 0;
-                }
-                _handle = lPtr;
-                _capacity = nb;
-            }
-            else
-            {
-                _handle = IntPtr.Zero;
-                _capacity = 0;
-            }
-            IsShared = false;
+		/// <summary>
+		/// Initialize instance with .NET string <see cref="s"/>
+		/// </summary>
+		/// <param name="s">.NET string to wrap into a UTF8 sequence of unmanaged bytes.</param>
+		public UTF8String(string s)
+		{
+			byte[] bytes = Encoding.UTF8.GetBytes(s);
+			int nb = bytes.Length;
+			IntPtr lPtr = SDL.SDL_malloc((IntPtr)(nb + 1));
+			if (lPtr == IntPtr.Zero)
+			{
+				throw new OutOfMemoryException("Cannot Allocate UTF8String");
+			}
+			else
+			{
+				Marshal.Copy(bytes, 0, lPtr, nb);
+				((byte*)lPtr)[nb] = 0;
+			}
+			_count = nb;
+			_capacity = nb + 1;
+			_handle = lPtr;
 
-            Contract.Ensures((s == null) || (_handle != IntPtr.Zero), "handle set");
-            Contract.Ensures((s == null) || (_capacity >= s.Length), "capacity_greater_than_input");
-            Contract.Ensures(ReferenceEquals(s, String()) || (String().Equals(s)), "string_set");
-            Contract.Ensures(!IsShared, "not shared.");
-        }
+			Contract.Ensures((_handle != IntPtr.Zero), "handle set");
+			Contract.Ensures((_capacity >= s.Length + 1), "capacity_greater_than_input");
+			Contract.Ensures(ReferenceEquals(s, String()) || (String().Equals(s)), "string_set");
+		}
 
-        /// <summary>
-        /// Initialize instance with a sequence of unmanaged bytes without owning the associated pointer, i.e. we won't free the resource.
-        /// </summary>
-        /// <param name="o">Unmanaged pointer from which data will be read.</param>
-        public UTF8String(IntPtr o)
-        {
-            if (o != IntPtr.Zero)
-            {
-                byte* ptr = (byte*) o;
-                    // Count number of available bytes.
-                while (*ptr != 0) { ptr++; }
-                long nb = ptr - (byte*) o + 1;
-                if (nb > int.MaxValue)
-                {
-                    throw new ArgumentOutOfRangeException("UTF-8 string too large.");
-                }
-                _capacity = (int) nb;
-                _handle = o;
-            }
-            else
-            {
-                _handle = IntPtr.Zero;
-                _capacity = 0;
-            }
-            IsShared = true;
-
-            Contract.Ensures(_handle == o, "handle set");
-            Contract.Ensures(_capacity >= 0, "capacity_non_negative");
-            Contract.Ensures(IsShared, "shared");
-        }
 #endregion
 
 #region Access
-        /// <summary>
-        /// Access to the underlying unmanaged memory.
-        /// </summary>
-        public IntPtr Handle { get { return _handle; } }
+		/// <summary>
+		/// Access to the underlying unmanaged memory.
+		/// </summary>
+		public IntPtr Handle { get { return _handle; } }
 
-        /// <summary>
-        /// .NET string representation of current UTF-8 encoding string.
-        /// </summary>
-        /// <returns></returns>
-        public string String()
-        {
-#if NET46
-            return (_handle == IntPtr.Zero ? null : Encoding.UTF8.GetString((byte*) _handle, _capacity - 1));
+		/// <summary>
+		/// </summary>
+		public static UTF8String ReusableBuffer(string s)
+		{
+			if (_buffer1 == null)
+			{
+				_buffer1 = new UTF8StringCell(s);
+			}
+			else
+			{
+				_buffer1.SetString(s);
+			}
+			return _buffer1._item;
+		}
+
+		/// <summary>
+		/// </summary>
+		public static UTF8String ReusableBufferBis(string s)
+		{
+			if (_buffer2 == null)
+			{
+				_buffer2 = new UTF8StringCell(s);
+			}
+			else
+			{
+				_buffer2.SetString(s);
+			}
+			return _buffer2._item;
+		}
+
+		/// <summary>
+		/// String instance corresponding to the null terminated bytes pointed by <paramref name="o"/>.
+		/// </summary>
+		/// <param name="o">Unmanaged pointer from which data will be read.</param>
+		public static string String(byte* o)
+		{
+			if (o == null)
+			{
+				return null;
+			}
+			else
+			{
+				byte* ptr = o;
+				// Count number of available bytes.
+				while (*ptr != 0) { ptr++; }
+				// `nb' contains the number of bytes not including the null terminating one.
+				long nb = ptr - o;
+				if (nb > int.MaxValue)
+				{
+					throw new ArgumentOutOfRangeException("UTF-8 string too large");
+				}
+#if !NET46
+				byte[] bytes = new byte[nb];
+				Marshal.Copy((IntPtr)o, bytes, 0, (int)nb);
+				return Encoding.UTF8.GetString(bytes, 0, (int) nb);
 #else
-            if (_handle == IntPtr.Zero)
-            {
-                return null;
-            }
-            else
-            {
-                byte[] bytes = new byte[_capacity - 1];
-                Marshal.Copy(_handle, bytes, 0, _capacity - 1);
-                return Encoding.UTF8.GetString(bytes, 0, _capacity - 1);
-            }
+				return Encoding.UTF8.GetString((byte*) o, (int) nb);
 #endif
-        }
-#endregion
+			}
+		}
 
-#region Measurements
-        /// <summary>
-        /// Number of bytes of allocated unmanaged data (i.e. including the null-terminator).
-        /// </summary>
-        public int Capacity { get { return _capacity; } }
+		/// <summary>
+		/// Overload of <see cref="String(byte *)"/>
+		/// </summary>
+		public static string String(IntPtr o)
+		{
+			return UTF8String.String((byte*)o);
+		}
 
-        public bool IsShared { get; set; }
+		/// <summary>
+		/// String instance corresponding to the sequence of the first <paramref name="n"/> bytes pointed by <paramref name="o"/>.
+		/// </summary>
+		/// <param name="o">Unmanaged pointer from which data will be read.</param>
+		/// <param name="n">Index from where to copy the data</param>
+		public static string String(byte* o, int n)
+		{
+#if !NET46
+			byte[] bytes = new byte[n];
+			Marshal.Copy((IntPtr)o, bytes, 0, (int)n);
+			return Encoding.UTF8.GetString(bytes, 0, n);
+#else
+			return Encoding.UTF8.GetString((byte*) o, n);
+#endif
+		}
 
+		/// <summary>
+		/// Overload of <see cref="String(byte *, int)"/>
+		/// </summary>
+		public static string String(IntPtr o, int n)
+		{
+			return UTF8String.String((byte*)o, n);
+		}
+
+		/// <summary>
+		/// .NET string representation of current UTF-8 encoded string.
+		/// </summary>
+		/// <returns></returns>
+		public string String()
+		{
+			return UTF8String.String(_handle, _count);
+		}
 #endregion
 
 #region Element change
-        public void SetString(string s)
-        {
-            if (s != null)
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(s);
-                int nb = bytes.Length + 1;
-                if (nb > _capacity)
-                {
-                    IntPtr lPtr = SDL.SDL_realloc(_handle, (IntPtr) nb);
-                    if (lPtr == IntPtr.Zero)
-                    {
-                        Dispose();
-                        throw new OutOfMemoryException("Cannot reallocate UTF8String");
-                    }
-                    _handle = lPtr;
-                    _capacity = nb;
-                }
+		/// <summary>
+		/// Set current with <paramref name="s"/>.
+		/// </summary>
+		/// <param name="s">String to convert into UTF-8.</param>
+		public void SetString(string s)
+		{
+			if (s != null)
+			{
+					// This code is not optimized. One could actually read the string and copy the content
+					// directly in _handle without hitting any allocation. This would require us to include
+					// the logic of converting .NET strings into UTF8 ourselves, something we do not want
+					// to do for the time being.
+				byte[] bytes = Encoding.UTF8.GetBytes(s);
+				int nb = bytes.Length;
+				if (nb >= _capacity)
+				{
+						// By default increase size by the max of 50% or new capacity nb.
+					int newSize = System.Math.Max(_capacity + _capacity / 2, nb + 1);
+					IntPtr lPtr = SDL.SDL_realloc(_handle, (IntPtr) newSize);
+					if (lPtr == IntPtr.Zero)
+					{
+						Dispose();
+						throw new OutOfMemoryException("Cannot reallocate UTF8String");
+					}
+					_handle = lPtr;
+					_capacity = newSize;
+				}
+				_count = nb;
 
-                Marshal.Copy(bytes, 0, _handle, nb - 1);
-                ((byte*) _handle)[nb - 1] = 0;
-            }
-            else
-            {
-                Dispose();
-            }
+				Marshal.Copy(bytes, 0, _handle, nb);
+				((byte*) _handle)[nb] = 0;
+			}
+			else
+			{
+				Dispose();
+			}
 
-            Contract.Ensures(String().Equals(s), "string_set");
-        }
+			Contract.Ensures(String().Equals(s), "string_set");
+		}
 #endregion
 
 #region Dispose
-        /// <summary>
-        /// Free allocated memory.
-        /// </summary>
-        public void Dispose()
-        {
-            if (_handle != IntPtr.Zero)
-            {
-                SDL.SDL_free(_handle);
-                _handle = IntPtr.Zero;
-                _capacity = 0;
-            }
-        }
+		/// <summary>
+		/// Free allocated memory.
+		/// </summary>
+		public void Dispose()
+		{
+			if (_handle != IntPtr.Zero)
+			{
+				SDL.SDL_free(_handle);
+				_handle = IntPtr.Zero;
+				_capacity = 0;
+				_count = 0;
+			}
+		}
 #endregion
 
 #region Implementation: Accesss
-        private int _capacity;
-        private IntPtr _handle;
+		/// <summary>
+		/// Number of bytes used to represent the UTF8 representation of the .NET string (not including the null-terminator).
+		/// </summary>
+		private int _count;
+
+		/// <summary>
+		/// Number of bytes used to hold the UTF8 representation of the .NET string (including the null-terminator).
+		/// </summary>
+		private int _capacity;
+
+		/// <summary>
+		/// Storage where we hold the UTF8 representation of the .NET string.
+		/// </summary>
+		private IntPtr _handle;
+
+		[ThreadStatic] private static UTF8StringCell _buffer1;
+		[ThreadStatic] private static UTF8StringCell _buffer2;
 #endregion
 
-    }
+	}
 }

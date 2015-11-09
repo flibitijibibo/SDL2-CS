@@ -188,10 +188,8 @@ namespace SDL2
 		/* IntPtr refers to a Mix_Music* */
 		public static IntPtr Mix_LoadMUS( string file)
 		{
-			UTF8String fileUTF8 = new UTF8String(file);
-			IntPtr res = Mix_LoadMUSNative(fileUTF8.Handle); 
-			fileUTF8.Dispose();
-			return res;
+			var fileUTF8 = UTF8String.ReusableBuffer(file);
+			return Mix_LoadMUSNative(fileUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "Mix_LoadMUS", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr Mix_LoadMUSNative( IntPtr file);
@@ -224,7 +222,7 @@ namespace SDL2
 
 		public static string Mix_GetChunkDecoder( int index)
 		{
-			return (new UTF8String(Mix_GetChunkDecoderNative(index))).String();
+			return UTF8String.String(Mix_GetChunkDecoderNative(index));
 		}
 		[DllImport(nativeLibName, EntryPoint = "Mix_GetChunkDecoder", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr Mix_GetChunkDecoderNative( int index);
@@ -234,7 +232,7 @@ namespace SDL2
 
 		public static string Mix_GetMusicDecoder( int index)
 		{
-			return (new UTF8String(Mix_GetMusicDecoderNative(index))).String();
+			return UTF8String.String(Mix_GetMusicDecoderNative(index));
 		}
 		[DllImport(nativeLibName, EntryPoint = "Mix_GetMusicDecoder", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr Mix_GetMusicDecoderNative( int index);
@@ -458,10 +456,8 @@ namespace SDL2
 
 		public static int Mix_SetMusicCMD( string command)
 		{
-			UTF8String commandUTF8 = new UTF8String(command);
-			int res = Mix_SetMusicCMDNative(commandUTF8.Handle); 
-			commandUTF8.Dispose();
-			return res;
+			var commandUTF8 = UTF8String.ReusableBuffer(command);
+			return Mix_SetMusicCMDNative(commandUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "Mix_SetMusicCMD", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetMusicCMDNative( IntPtr command);
@@ -474,17 +470,15 @@ namespace SDL2
 
 		public static int Mix_SetSoundFonts( string paths)
 		{
-			UTF8String pathsUTF8 = new UTF8String(paths);
-			int res = Mix_SetSoundFontsNative(pathsUTF8.Handle); 
-			pathsUTF8.Dispose();
-			return res;
+			var pathsUTF8 = UTF8String.ReusableBuffer(paths);
+			return Mix_SetSoundFontsNative(pathsUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "Mix_SetSoundFonts", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetSoundFontsNative( IntPtr paths);
 
 		public static string Mix_GetSoundFonts()
 		{
-			return (new UTF8String(Mix_GetSoundFontsNative())).String();
+			return UTF8String.String(Mix_GetSoundFontsNative());
 		}
 		[DllImport(nativeLibName, EntryPoint = "Mix_GetSoundFonts", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr Mix_GetSoundFontsNative();

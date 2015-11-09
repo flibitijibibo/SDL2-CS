@@ -89,12 +89,9 @@ namespace SDL2
 		/// <returns>Returns a pointer to the SDL_RWops structure that is created, or NULL on failure; call SDL_GetError() for more information.</returns>
 		public static IntPtr SDL_RWFromFile(string file, string mode)
 		{
-			UTF8String fileUTF8 = new UTF8String(file);
-			UTF8String modeUTF8 = new UTF8String(mode);
-			IntPtr res = SDL_RWFromFileNative(fileUTF8.Handle, modeUTF8.Handle);
-			fileUTF8.Dispose();
-			modeUTF8.Dispose();
-			return res;
+			var fileUTF8 = UTF8String.ReusableBuffer(file);
+			var modeUTF8 = UTF8String.ReusableBufferBis(mode);
+			return SDL_RWFromFileNative(fileUTF8.Handle, modeUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RWFromFileNative(IntPtr fileUtf8Str, IntPtr modeUtf8Str);
@@ -208,7 +205,7 @@ namespace SDL2
 
 		public static string SDL_GetPlatform ()
 		{
-			return (new UTF8String(SDL_GetPlatformNative())).String();
+			return UTF8String.String(SDL_GetPlatformNative());
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetPlatform", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetPlatformNative();
@@ -274,43 +271,43 @@ namespace SDL2
 		public const string SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES =
 			"SDL_VIDEO_MAC_FULLSCREEN_SPACES";
 
-        /* Only available in SDL 2.0.3 or higher */
-	    public const string SDL_HINT_RENDER_DIRECT3D11_DEBUG =
-	        "SDL_RENDER_DIRECT3D11_DEBUG";
-        public const string SDL_HINT_WINRT_PRIVACY_POLICY_URL =
-            "SDL_WINRT_PRIVACY_POLICY_URL";
-        public const string SDL_HINT_WINRT_PRIVACY_POLICY_LABEL =
-            "SDL_WINRT_PRIVACY_POLICY_LABEL";
-        public const string SDL_HINT_WINRT_HANDLE_BACK_BUTTON =
-            "SDL_WINRT_HANDLE_BACK_BUTTON";
+		/* Only available in SDL 2.0.3 or higher */
+		public const string SDL_HINT_RENDER_DIRECT3D11_DEBUG =
+			"SDL_RENDER_DIRECT3D11_DEBUG";
+		public const string SDL_HINT_WINRT_PRIVACY_POLICY_URL =
+			"SDL_WINRT_PRIVACY_POLICY_URL";
+		public const string SDL_HINT_WINRT_PRIVACY_POLICY_LABEL =
+			"SDL_WINRT_PRIVACY_POLICY_LABEL";
+		public const string SDL_HINT_WINRT_HANDLE_BACK_BUTTON =
+			"SDL_WINRT_HANDLE_BACK_BUTTON";
 
-        /* Only available in SDL 2.0.4 or higher */
-        public const string SDL_HINT_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN =
-	        "SDL_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN";
-	    public const string SDL_HINT_WINDOWS_ENABLE_MESSAGELOOP =
-	        "SDL_WINDOWS_ENABLE_MESSAGELOOP";
-        public const string SDL_HINT_XINPUT_USE_OLD_JOYSTICK_MAPPING =
-            "SDL_XINPUT_USE_OLD_JOYSTICK_MAPPING";
-        public const string SDL_HINT_THREAD_STACK_SIZE =
-            "SDL_THREAD_STACK_SIZE";
-        public const string SDL_HINT_MAC_BACKGROUND_APP =
-            "SDL_MAC_BACKGROUND_APP";
-        public const string SDL_HINT_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION =
-            "SDL_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION";
-        public const string SDL_HINT_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION =
-            "SDL_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION";
-        public const string SDL_HINT_IME_INTERNAL_EDITING =
-            "SDL_IME_INTERNAL_EDITING";
-        public const string SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH =
-            "SDL_ANDROID_SEPARATE_MOUSE_AND_TOUCH";
-        public const string SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT =
-            "SDL_EMSCRIPTEN_KEYBOARD_ELEMENT";
-        public const string SDL_HINT_NO_SIGNAL_HANDLERS =
-            "SDL_NO_SIGNAL_HANDLERS";
-        public const string SDL_HINT_WINDOWS_NO_CLOSE_ON_ALT_F4 =
-            "SDL_WINDOWS_NO_CLOSE_ON_ALT_F4";
+		/* Only available in SDL 2.0.4 or higher */
+		public const string SDL_HINT_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN =
+			"SDL_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN";
+		public const string SDL_HINT_WINDOWS_ENABLE_MESSAGELOOP =
+			"SDL_WINDOWS_ENABLE_MESSAGELOOP";
+		public const string SDL_HINT_XINPUT_USE_OLD_JOYSTICK_MAPPING =
+			"SDL_XINPUT_USE_OLD_JOYSTICK_MAPPING";
+		public const string SDL_HINT_THREAD_STACK_SIZE =
+			"SDL_THREAD_STACK_SIZE";
+		public const string SDL_HINT_MAC_BACKGROUND_APP =
+			"SDL_MAC_BACKGROUND_APP";
+		public const string SDL_HINT_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION =
+			"SDL_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION";
+		public const string SDL_HINT_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION =
+			"SDL_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION";
+		public const string SDL_HINT_IME_INTERNAL_EDITING =
+			"SDL_IME_INTERNAL_EDITING";
+		public const string SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH =
+			"SDL_ANDROID_SEPARATE_MOUSE_AND_TOUCH";
+		public const string SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT =
+			"SDL_EMSCRIPTEN_KEYBOARD_ELEMENT";
+		public const string SDL_HINT_NO_SIGNAL_HANDLERS =
+			"SDL_NO_SIGNAL_HANDLERS";
+		public const string SDL_HINT_WINDOWS_NO_CLOSE_ON_ALT_F4 =
+			"SDL_WINDOWS_NO_CLOSE_ON_ALT_F4";
 
-        public enum SDL_HintPriority
+		public enum SDL_HintPriority
 		{
 			SDL_HINT_DEFAULT,
 			SDL_HINT_NORMAL,
@@ -332,10 +329,8 @@ namespace SDL2
 		/// <returns>Returns the string value of a hint or NULL if the hint isn't set.</returns>
 		public static string SDL_GetHint(string name)
 		{
-			UTF8String nameUTF8 = new UTF8String(name);
-			string res = (new UTF8String(SDL_GetHintNative(nameUTF8.Handle))).String();
-			nameUTF8.Dispose();
-			return res;
+			var nameUTF8 = UTF8String.ReusableBuffer(name);
+			return UTF8String.String(SDL_GetHintNative(nameUTF8.Handle));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetHint", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetHintNative(IntPtr name);
@@ -352,12 +347,9 @@ namespace SDL2
 		/// override priority instead.</remarks>
 		public static SDL_bool SDL_SetHint( string name, string value)
 		{
-			UTF8String nameUTF8 = new UTF8String(name);
-			UTF8String valueUTF8 = new UTF8String(value);
-			SDL_bool res = SDL_SetHintNative(nameUTF8.Handle, valueUTF8.Handle);
-			nameUTF8.Dispose();
-			valueUTF8.Dispose();
-			return res;
+			var nameUTF8 = UTF8String.ReusableBuffer(name);
+			var valueUTF8 = UTF8String.ReusableBufferBis(value);
+			return SDL_SetHintNative(nameUTF8.Handle, valueUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetHint", CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_SetHintNative(IntPtr name, IntPtr value);
@@ -375,12 +367,9 @@ namespace SDL2
 		/// considered to have override priority. </remarks>
 		public static SDL_bool SDL_SetHintWithPriority( string name, string value, SDL_HintPriority priority)
 		{
-			UTF8String nameUTF8 = new UTF8String(name);
-			UTF8String valueUTF8 = new UTF8String(value);
-			SDL_bool res = SDL_SetHintWithPriorityNative(nameUTF8.Handle, valueUTF8.Handle, priority);
-			nameUTF8.Dispose();
-			valueUTF8.Dispose();
-			return res;
+			var nameUTF8 = UTF8String.ReusableBuffer(name);
+			var valueUTF8 = UTF8String.ReusableBufferBis(value);
+			return SDL_SetHintWithPriorityNative(nameUTF8.Handle, valueUTF8.Handle, priority);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetHintWithPriority", CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_SetHintWithPriorityNative( IntPtr name, IntPtr value, SDL_HintPriority priority);
@@ -407,7 +396,7 @@ namespace SDL2
 		/// <remarks>It is possible for multiple errors to occur before calling SDL_GetError(). Only the last error is returned. </remarks>
 		public static string SDL_GetError()
 		{
-			return (new UTF8String(SDL_GetErrorNative())).String();
+			return UTF8String.String(SDL_GetErrorNative());
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetError", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetErrorNative();
@@ -422,9 +411,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <remarks>Calling this function will replace any previous error message that was set.</remarks>
 		public static void SDL_SetError(string fmt, __arglist)
 		{
-			UTF8String fmtUTF8 = new UTF8String(fmt);
+			var fmtUTF8 = UTF8String.ReusableBuffer(fmt);
 			SDL_SetErrorNative(fmtUTF8.Handle, __arglist);
-			fmtUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetError", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetErrorNative(IntPtr fmt, __arglist);
@@ -507,9 +495,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
 		public static void SDL_Log( string fmt, __arglist)
 		{
-			UTF8String fmtUTF8 = new UTF8String(fmt);
+			var fmtUTF8 = UTF8String.ReusableBuffer(fmt);
 			SDL_LogNative(fmtUTF8.Handle, __arglist);
-			fmtUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_Log", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogNative(IntPtr fmt, __arglist);
@@ -523,9 +510,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		public static void SDL_LogVerbose( int category, string fmt, __arglist)
 		{
-			UTF8String fmtUTF8 = new UTF8String(fmt);
+			var fmtUTF8 = UTF8String.ReusableBuffer(fmt);
 			SDL_LogVerboseNative(category, fmtUTF8.Handle, __arglist);
-			fmtUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogVerbose", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogVerboseNative( int category, IntPtr fmt, __arglist);
@@ -539,9 +525,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		public static void SDL_LogDebug( int category, string fmt, __arglist)
 		{
-			UTF8String fmtUTF8 = new UTF8String(fmt);
+			var fmtUTF8 = UTF8String.ReusableBuffer(fmt);
 			SDL_LogDebugNative(category, fmtUTF8.Handle, __arglist);
-			fmtUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogDebug", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogDebugNative( int category, IntPtr fmt, __arglist);
@@ -555,9 +540,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		public static void SDL_LogInfo( int category, string fmt, __arglist)
 		{
-			UTF8String fmtUTF8 = new UTF8String(fmt);
+			var fmtUTF8 = UTF8String.ReusableBuffer(fmt);
 			SDL_LogInfoNative(category, fmtUTF8.Handle, __arglist);
-			fmtUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = " SDL_LogInfo", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogInfoNative( int category, IntPtr fmt, __arglist);
@@ -571,9 +555,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		public static void SDL_LogWarn( int category, string fmt, __arglist)
 		{
-			UTF8String fmtUTF8 = new UTF8String(fmt);
+			var fmtUTF8 = UTF8String.ReusableBuffer(fmt);
 			SDL_LogWarnNative(category, fmtUTF8.Handle, __arglist);
-			fmtUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogWarn", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogWarnNative( int category, IntPtr fmt, __arglist);
@@ -587,9 +570,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		public static void SDL_LogError( int category, string fmt, __arglist)
 		{
-			UTF8String fmtUTF8 = new UTF8String(fmt);
+			var fmtUTF8 = UTF8String.ReusableBuffer(fmt);
 			SDL_LogErrorNative(category, fmtUTF8.Handle, __arglist);
-			fmtUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogError", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogErrorNative( int category, IntPtr fmt, __arglist);
@@ -603,9 +585,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
 		public static void SDL_LogCritical( int category, string fmt, __arglist)
 		{
-			UTF8String fmtUTF8 = new UTF8String(fmt);
+			var fmtUTF8 = UTF8String.ReusableBuffer(fmt);
 			SDL_LogCriticalNative(category, fmtUTF8.Handle, __arglist);
-			fmtUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogCritical", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogCriticalNative( int category, IntPtr fmt, __arglist);
@@ -621,9 +602,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <remarks>The priority can be one of SDL_LOG_PRIORITY*</remarks>
 		public static void SDL_LogMessage( int category, SDL_LogPriority priority, string fmt, __arglist)
 		{
-			UTF8String fmtUTF8 = new UTF8String(fmt);
+			var fmtUTF8 = UTF8String.ReusableBuffer(fmt);
 			SDL_LogMessageNative(category, priority, fmtUTF8.Handle, __arglist);
-			fmtUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogMessage", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogMessageNative( int category, SDL_LogPriority priority, IntPtr fmt, __arglist);
@@ -638,9 +618,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
 		public static void SDL_LogMessageV( int category, SDL_LogPriority priority, string fmt, __arglist)
 		{
-			UTF8String fmtUTF8 = new UTF8String(fmt);
+			var fmtUTF8 = UTF8String.ReusableBuffer(fmt);
 			SDL_LogMessageVNative(category, priority, fmtUTF8.Handle, __arglist);
-			fmtUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogMessageV", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_LogMessageVNative( int category, SDL_LogPriority priority, IntPtr fmt, __arglist);
@@ -717,8 +696,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		[Flags]
 		public enum SDL_MessageBoxFlags : uint
 		{
-			SDL_MESSAGEBOX_ERROR		= 0x00000010,
-			SDL_MESSAGEBOX_WARNING	  = 0x00000020,
+			SDL_MESSAGEBOX_ERROR        = 0x00000010,
+			SDL_MESSAGEBOX_WARNING      = 0x00000020,
 			SDL_MESSAGEBOX_INFORMATION  = 0x00000040
 		}
 
@@ -809,8 +788,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <returns></returns>
 		public static unsafe int SDL_ShowMessageBox([In()] ref SDL_MessageBoxData messageboxdata, out int buttonid)
 		{
-			UTF8String titleUTF8 = new UTF8String(messageboxdata.title);
-			UTF8String messageUTF8 = new UTF8String(messageboxdata.message);
+			UTF8StringCell titleUTF8 = new UTF8StringCell(messageboxdata.title);
+			UTF8StringCell messageUTF8 = new UTF8StringCell(messageboxdata.message);
 			var data = new INTERNAL_SDL_MessageBoxData()
 			{
 				flags = messageboxdata.flags,
@@ -821,10 +800,10 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 			};
 
 			var buttons = new INTERNAL_SDL_MessageBoxButtonData[messageboxdata.numbuttons];
-			var buttonTextUTF8 = new UTF8String[messageboxdata.numbuttons];
+			var buttonTextUTF8 = new UTF8StringCell[messageboxdata.numbuttons];
 			for (int i = 0; i < messageboxdata.numbuttons; i++)
 			{
-				buttonTextUTF8[i] = new UTF8String(messageboxdata.buttons[i].text);
+				buttonTextUTF8[i] = new UTF8StringCell(messageboxdata.buttons[i].text);
 				buttons[i] = new INTERNAL_SDL_MessageBoxButtonData()
 				{
 					flags = messageboxdata.buttons[i].flags,
@@ -867,12 +846,9 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <returns>0 on success or a negative error code on failure; call SDL_GetError() for more information. </returns>
 		public static int SDL_ShowSimpleMessageBox( SDL_MessageBoxFlags flags, string title, string message, IntPtr window)
 		{
-			UTF8String titleUTF8 = new UTF8String(title);
-			UTF8String messageUTF8 = new UTF8String(message);
-			int res = SDL_ShowSimpleMessageBoxNative (flags, titleUTF8.Handle, messageUTF8.Handle, window);
-			titleUTF8.Dispose();
-			messageUTF8.Dispose();
-			return res;
+			var titleUTF8 = UTF8String.ReusableBuffer(title);
+			var messageUTF8 = UTF8String.ReusableBufferBis(message);
+			return SDL_ShowSimpleMessageBoxNative (flags, titleUTF8.Handle, messageUTF8.Handle, window);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_ShowSimpleMessageBox", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_ShowSimpleMessageBoxNative( SDL_MessageBoxFlags flags, IntPtr title, IntPtr message, IntPtr window);
@@ -968,7 +944,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// different from the code you are compiling with, which is found in the constant SDL_REVISION.</remarks>
 		public static string SDL_GetRevision()
 		{
-			return (new UTF8String(SDL_GetRevisionNative())).String();
+			return UTF8String.String(SDL_GetRevisionNative());
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetRevision", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetRevisionNative();
@@ -1150,10 +1126,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// for more information. (refers to an <see cref="SDL_Window"/>)</returns>
 		public static IntPtr SDL_CreateWindow( string title, int x, int y, int w, int h, SDL_WindowFlags flags)
 		{
-			UTF8String titleUTF8 = new UTF8String(title);
-			IntPtr res = SDL_CreateWindowNative(titleUTF8.Handle, x, y, w, h, flags);
-			titleUTF8.Dispose();
-			return res;
+			var titleUTF8 = UTF8String.ReusableBuffer(title);
+			return SDL_CreateWindowNative(titleUTF8.Handle, x, y, w, h, flags);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_CreateWindow", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_CreateWindowNative( IntPtr title, int x, int y, int w, int h, SDL_WindowFlags flags);
@@ -1253,7 +1227,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// previous native display mode, and not the current display mode. </remarks>
 		public static string SDL_GetCurrentVideoDriver()
 		{
-			return (new UTF8String(SDL_GetCurrentVideoDriverNative())).String();
+			return UTF8String.String(SDL_GetCurrentVideoDriverNative());
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentVideoDriver", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetCurrentVideoDriverNative();
@@ -1342,7 +1316,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <remarks>The video drivers are presented in the order in which they are normally checked during initialization. </remarks>
 		public static string SDL_GetVideoDriver( int index)
 		{
-			return (new UTF8String(SDL_GetVideoDriverNative(index))).String();
+			return UTF8String.String(SDL_GetVideoDriverNative(index));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetVideoDriver", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetVideoDriverNative( int index);
@@ -1365,10 +1339,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// <returns>Returns the value associated with name. (void*)</returns>
 		public static IntPtr SDL_GetWindowData( IntPtr window, string name)
 		{
-			UTF8String nameUTF8 = new UTF8String(name);
-			IntPtr res = SDL_GetWindowDataNative(window, nameUTF8.Handle);
-			nameUTF8.Dispose();
-			return res;
+			var nameUTF8 = UTF8String.ReusableBuffer(name);
+			return SDL_GetWindowDataNative(window, nameUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetWindowData", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetWindowDataNative( IntPtr window, IntPtr name);
@@ -1480,7 +1452,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* window refers to an SDL_Window* */
 		public static string SDL_GetWindowTitle( IntPtr window)
 		{
-			return (new UTF8String(SDL_GetWindowTitleNative(window))).String();
+			return UTF8String.String(SDL_GetWindowTitleNative(window));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetWindowTitle", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetWindowTitleNative( IntPtr window);
@@ -1504,20 +1476,16 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* IntPtr refers to a function pointer */
 		public static IntPtr SDL_GL_GetProcAddress( string proc)
 		{
-			UTF8String procUTF8 = new UTF8String(proc);
-			IntPtr res = SDL_GL_GetProcAddressNative(procUTF8.Handle);
-			procUTF8.Dispose();
-			return res;
+			var procUTF8 = UTF8String.ReusableBuffer(proc);
+			return SDL_GL_GetProcAddressNative(procUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GL_GetProcAddress", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GL_GetProcAddressNative( IntPtr proc);
 
 		public static SDL_bool SDL_GL_ExtensionSupported( string extension)
 		{
-			UTF8String extensionUTF8 = new UTF8String(extension);
-			SDL_bool res = SDL_GL_ExtensionSupportedNative(extensionUTF8.Handle); 
-			extensionUTF8.Dispose();
-			return res;
+			var extensionUTF8 = UTF8String.ReusableBuffer(extension);
+			return SDL_GL_ExtensionSupportedNative(extensionUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GL_ExtensionSupported", CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_GL_ExtensionSupportedNative( IntPtr extension);
@@ -1608,10 +1576,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* IntPtr and userdata are void*, window is an SDL_Window* */
 		public static IntPtr SDL_SetWindowData( IntPtr window, string name, IntPtr userdata)
 		{
-			UTF8String nameUTF8 = new UTF8String(name);
-			IntPtr res = SDL_SetWindowDataNative(window, nameUTF8.Handle, userdata);
-			nameUTF8.Dispose();
-			return res;
+			var nameUTF8 = UTF8String.ReusableBuffer(name);
+			return SDL_SetWindowDataNative(window, nameUTF8.Handle, userdata);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetWindowData", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_SetWindowDataNative( IntPtr window, IntPtr name, IntPtr userdata);
@@ -1698,9 +1664,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* window refers to an SDL_Window* */
 		public static void SDL_SetWindowTitle( IntPtr window, string title)
 		{
-			UTF8String titleUTF8 = new UTF8String(title);
+			var titleUTF8 = UTF8String.ReusableBuffer(title);
 			SDL_SetWindowTitleNative(window, titleUTF8.Handle);
-			titleUTF8.Dispose();
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetWindowTitle", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetWindowTitleNative( IntPtr window, IntPtr title);
@@ -1724,10 +1689,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static int SDL_VideoInit( string driver_name)
 		{
-			UTF8String driver_nameUTF8 = new UTF8String(driver_name);
-			int res = SDL_VideoInitNative(driver_nameUTF8.Handle); 
-			driver_nameUTF8.Dispose();
-			return res;
+			var driver_nameUTF8 = UTF8String.ReusableBuffer(driver_name);
+			return SDL_VideoInitNative(driver_nameUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_VideoInit", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_VideoInitNative( IntPtr driver_name);
@@ -2707,7 +2670,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static string SDL_GetPixelFormatName( uint format)
 		{
-			return (new UTF8String(SDL_GetPixelFormatNameNative(format))).String();
+			return UTF8String.String(SDL_GetPixelFormatNameNative(format));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetPixelFormatName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetPixelFormatNameNative( uint format);
@@ -3246,17 +3209,15 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static string SDL_GetClipboardText()
 		{
-			return (new UTF8String(SDL_GetClipboardText())).String();
+			return UTF8String.String(SDL_GetClipboardTextNative());
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetClipboardText", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetClipboardTextNative();
 
 		public static int SDL_SetClipboardText( string text)
 		{
-			UTF8String textUTF8 = new UTF8String(text);
-			int res = SDL_SetClipboardTextNative(textUTF8.Handle); 
-			textUTF8.Dispose();
-			return res;
+			var textUTF8 = UTF8String.ReusableBuffer(text);
+			return SDL_SetClipboardTextNative(textUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetClipboardText", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetClipboardTextNative( IntPtr text);
@@ -4460,7 +4421,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* Wrapper for SDL_GetScancodeName */
 		public static string SDL_GetScancodeName(SDL_Scancode scancode)
 		{
-			return (new UTF8String(SDL_GetScancodeNameNative(scancode))).String();
+			return UTF8String.String(SDL_GetScancodeNameNative(scancode));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetScancodeName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetScancodeNameNative(SDL_Scancode scancode);
@@ -4468,10 +4429,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* Get a scancode from a human-readable name */
 		public static SDL_Scancode SDL_GetScancodeFromName( string name)
 		{
-			UTF8String nameUTF8 = new UTF8String(name);
-			SDL_Scancode res = SDL_GetScancodeFromNameNative(nameUTF8.Handle); 
-			nameUTF8.Dispose();
-			return res;
+			var nameUTF8 = UTF8String.ReusableBuffer(name);
+			return SDL_GetScancodeFromNameNative(nameUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetScancodeFromName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_Scancode SDL_GetScancodeFromNameNative( IntPtr name);
@@ -4479,7 +4438,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* Wrapper for SDL_GetKeyName */
 		public static string SDL_GetKeyName(SDL_Keycode key)
 		{
-			return (new UTF8String(SDL_GetKeyNameNative(key))).String();
+			return UTF8String.String(SDL_GetKeyNameNative(key));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetKeyName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetKeyNameNative(SDL_Keycode key);
@@ -4487,10 +4446,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* Get a key code from a human-readable name */
 		public static SDL_Keycode SDL_GetKeyFromName( string name)
 		{
-			UTF8String nameUTF8 = new UTF8String(name);
-			SDL_Keycode res = SDL_GetKeyFromNameNative(nameUTF8.Handle); 
-			nameUTF8.Dispose();
-			return res;
+			var nameUTF8 = UTF8String.ReusableBuffer(name);
+			return SDL_GetKeyFromNameNative(nameUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetKeyFromName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_Keycode SDL_GetKeyFromNameNative( IntPtr name);
@@ -4764,14 +4721,14 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* joystick refers to an SDL_Joystick* */
 		public static string SDL_JoystickName( IntPtr joystick)
 		{
-			return (new UTF8String(SDL_JoystickNameNative(joystick))).String();
+			return UTF8String.String(SDL_JoystickNameNative(joystick));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_JoystickName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_JoystickNameNative( IntPtr joystick);
 
 		public static string SDL_JoystickNameForIndex( int device_index)
 		{
-			return (new UTF8String(SDL_JoystickNameForIndexNative(device_index))).String();
+			return UTF8String.String(SDL_JoystickNameForIndexNative(device_index));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_JoystickNameForIndex", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_JoystickNameForIndexNative( int device_index);
@@ -4828,10 +4785,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static Guid SDL_JoystickGetGUIDFromString( string pchGUID)
 		{
-			UTF8String pchGUIDUTF8 = new UTF8String(pchGUID);
-			Guid res = SDL_JoystickGetGUIDFromStringNative(pchGUIDUTF8.Handle); 
-			pchGUIDUTF8.Dispose();
-			return res;
+			var pchGUIDUTF8 = UTF8String.ReusableBuffer(pchGUID);
+			return SDL_JoystickGetGUIDFromStringNative(pchGUIDUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_JoystickGetGUIDFromString", CallingConvention = CallingConvention.Cdecl)]
 		public static extern Guid SDL_JoystickGetGUIDFromStringNative( IntPtr pchGUID);
@@ -4914,10 +4869,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static int SDL_GameControllerAddMapping( string mappingString)
 		{
-			UTF8String mappingStringUTF8 = new UTF8String(mappingString);
-			int res = SDL_GameControllerAddMappingNative(mappingStringUTF8.Handle); 
-			mappingStringUTF8.Dispose();
-			return res;
+			var mappingStringUTF8 = UTF8String.ReusableBuffer(mappingString);
+			return SDL_GameControllerAddMappingNative(mappingStringUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerAddMapping", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GameControllerAddMappingNative( IntPtr mappingString);
@@ -4936,7 +4889,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static string SDL_GameControllerMappingForGUID( Guid guid)
 		{
-			return (new UTF8String(SDL_GameControllerMappingForGUIDNative(guid))).String();
+			return UTF8String.String(SDL_GameControllerMappingForGUIDNative(guid));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerMappingForGUID", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GameControllerMappingForGUIDNative( Guid guid);
@@ -4944,7 +4897,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* gamecontroller refers to an SDL_GameController* */
 		public static string SDL_GameControllerMapping( IntPtr gamecontroller)
 		{
-			return (new UTF8String(SDL_GameControllerMappingNative(gamecontroller))).String();
+			return UTF8String.String(SDL_GameControllerMappingNative(gamecontroller));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerMapping", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GameControllerMappingNative( IntPtr gamecontroller);
@@ -4954,7 +4907,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static string SDL_GameControllerNameForIndex( int joystick_index)
 		{
-			return (new UTF8String(SDL_GameControllerNameForIndexNative(joystick_index))).String();
+			return UTF8String.String(SDL_GameControllerNameForIndexNative(joystick_index));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerNameForIndex", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GameControllerNameForIndexNative( int joystick_index);
@@ -4966,7 +4919,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* gamecontroller refers to an SDL_GameController* */
 		public static string SDL_GameControllerName( IntPtr gamecontroller)
 		{
-			return (new UTF8String(SDL_GameControllerNameNative(gamecontroller))).String();
+			return UTF8String.String(SDL_GameControllerNameNative(gamecontroller));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GameControllerNameNative( IntPtr gamecontroller);
@@ -4993,17 +4946,15 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static SDL_GameControllerAxis SDL_GameControllerGetAxisFromString( string pchString)
 		{
-			UTF8String pchStringUTF8 = new UTF8String(pchString);
-			SDL_GameControllerAxis res = SDL_GameControllerGetAxisFromStringNative(pchStringUTF8.Handle); 
-			pchStringUTF8.Dispose();
-			return res;
+			var pchStringUTF8 = UTF8String.ReusableBuffer(pchString);
+			return SDL_GameControllerGetAxisFromStringNative(pchStringUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetAxisFromString", CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_GameControllerAxis SDL_GameControllerGetAxisFromStringNative( IntPtr pchString);
 
 		public static string SDL_GameControllerGetStringForAxis( SDL_GameControllerAxis axis)
 		{
-			return (new UTF8String(SDL_GameControllerGetStringForAxisNative(axis))).String();
+			return UTF8String.String(SDL_GameControllerGetStringForAxisNative(axis));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetStringForAxis", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GameControllerGetStringForAxisNative( SDL_GameControllerAxis axis);
@@ -5024,17 +4975,15 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static SDL_GameControllerButton SDL_GameControllerGetButtonFromString( string pchString)
 		{
-			UTF8String pchStringUTF8 = new UTF8String(pchString);
-			SDL_GameControllerButton res = SDL_GameControllerGetButtonFromStringNative(pchStringUTF8.Handle); 
-			pchStringUTF8.Dispose();
-			return res;
+			var pchStringUTF8 = UTF8String.ReusableBuffer(pchString);
+			return SDL_GameControllerGetButtonFromStringNative(pchStringUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetButtonFromString", CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_GameControllerButton SDL_GameControllerGetButtonFromStringNative( IntPtr pchString);
 
 		public static string SDL_GameControllerGetStringForButton( SDL_GameControllerButton button)
 		{
-			return (new UTF8String(SDL_GameControllerGetStringForButtonNative(button))).String();
+			return UTF8String.String(SDL_GameControllerGetStringForButtonNative(button));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetStringForButton", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GameControllerGetStringForButtonNative( SDL_GameControllerButton button);
@@ -5270,7 +5219,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* haptic refers to an SDL_Haptic* */
 		public static string SDL_HapticName( int device_index)
 		{
-			return (new UTF8String(SDL_HapticNameNative(device_index))).String();
+			return UTF8String.String(SDL_HapticNameNative(device_index));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_HapticName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_HapticNameNative( int device_index);
@@ -5507,10 +5456,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static int SDL_AudioInit( string driver_name)
 		{
-			UTF8String driver_nameUTF8 = new UTF8String(driver_name);
-			int res = SDL_AudioInitNative(driver_nameUTF8.Handle); 
-			driver_nameUTF8.Dispose();
-			return res;
+			var driver_nameUTF8 = UTF8String.ReusableBuffer(driver_name);
+			return SDL_AudioInitNative(driver_nameUTF8.Handle);
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_AudioInit", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_AudioInitNative( IntPtr driver_name);
@@ -5531,7 +5478,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static string SDL_GetAudioDeviceName( int index, int iscapture)
 		{
-			return (new UTF8String(SDL_GetAudioDeviceNameNative(index, iscapture))).String();
+			return UTF8String.String(SDL_GetAudioDeviceNameNative(index, iscapture));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetAudioDeviceName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetAudioDeviceNameNative( int index, int iscapture);
@@ -5544,7 +5491,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static string SDL_GetAudioDriver( int index)
 		{
-			return (new UTF8String(SDL_GetAudioDriverNative(index))).String();
+			return UTF8String.String(SDL_GetAudioDriverNative(index));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetAudioDriver", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetAudioDriverNative( int index);
@@ -5554,7 +5501,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 
 		public static string SDL_GetCurrentAudioDriver()
 		{
-			return (new UTF8String(SDL_GetCurrentAudioDriverNative())).String();
+			return UTF8String.String(SDL_GetCurrentAudioDriverNative());
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentAudioDriver", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetCurrentAudioDriverNative();
@@ -5590,7 +5537,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 				out audio_buf,
 				out audio_len
 			);
-		    result = (SDL_AudioSpec) Marshal.PtrToStructure(result_ptr, typeof(SDL_AudioSpec));
+			result = (SDL_AudioSpec) Marshal.PtrToStructure(result_ptr, typeof(SDL_AudioSpec));
 			return result;
 		}
 
@@ -5632,10 +5579,8 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* uint refers to an SDL_AudioDeviceID */
 		public static uint SDL_OpenAudioDevice( string device, int iscapture, ref SDL_AudioSpec desired, out SDL_AudioSpec obtained, int allowed_changes)
 		{
-			UTF8String deviceUTF8 = new UTF8String(device);
-			uint res = SDL_OpenAudioDeviceNative (deviceUTF8.Handle, iscapture, ref desired, out obtained, allowed_changes);
-			deviceUTF8.Dispose();
-			return res;
+			var deviceUTF8 = UTF8String.ReusableBuffer(device);
+			return SDL_OpenAudioDeviceNative (deviceUTF8.Handle, iscapture, ref desired, out obtained, allowed_changes);
 		}
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_OpenAudioDeviceNative ( IntPtr device, int iscapture, ref SDL_AudioSpec desired, out SDL_AudioSpec obtained, int allowed_changes);
@@ -5807,7 +5752,7 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// This function is only available in SDL 2.0.1 and later.</remarks>
 		public static string SDL_GetBasePath()
 		{
-			return (new UTF8String(SDL_GetBasePath())).String();
+			return UTF8String.String(SDL_GetBasePathNative());
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetBasePath", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetBasePathNative();
@@ -5836,12 +5781,9 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/// This function is only available in SDL 2.0.1 and later.</remarks>
 		public static string SDL_GetPrefPath( string org, string app)
 		{
-			UTF8String orgUTF8 = new UTF8String(org);
-			UTF8String appUTF8 = new UTF8String(app);
-			string res = (new UTF8String(SDL_GetPrefPathNative(orgUTF8.Handle, appUTF8.Handle))).String();
-			orgUTF8.Dispose();
-			appUTF8.Dispose();
-			return res;
+			var orgUTF8 = UTF8String.ReusableBuffer(org);
+			var appUTF8 = UTF8String.ReusableBufferBis(app);
+			return UTF8String.String(SDL_GetPrefPathNative(orgUTF8.Handle, appUTF8.Handle));
 		}
 		[DllImport(nativeLibName, EntryPoint = "SDL_GetPrefPath", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetPrefPathNative( IntPtr org, IntPtr app);
