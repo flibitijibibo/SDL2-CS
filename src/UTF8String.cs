@@ -43,8 +43,13 @@ namespace SDL2
 		{
 			Contract.Requires(s != null, "s is not null");
 
-			byte[] bytes = Encoding.UTF8.GetBytes(s);
-			int nb = bytes.Length;
+				// This code is not optimized. One could actually read the string and copy the content
+				// directly in _handle without hitting any allocation. This would require us to include
+				// the logic of converting .NET strings into UTF8 ourselves, something we do not want
+				// to do for the time being. For now we only avoid the allocation of an extra byte array
+				// for small strings (see the implementation of GetUtf8Bytes).
+			int nb;
+			byte[] bytes = GetUtf8Bytes(s, out nb);
 			IntPtr lPtr = SDL.SDL_malloc((IntPtr)(nb + 1));
 			if (lPtr == IntPtr.Zero)
 			{
@@ -131,17 +136,18 @@ namespace SDL2
 				// Count number of available bytes.
 				while (*ptr != 0) { ptr++; }
 				// `nb' contains the number of bytes not including the null terminating one.
-				long nb = ptr - o;
-				if (nb > int.MaxValue)
+				long size = ptr - o;
+				if (size > int.MaxValue)
 				{
 					throw new ArgumentOutOfRangeException("UTF-8 string `o' is too large");
 				}
+				int nb = (int) size;
 #if !NET46
-				byte[] bytes = new byte[nb];
-				Marshal.Copy((IntPtr)o, bytes, 0, (int)nb);
-				return Encoding.UTF8.GetString(bytes, 0, (int) nb);
+				byte[] bytes = NewByteArray(nb);
+				Marshal.Copy((IntPtr)o, bytes, 0, nb);
+				return Encoding.UTF8.GetString(bytes, 0, nb);
 #else
-				return Encoding.UTF8.GetString((byte*) o, (int) nb);
+				return Encoding.UTF8.GetString((byte*) o, nb);
 #endif
 			}
 		}
@@ -200,9 +206,10 @@ namespace SDL2
 					// This code is not optimized. One could actually read the string and copy the content
 					// directly in _handle without hitting any allocation. This would require us to include
 					// the logic of converting .NET strings into UTF8 ourselves, something we do not want
-					// to do for the time being.
-				byte[] bytes = Encoding.UTF8.GetBytes(s);
-				int nb = bytes.Length;
+					// to do for the time being. For now we only avoid the allocation of an extra byte array
+					// for small strings (see the implementation of GetUtf8Bytes).
+				int nb;
+				byte[] bytes = GetUtf8Bytes(s, out nb);
 				if (nb >= _capacity)
 				{
 						// By default increase size by the max of 50% or new capacity nb.
@@ -281,9 +288,53 @@ namespace SDL2
 		/// </summary>
 		private IntPtr _handle;
 
+		/// <summary>
+		/// Maximum size for the <see cref="_bytes"/> array. Anything larger will cause a new allocation.
+		/// </summary>
+		private const int MaxBytes = 512;
+
 		[ThreadStatic] private static Utf8String _buffer1;
 		[ThreadStatic] private static Utf8String _buffer2;
+		[ThreadStatic] private static byte[] _bytes;
 #endregion
 
+#region Implementation: Helpers
+		/// <summary>
+		/// For a size <paramref name="n"/> smaller than <see cref="MaxBytes"/> return <see cref="_bytes"/>
+		/// otherwise create a new byte array.
+		/// </summary>
+		/// <param name="n">Size of byte array to return.</param>
+		private static byte [] NewByteArray(int n)
+		{
+			if (n <= MaxBytes)
+			{
+				byte[] bytes = _bytes;
+				if (bytes == null)
+				{
+					bytes = new byte[MaxBytes];
+					_bytes = bytes;
+				}
+				return bytes;
+			}
+			else
+			{
+				return new byte[n];
+			}
+		}
+
+		/// <summary>
+		/// Returns the byte array where the first <paramref name="bytesLength"/> bytes contains the
+		/// UTF-8 encoded version of <paramref name="s"/>.
+		/// </summary>
+		/// <param name="s">String to encode.</param>
+		/// <param name="bytesLength">Number of bytes representing the UTF-8 encoded version of <paramref name="s"/> in the returned byte array.</param>
+		private byte[] GetUtf8Bytes(string s, out int bytesLength)
+		{
+			bytesLength = Encoding.UTF8.GetByteCount(s);
+			byte[] bytes = NewByteArray(bytesLength);
+			int nb = Encoding.UTF8.GetBytes(s, 0, s.Length, bytes, 0);
+			return bytes;
+		}
+#endregion
 	}
 }
