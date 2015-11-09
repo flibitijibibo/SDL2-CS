@@ -79,7 +79,7 @@ namespace SDL2
 		{
 			SDL.SDL_version result;
 			IntPtr result_ptr = INTERNAL_TTF_LinkedVersion();
-		    result = (SDL.SDL_version) Marshal.PtrToStructure(result_ptr, typeof(SDL.SDL_version));
+			result = (SDL.SDL_version) Marshal.PtrToStructure(result_ptr, typeof(SDL.SDL_version));
 			return result;
 		}
 
@@ -92,8 +92,8 @@ namespace SDL2
 		/* IntPtr refers to a TTF_Font */
 		public static IntPtr TTF_OpenFont(string file, int ptsize)
 		{
-			var fileUTF8 = UTF8String.ReusableBuffer(file);
-			return TTF_OpenFontNative(fileUTF8.Handle, ptsize);
+			var fileUTF8 = Utf8String.ReusableBufferPtr(file);
+			return TTF_OpenFontNative(fileUTF8, ptsize);
 		}
 		[DllImport(nativeLibName, EntryPoint = "TTF_OpenFont", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_OpenFontNative( IntPtr file, int ptsize );
@@ -110,8 +110,8 @@ namespace SDL2
 		/* IntPtr refers to a TTF_Font* */
 		public static IntPtr TTF_OpenFontIndex( string file, int ptsize, long index)
 		{
-			var fileUTF8 = UTF8String.ReusableBuffer(file);
-			return TTF_OpenFontIndexNative(fileUTF8.Handle, ptsize, index);
+			var fileUTF8 = Utf8String.ReusableBufferPtr(file);
+			return TTF_OpenFontIndexNative(fileUTF8, ptsize, index);
 		}
 		[DllImport(nativeLibName, EntryPoint = "TTF_OpenFontIndex", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_OpenFontIndexNative( IntPtr file, int ptsize, long index);
@@ -185,7 +185,7 @@ namespace SDL2
 		/* font refers to a TTF_Font* */
 		public static string TTF_FontFaceFamilyName( IntPtr font)
 		{
-			return UTF8String.String(TTF_FontFaceFamilyNameNative(font));
+			return Utf8String.String(TTF_FontFaceFamilyNameNative(font));
 		}
 		[DllImport(nativeLibName, EntryPoint = "TTF_FontFaceFamilyName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_FontFaceFamilyNameNative( IntPtr font);
@@ -193,7 +193,7 @@ namespace SDL2
 		/* font refers to a TTF_Font* */
 		public static string TTF_FontFaceStyleName( IntPtr font)
 		{
-			return UTF8String.String(TTF_FontFaceStyleNameNative(font));
+			return Utf8String.String(TTF_FontFaceStyleNameNative(font));
 		}
 		[DllImport(nativeLibName, EntryPoint = "TTF_FontFaceStyleName", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_FontFaceStyleNameNative( IntPtr font);
@@ -217,8 +217,8 @@ namespace SDL2
 		/* font refers to a TTF_Font* */
 		public static int TTF_SizeText( IntPtr font, string text, out int w, out int h)
 		{
-			var textUTF8 = UTF8String.ReusableBuffer(text);
-			return TTF_SizeTextNative(font, textUTF8.Handle, out w, out h);
+			var textUTF8 = Utf8String.ReusableBufferPtr(text);
+			return TTF_SizeTextNative(font, textUTF8, out w, out h);
 		}
 		[DllImport(nativeLibName, EntryPoint="TTF_SizeText", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_SizeTextNative( IntPtr font, IntPtr text, out int w, out int h);
@@ -226,8 +226,8 @@ namespace SDL2
 		/* font refers to a TTF_Font* */
 		public static int TTF_SizeUTF8( IntPtr font, string text, out int w, out int h)
 		{
-			var textUTF8 = UTF8String.ReusableBuffer(text);
-			return TTF_SizeUTF8Native(font, textUTF8.Handle, out w, out h);
+			var textUTF8 = Utf8String.ReusableBufferPtr(text);
+			return TTF_SizeUTF8Native(font, textUTF8, out w, out h);
 		}
 		[DllImport(nativeLibName, EntryPoint="TTF_SizeUTF8", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int TTF_SizeUTF8Native( IntPtr font, IntPtr text, out int w, out int h);
@@ -254,8 +254,8 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
 		public static IntPtr TTF_RenderUTF8_Solid( IntPtr font, string text, SDL.SDL_Color fg)
 		{
-			var textUTF8 = UTF8String.ReusableBuffer(text);
-			return TTF_RenderUTF8_SolidNative(font, textUTF8.Handle, fg);
+			var textUTF8 = Utf8String.ReusableBufferPtr(text);
+			return TTF_RenderUTF8_SolidNative(font, textUTF8, fg);
 		}
 		[DllImport(nativeLibName, EntryPoint="CalTTF_RenderUTF8_Solid", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_SolidNative( IntPtr font, IntPtr text, SDL.SDL_Color fg);
@@ -290,8 +290,8 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
 		public static IntPtr TTF_RenderUTF8_Shaded( IntPtr font, string text, SDL.SDL_Color fg, SDL.SDL_Color bg)
 		{
-			var textUTF8 = UTF8String.ReusableBuffer(text);
-			return TTF_RenderUTF8_ShadedNative(font, textUTF8.Handle, fg, bg);
+			var textUTF8 = Utf8String.ReusableBufferPtr(text);
+			return TTF_RenderUTF8_ShadedNative(font, textUTF8, fg, bg);
 		}
 		[DllImport(nativeLibName, EntryPoint="CalTTF_RenderUTF8_Shaded", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_ShadedNative( IntPtr font, IntPtr text, SDL.SDL_Color fg, SDL.SDL_Color bg);
@@ -327,8 +327,8 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
 		public static IntPtr TTF_RenderUTF8_Blended( IntPtr font, string text, SDL.SDL_Color fg, int toto)
 		{
-			var textUTF8 = UTF8String.ReusableBuffer(text);
-			return TTF_RenderUTF8_BlendedNative(font, textUTF8.Handle, fg);
+			var textUTF8 = Utf8String.ReusableBufferPtr(text);
+			return TTF_RenderUTF8_BlendedNative(font, textUTF8, fg);
 		}
 		[DllImport(nativeLibName, EntryPoint="CalTTF_RenderUTF8_Blended", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_BlendedNative( IntPtr font, IntPtr text, SDL.SDL_Color fg);
@@ -355,8 +355,8 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Surface*, font to a TTF_Font* */
 		public static IntPtr TTF_RenderUTF8_Blended_Wrapped( IntPtr font, string text, SDL.SDL_Color fg, uint wrapped)
 		{
-			var textUTF8 = UTF8String.ReusableBuffer(text);
-			return TTF_RenderUTF8_Blended_WrappedNative(font, textUTF8.Handle, fg, wrapped);
+			var textUTF8 = Utf8String.ReusableBufferPtr(text);
+			return TTF_RenderUTF8_Blended_WrappedNative(font, textUTF8, fg, wrapped);
 		}
 		[DllImport(nativeLibName, EntryPoint = "TTF_RenderUTF8_Blended_Wrapped", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr TTF_RenderUTF8_Blended_WrappedNative( IntPtr font, IntPtr text, SDL.SDL_Color fg, uint wrapped);

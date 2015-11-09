@@ -30,98 +30,25 @@ using System.Diagnostics.Contracts;
 namespace SDL2
 {
 	/// <summary>
-	/// Provides a wrapper around the <see cref="UTF8String"/> struct that will automatically free the external memory when not referenced.
-	/// Mostly used to provide reusable buffers of UTF8String.
-	/// </summary>
-	public class UTF8StringCell: IDisposable
-	{
-
-		/// <summary>
-		/// Initialize current with <paramref name="s"/>
-		/// </summary>
-		/// <param name="s">String to use for initializing current.</param>
-		public UTF8StringCell(string s)
-		{
-			_item = new UTF8String(s);
-		}
-
-		/// <summary>
-		/// Access to the underlying unmanaged memory.
-		/// </summary>
-		public IntPtr Handle
-		{
-			get { return _item.Handle; }
-		}
-
-		/// <summary>
-		/// .NET string representation of current UTF-8 encoded string.
-		/// </summary>
-		public string String()
-		{
-			return _item.String();
-		}
-
-		/// <summary>
-		/// Set current with <paramref name="s"/>.
-		/// </summary>
-		/// <param name="s">String to convert into UTF-8.</param>
-		public void SetString(string s)
-		{
-			_item.SetString(s);
-		}
-
-		/// <summary>
-		/// Free external memory held by current.
-		/// </summary>
-		public void Dispose()
-		{
-			if (_item.Handle != IntPtr.Zero)
-			{
-				_item.Dispose();
-			}
-		}
-
-		/// <summary>
-		/// Finalizer to free external memory held by current if not already done.
-		/// </summary>
-		~UTF8StringCell() {
-			Dispose();
-		 }
-
-		/// <summary>
-		/// Explicit interface implementation of the Dispose pattern.
-		/// </summary>
-		 void IDisposable.Dispose()
-		{
-			Dispose();
-			// No need to have the finalizer running now.
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary>
-		/// Content of cell.
-		/// </summary>
-		internal UTF8String _item;
-	}
-
-	/// <summary>
 	/// .NET representation of a UTF8 string. Mostly used for marshalling between .NET and UTF-8.
 	/// </summary>
-	public unsafe struct UTF8String : IDisposable
+	public unsafe class Utf8String : IDisposable
 	{
 #region Initialization
 		/// <summary>
 		/// Initialize instance with .NET string <see cref="s"/>
 		/// </summary>
 		/// <param name="s">.NET string to wrap into a UTF8 sequence of unmanaged bytes.</param>
-		public UTF8String(string s)
+		public Utf8String(string s)
 		{
+			Contract.Requires(s != null, "s is not null");
+
 			byte[] bytes = Encoding.UTF8.GetBytes(s);
 			int nb = bytes.Length;
 			IntPtr lPtr = SDL.SDL_malloc((IntPtr)(nb + 1));
 			if (lPtr == IntPtr.Zero)
 			{
-				throw new OutOfMemoryException("Cannot Allocate UTF8String");
+				throw new OutOfMemoryException("Cannot Allocate Utf8String");
 			}
 			else
 			{
@@ -136,7 +63,6 @@ namespace SDL2
 			Contract.Ensures((_capacity >= s.Length + 1), "capacity_greater_than_input");
 			Contract.Ensures(ReferenceEquals(s, String()) || (String().Equals(s)), "string_set");
 		}
-
 #endregion
 
 #region Access
@@ -144,35 +70,49 @@ namespace SDL2
 		/// Access to the underlying unmanaged memory.
 		/// </summary>
 		public IntPtr Handle { get { return _handle; } }
+#endregion
 
+#region Statics
 		/// <summary>
+		/// Avoid allocating external memory by reusing an internal buffer for the UTF-8 encoded representation of <paramref name="s"/>
+		/// and returns a pointer to that representation.
 		/// </summary>
-		public static UTF8String ReusableBuffer(string s)
+		/// <remarks>Consecutive calls to this routine will invalidate any previous calls. Use <see cref="ReusableBufferPtrBis"/> when you need another handle.</remarks>
+		/// <param name="s">String to encode.</param>
+		public static IntPtr ReusableBufferPtr(string s)
 		{
-			if (_buffer1 == null)
+			var buf = _buffer1;
+			if (buf == null)
 			{
-				_buffer1 = new UTF8StringCell(s);
+				buf = new Utf8String(s);
+				_buffer1 = buf;
 			}
 			else
 			{
-				_buffer1.SetString(s);
+				buf.SetString(s);
 			}
-			return _buffer1._item;
+			return buf._handle;
 		}
 
 		/// <summary>
+		/// Avoid allocating external memory by reusing an internal buffer for the UTF-8 encoded representation of <paramref name="s"/>
+		/// and returns a pointer to that representation.
 		/// </summary>
-		public static UTF8String ReusableBufferBis(string s)
+		/// <remarks>Consecutive calls to this routine will invalidate any previous calls. Use <see cref="ReusableBufferPtr"/> when you need another handle.</remarks>
+		/// <param name="s">String to encode.</param>	
+		public static IntPtr ReusableBufferPtrBis(string s)
 		{
-			if (_buffer2 == null)
+			var buf = _buffer2;
+			if (buf == null)
 			{
-				_buffer2 = new UTF8StringCell(s);
+				buf = new Utf8String(s);
+				_buffer2 = buf;
 			}
 			else
 			{
-				_buffer2.SetString(s);
+				buf.SetString(s);
 			}
-			return _buffer2._item;
+			return buf._handle;
 		}
 
 		/// <summary>
@@ -194,7 +134,7 @@ namespace SDL2
 				long nb = ptr - o;
 				if (nb > int.MaxValue)
 				{
-					throw new ArgumentOutOfRangeException("UTF-8 string too large");
+					throw new ArgumentOutOfRangeException("UTF-8 string `o' is too large");
 				}
 #if !NET46
 				byte[] bytes = new byte[nb];
@@ -211,7 +151,7 @@ namespace SDL2
 		/// </summary>
 		public static string String(IntPtr o)
 		{
-			return UTF8String.String((byte*)o);
+			return String((byte*)o);
 		}
 
 		/// <summary>
@@ -223,7 +163,7 @@ namespace SDL2
 		{
 #if !NET46
 			byte[] bytes = new byte[n];
-			Marshal.Copy((IntPtr)o, bytes, 0, (int)n);
+			Marshal.Copy((IntPtr)o, bytes, 0, n);
 			return Encoding.UTF8.GetString(bytes, 0, n);
 #else
 			return Encoding.UTF8.GetString((byte*) o, n);
@@ -235,7 +175,7 @@ namespace SDL2
 		/// </summary>
 		public static string String(IntPtr o, int n)
 		{
-			return UTF8String.String((byte*)o, n);
+			return String((byte*)o, n);
 		}
 
 		/// <summary>
@@ -244,7 +184,7 @@ namespace SDL2
 		/// <returns></returns>
 		public string String()
 		{
-			return UTF8String.String(_handle, _count);
+			return String(_handle, _count);
 		}
 #endregion
 
@@ -266,12 +206,12 @@ namespace SDL2
 				if (nb >= _capacity)
 				{
 						// By default increase size by the max of 50% or new capacity nb.
-					int newSize = System.Math.Max(_capacity + _capacity / 2, nb + 1);
+					int newSize = Math.Max(_capacity + _capacity / 2, nb + 1);
 					IntPtr lPtr = SDL.SDL_realloc(_handle, (IntPtr) newSize);
 					if (lPtr == IntPtr.Zero)
 					{
 						Dispose();
-						throw new OutOfMemoryException("Cannot reallocate UTF8String");
+						throw new OutOfMemoryException("Cannot reallocate Utf8String");
 					}
 					_handle = lPtr;
 					_capacity = newSize;
@@ -292,7 +232,7 @@ namespace SDL2
 
 #region Dispose
 		/// <summary>
-		/// Free allocated memory.
+		/// Free external memory held by current.
 		/// </summary>
 		public void Dispose()
 		{
@@ -304,6 +244,25 @@ namespace SDL2
 				_count = 0;
 			}
 		}
+
+		/// <summary>
+		/// Finalizer to free external memory held by current if not already done.
+		/// </summary>
+		~Utf8String()
+		{
+			Dispose();
+		}
+
+		/// <summary>
+		/// Explicit interface implementation of the Dispose pattern.
+		/// </summary>
+		void IDisposable.Dispose()
+		{
+			Dispose();
+			// No need to have the finalizer running now.
+			GC.SuppressFinalize(this);
+		}
+		
 #endregion
 
 #region Implementation: Accesss
@@ -322,8 +281,8 @@ namespace SDL2
 		/// </summary>
 		private IntPtr _handle;
 
-		[ThreadStatic] private static UTF8StringCell _buffer1;
-		[ThreadStatic] private static UTF8StringCell _buffer2;
+		[ThreadStatic] private static Utf8String _buffer1;
+		[ThreadStatic] private static Utf8String _buffer2;
 #endregion
 
 	}

@@ -87,8 +87,8 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Surface* */
 		public static IntPtr IMG_Load( string file)
 		{
-			var fileUTF8 = UTF8String.ReusableBuffer(file);
-			return IMG_LoadNative(fileUTF8.Handle);
+			var fileUTF8 = Utf8String.ReusableBufferPtr(file);
+			return IMG_LoadNative(fileUTF8);
 		}
 		[DllImport(nativeLibName, EntryPoint = "IMG_LoadNative", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_LoadNative( IntPtr file);
@@ -105,8 +105,8 @@ namespace SDL2
 		/* THIS IS A PUBLIC RWops FUNCTION! */
 		public static IntPtr IMG_LoadTyped_RW(IntPtr src, int freesrc, string type)
 		{
-			var typeUTF8 = UTF8String.ReusableBuffer(type);
-			return IMG_LoadTyped_RWNative(src, freesrc, typeUTF8.Handle);
+			var typeUTF8 = Utf8String.ReusableBufferPtr(type);
+			return IMG_LoadTyped_RWNative(src, freesrc, typeUTF8);
 		}
 		[DllImport(nativeLibName, EntryPoint = "IMG_LoadTypedRW", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_LoadTyped_RWNative( IntPtr src, int freesrc, IntPtr type );
@@ -114,8 +114,8 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
 		public static IntPtr IMG_LoadTexture(IntPtr renderer, string file)
 		{
-			var fileUTF8 = UTF8String.ReusableBuffer(file);
-			return IMG_LoadTextureNative(renderer, fileUTF8.Handle);
+			var fileUTF8 = Utf8String.ReusableBufferPtr(file);
+			return IMG_LoadTextureNative(renderer, fileUTF8);
 		}
 		[DllImport(nativeLibName, EntryPoint = "IMG_loadTexture", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_LoadTextureNative( IntPtr renderer, IntPtr file );
@@ -139,8 +139,8 @@ namespace SDL2
 		/* THIS IS A PUBLIC RWops FUNCTION! */
 		public static IntPtr IMG_LoadTextureTyped_RW(IntPtr renderer, IntPtr src, int freesrc, string type)
 		{
-			var typeUTF8 = UTF8String.ReusableBuffer(type);
-			return IMG_LoadTextureTyped_RWNative(renderer, src, freesrc, typeUTF8.Handle);
+			var typeUTF8 = Utf8String.ReusableBufferPtr(type);
+			return IMG_LoadTextureTyped_RWNative(renderer, src, freesrc, typeUTF8);
 		}
 		[DllImport(nativeLibName, EntryPoint = "IMG_LoadTextureTyped_RW", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr IMG_LoadTextureTyped_RWNative( IntPtr renderer, IntPtr src, int freesrc, IntPtr type );
@@ -158,8 +158,8 @@ namespace SDL2
 		/* surface refers to an SDL_Surface* */
 		public static int IMG_SavePNG(IntPtr surface, string file)
 		{
-			var fileUTF8 = UTF8String.ReusableBuffer(file);
-			return IMG_SavePNGNative(surface, fileUTF8.Handle);
+			var fileUTF8 = Utf8String.ReusableBufferPtr(file);
+			return IMG_SavePNGNative(surface, fileUTF8);
 		}
 		[DllImport(nativeLibName, EntryPoint = "IMG_SavePNG", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int IMG_SavePNGNative( IntPtr surface, IntPtr file );
