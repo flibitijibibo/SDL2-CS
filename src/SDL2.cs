@@ -1906,6 +1906,90 @@ namespace SDL2
 			SDL_RendererFlip flip
 		);
 
+        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SDL_RenderCopyEx(
+            IntPtr renderer,
+            IntPtr texture,
+            IntPtr srcrect,
+            ref SDL_Rect dstrect,
+            double angle,
+            ref SDL_Point center,
+            SDL_RendererFlip flip
+        );
+
+        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SDL_RenderCopyEx(
+            IntPtr renderer,
+            IntPtr texture,
+            ref SDL_Rect srcrect,
+            IntPtr dstrect,
+            double angle,
+            ref SDL_Point center,
+            SDL_RendererFlip flip
+        );
+
+        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SDL_RenderCopyEx(
+            IntPtr renderer,
+            IntPtr texture,
+            ref SDL_Rect srcrect,
+            ref SDL_Rect dstrect,
+            double angle,
+            IntPtr center,
+            SDL_RendererFlip flip
+        );
+
+        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SDL_RenderCopyEx(
+            IntPtr renderer,
+            IntPtr texture,
+            IntPtr srcrect,
+            IntPtr dstrect,
+            double angle,
+            ref SDL_Point center,
+            SDL_RendererFlip flip
+        );
+
+        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SDL_RenderCopyEx(
+            IntPtr renderer,
+            IntPtr texture,
+            ref SDL_Rect srcrect,
+            IntPtr dstrect,
+            double angle,
+            IntPtr center,
+            SDL_RendererFlip flip
+        );
+
+        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SDL_RenderCopyEx(
+            IntPtr renderer,
+            IntPtr texture,
+            IntPtr srcrect,
+            IntPtr dstrect,
+            double angle,
+            IntPtr center,
+            SDL_RendererFlip flip
+        );
+
+        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SDL_RenderCopyEx(
+            IntPtr renderer,
+            IntPtr texture,
+            IntPtr srcrect,
+            ref SDL_Rect dstrect,
+            double angle,
+            IntPtr center,
+            SDL_RendererFlip flip
+        );
+
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawLine(
