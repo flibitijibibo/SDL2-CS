@@ -640,9 +640,9 @@ namespace SDL2
 		[Flags]
 		public enum SDL_MessageBoxFlags : uint
 		{
-			SDL_MESSAGEBOX_ERROR        = 0x00000010,
-			SDL_MESSAGEBOX_WARNING      = 0x00000020,
-			SDL_MESSAGEBOX_INFORMATION  = 0x00000040
+			SDL_MESSAGEBOX_ERROR =		0x00000010,
+			SDL_MESSAGEBOX_WARNING =	0x00000020,
+			SDL_MESSAGEBOX_INFORMATION =	0x00000040
 		}
 
 		[Flags]
@@ -707,12 +707,12 @@ namespace SDL2
 		public struct SDL_MessageBoxData
 		{
 			public SDL_MessageBoxFlags flags;
-			public IntPtr window;							/* Parent window, can be NULL */
-			public string title;							/* UTF-8 title */
-			public string message;							/* UTF-8 message text */
+			public IntPtr window;				/* Parent window, can be NULL */
+			public string title;				/* UTF-8 title */
+			public string message;				/* UTF-8 message text */
 			public int numbuttons;
 			public SDL_MessageBoxButtonData[] buttons;
-			public SDL_MessageBoxColorScheme? colorScheme;  /* Can be NULL to use system settings */
+			public SDL_MessageBoxColorScheme? colorScheme;	/* Can be NULL to use system settings */
 		}
 
 		/// <summary>
@@ -1906,89 +1906,121 @@ namespace SDL2
 			SDL_RendererFlip flip
 		);
 
-        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
-        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SDL_RenderCopyEx(
-            IntPtr renderer,
-            IntPtr texture,
-            IntPtr srcrect,
-            ref SDL_Rect dstrect,
-            double angle,
-            ref SDL_Point center,
-            SDL_RendererFlip flip
-        );
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			ref SDL_Rect dstrect,
+			double angle,
+			ref SDL_Point center,
+			SDL_RendererFlip flip
+		);
 
-        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
-        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SDL_RenderCopyEx(
-            IntPtr renderer,
-            IntPtr texture,
-            ref SDL_Rect srcrect,
-            IntPtr dstrect,
-            double angle,
-            ref SDL_Point center,
-            SDL_RendererFlip flip
-        );
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			ref SDL_Rect srcrect,
+			IntPtr dstrect,
+			double angle,
+			ref SDL_Point center,
+			SDL_RendererFlip flip
+		);
 
-        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
-        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SDL_RenderCopyEx(
-            IntPtr renderer,
-            IntPtr texture,
-            ref SDL_Rect srcrect,
-            ref SDL_Rect dstrect,
-            double angle,
-            IntPtr center,
-            SDL_RendererFlip flip
-        );
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for center.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			ref SDL_Rect srcrect,
+			ref SDL_Rect dstrect,
+			double angle,
+			IntPtr center,
+			SDL_RendererFlip flip
+		);
 
-        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
-        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SDL_RenderCopyEx(
-            IntPtr renderer,
-            IntPtr texture,
-            IntPtr srcrect,
-            IntPtr dstrect,
-            double angle,
-            ref SDL_Point center,
-            SDL_RendererFlip flip
-        );
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for both
+		 * srcrect and dstrect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			IntPtr dstrect,
+			double angle,
+			ref SDL_Point center,
+			SDL_RendererFlip flip
+		);
 
-        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
-        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SDL_RenderCopyEx(
-            IntPtr renderer,
-            IntPtr texture,
-            ref SDL_Rect srcrect,
-            IntPtr dstrect,
-            double angle,
-            IntPtr center,
-            SDL_RendererFlip flip
-        );
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for both
+		 * srcrect and center.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			ref SDL_Rect dstrect,
+			double angle,
+			IntPtr center,
+			SDL_RendererFlip flip
+		);
 
-        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
-        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SDL_RenderCopyEx(
-            IntPtr renderer,
-            IntPtr texture,
-            IntPtr srcrect,
-            IntPtr dstrect,
-            double angle,
-            IntPtr center,
-            SDL_RendererFlip flip
-        );
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for both
+		 * dstrect and center.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			ref SDL_Rect srcrect,
+			IntPtr dstrect,
+			double angle,
+			IntPtr center,
+			SDL_RendererFlip flip
+		);
 
-        /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
-        [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SDL_RenderCopyEx(
-            IntPtr renderer,
-            IntPtr texture,
-            IntPtr srcrect,
-            ref SDL_Rect dstrect,
-            double angle,
-            IntPtr center,
-            SDL_RendererFlip flip
-        );
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for all
+		 * three parameters.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			IntPtr dstrect,
+			double angle,
+			IntPtr center,
+			SDL_RendererFlip flip
+		);
 
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3548,8 +3580,9 @@ namespace SDL2
 		{
 			public SDL_EventType type;
 			public UInt32 timestamp;
-			public Int32 which; /* joystick id for ADDED, else
-					       instance id */
+			public Int32 which;	/* joystick id for ADDED,
+						 * else instance id
+						 */
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -3948,7 +3981,7 @@ namespace SDL2
 			SDL_SCANCODE_VOLUMEUP = 128,
 			SDL_SCANCODE_VOLUMEDOWN = 129,
 			/* not sure whether there's a reason to enable these */
-			/*	SDL_SCANCODE_LOCKINGCAPSLOCK = 130,  */
+			/*	SDL_SCANCODE_LOCKINGCAPSLOCK = 130, */
 			/*	SDL_SCANCODE_LOCKINGNUMLOCK = 131, */
 			/*	SDL_SCANCODE_LOCKINGSCROLLLOCK = 132, */
 			SDL_SCANCODE_KP_COMMA = 133,
