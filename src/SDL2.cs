@@ -3063,6 +3063,16 @@ namespace SDL2
 			uint color
 		);
 
+		/* dst refers to an SDL_Surface*.
+		 * This overload allows passing NULL to rect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_FillRect(
+			IntPtr dst,
+			IntPtr rect,
+			uint color
+		);
+
 		/* dst refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_FillRects(
