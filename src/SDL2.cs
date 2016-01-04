@@ -261,6 +261,24 @@ namespace SDL2
 			"SDL_ANDROID_SEPARATE_MOUSE_AND_TOUCH";
 		public const string SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT =
 			"SDL_EMSCRIPTEN_KEYBOARD_ELEMENT";
+		public const string SDL_HINT_THREAD_STACK_SIZE =
+			"SDL_THREAD_STACK_SIZE";
+		public const string SDL_HINT_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN =
+			"SDL_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN";
+		public const string SDL_HINT_WINDOWS_ENABLE_MESSAGELOOP =
+			"SDL_WINDOWS_ENABLE_MESSAGELOOP";
+		public const string SDL_HINT_WINDOWS_NO_CLOSE_ON_ALT_F4 =
+			"SDL_WINDOWS_NO_CLOSE_ON_ALT_F4";
+		public const string SDL_HINT_XINPUT_USE_OLD_JOYSTICK_MAPPING =
+			"SDL_XINPUT_USE_OLD_JOYSTICK_MAPPING";
+		public const string SDL_HINT_MAC_BACKGROUND_APP =
+			"SDL_MAC_BACKGROUND_APP";
+		public const string SDL_HINT_VIDEO_X11_NET_WM_PING =
+			"SDL_VIDEO_X11_NET_WM_PING";
+		public const string SDL_HINT_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION =
+			"SDL_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION";
+		public const string SDL_HINT_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION =
+			"SDL_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION";
 
 		public enum SDL_HintPriority
 		{
@@ -808,7 +826,7 @@ namespace SDL2
 		 */
 		public const int SDL_MAJOR_VERSION =	2;
 		public const int SDL_MINOR_VERSION =	0;
-		public const int SDL_PATCHLEVEL =	3;
+		public const int SDL_PATCHLEVEL =	4;
 
 		public static readonly int SDL_COMPILEDVERSION = SDL_VERSIONNUM(
 			SDL_MAJOR_VERSION,
@@ -1225,6 +1243,15 @@ namespace SDL2
 		public static extern int SDL_GetDisplayBounds(
 			int displayIndex,
 			out SDL_Rect rect
+		);
+
+		/* This function is only available in 2.0.4 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetDisplayDPI(
+			int displayIndex,
+			out float ddpi,
+			out float hdpi,
+			out float vdpi
 		);
 
 		/// <summary>
@@ -4667,6 +4694,17 @@ namespace SDL2
 		public const byte SDL_HAT_LEFTUP =	SDL_HAT_LEFT | SDL_HAT_UP;
 		public const byte SDL_HAT_LEFTDOWN =	SDL_HAT_LEFT | SDL_HAT_DOWN;
 
+		public enum SDL_JoystickPowerLevel
+		{
+			SDL_JOYSTICK_POWER_UNKNOWN = -1,
+			SDL_JOYSTICK_POWER_EMPTY,
+			SDL_JOYSTICK_POWER_LOW,
+			SDL_JOYSTICK_POWER_MEDIUM,
+			SDL_JOYSTICK_POWER_FULL,
+			SDL_JOYSTICK_POWER_WIRED,
+			SDL_JOYSTICK_POWER_MAX
+		}
+
 		/* joystick refers to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_JoystickClose(IntPtr joystick);
@@ -4780,6 +4818,20 @@ namespace SDL2
 		/* int refers to an SDL_JoystickID, joystick to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_JoystickInstanceID(IntPtr joystick);
+
+		/* joystick refers to an SDL_Joystick*.
+		 * This function is only available in 2.0.4 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_JoystickPowerLevel SDL_JoystickCurrentPowerLevel(
+			IntPtr joystick
+		);
+
+		/* int refers to an SDL_JoystickID, IntPtr to an SDL_Joystick*.
+		 * This function is only available in 2.0.4 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_JoystickFromInstanceID(int joyid);
 
 		#endregion
 
@@ -4977,6 +5029,12 @@ namespace SDL2
 		public static extern void SDL_GameControllerClose(
 			IntPtr gamecontroller
 		);
+
+		/* int refers to an SDL_JoystickID, IntPtr to an SDL_GameController*.
+		 * This function is only available in 2.0.4 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GameControllerFromInstanceID(int joyid);
 
 		#endregion
 
@@ -5643,7 +5701,11 @@ namespace SDL2
 			SDL_SYSWM_X11,
 			SDL_SYSWM_DIRECTFB,
 			SDL_SYSWM_COCOA,
-			SDL_SYSWM_UIKIT
+			SDL_SYSWM_UIKIT,
+			SDL_SYSWM_WAYLAND,
+			SDL_SYSWM_MIR,
+			SDL_SYSWM_WINRT,
+			SDL_SYSWM_ANDROID
 		}
 
 		// FIXME: I wish these weren't public...
@@ -5652,6 +5714,12 @@ namespace SDL2
 		{
 			public IntPtr window; // Refers to an HWND
 			public IntPtr hdc; // Refers to an HDC
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_winrt_wminfo
+		{
+			public IntPtr window; // Refers to an IInspectable*
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -5679,6 +5747,9 @@ namespace SDL2
 		public struct INTERNAL_uikit_wminfo
 		{
 			public IntPtr window; // Refers to a UIWindow*
+			public uint framebuffer;
+			public uint colorbuffer;
+			public uint resolveFramebuffer;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -5708,6 +5779,8 @@ namespace SDL2
 		{
 			[FieldOffset(0)]
 			public INTERNAL_windows_wminfo win;
+			[FieldOffset(0)]
+			public INTERNAL_winrt_wminfo winrt;
 			[FieldOffset(0)]
 			public INTERNAL_x11_wminfo x11;
 			[FieldOffset(0)]
