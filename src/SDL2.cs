@@ -260,6 +260,34 @@ namespace SDL2
 		public const string SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES =
 			"SDL_VIDEO_MAC_FULLSCREEN_SPACES";
 
+		/* Only available in SDL 2.0.4 or higher */
+		public const string SDL_HINT_NO_SIGNAL_HANDLERS =
+			"SDL_NO_SIGNAL_HANDLERS";
+		public const string SDL_HINT_IME_INTERNAL_EDITING =
+			"SDL_IME_INTERNAL_EDITING";
+		public const string SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH =
+			"SDL_ANDROID_SEPARATE_MOUSE_AND_TOUCH";
+		public const string SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT =
+			"SDL_EMSCRIPTEN_KEYBOARD_ELEMENT";
+		public const string SDL_HINT_THREAD_STACK_SIZE =
+			"SDL_THREAD_STACK_SIZE";
+		public const string SDL_HINT_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN =
+			"SDL_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN";
+		public const string SDL_HINT_WINDOWS_ENABLE_MESSAGELOOP =
+			"SDL_WINDOWS_ENABLE_MESSAGELOOP";
+		public const string SDL_HINT_WINDOWS_NO_CLOSE_ON_ALT_F4 =
+			"SDL_WINDOWS_NO_CLOSE_ON_ALT_F4";
+		public const string SDL_HINT_XINPUT_USE_OLD_JOYSTICK_MAPPING =
+			"SDL_XINPUT_USE_OLD_JOYSTICK_MAPPING";
+		public const string SDL_HINT_MAC_BACKGROUND_APP =
+			"SDL_MAC_BACKGROUND_APP";
+		public const string SDL_HINT_VIDEO_X11_NET_WM_PING =
+			"SDL_VIDEO_X11_NET_WM_PING";
+		public const string SDL_HINT_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION =
+			"SDL_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION";
+		public const string SDL_HINT_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION =
+			"SDL_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION";
+
 		public enum SDL_HintPriority
 		{
 			SDL_HINT_DEFAULT,
@@ -806,7 +834,7 @@ namespace SDL2
 		 */
 		public const int SDL_MAJOR_VERSION =	2;
 		public const int SDL_MINOR_VERSION =	0;
-		public const int SDL_PATCHLEVEL =	3;
+		public const int SDL_PATCHLEVEL =	4;
 
 		public static readonly int SDL_COMPILEDVERSION = SDL_VERSIONNUM(
 			SDL_MAJOR_VERSION,
@@ -942,7 +970,8 @@ namespace SDL2
 			SDL_GL_CONTEXT_FLAGS,
 			SDL_GL_CONTEXT_PROFILE_MASK,
 			SDL_GL_SHARE_WITH_CURRENT_CONTEXT,
-			SDL_GL_FRAMEBUFFER_SRGB_CAPABLE
+			SDL_GL_FRAMEBUFFER_SRGB_CAPABLE,
+			SDL_GL_CONTEXT_RELEASE_BEHAVIOR
 		}
 
 		/// <summary>
@@ -1011,7 +1040,26 @@ namespace SDL2
 			SDL_WINDOW_FULLSCREEN_DESKTOP =
 				(SDL_WINDOW_FULLSCREEN | 0x00001000),
 			SDL_WINDOW_FOREIGN =		0x00000800,
-			SDL_WINDOW_ALLOW_HIGHDPI =	0x00002000	/* Only available in 2.0.1 */
+			SDL_WINDOW_ALLOW_HIGHDPI =	0x00002000,	/* Only available in 2.0.1 */
+			SDL_WINDOW_MOUSE_CAPTURE =	0x00004000,	/* Only available in 2.0.4 */
+		}
+
+		/// <summary>
+		/// Possible return values from the SDL_HitTest callback.
+		/// This is only available in 2.0.4.
+		/// </summary>
+		public enum SDL_HitTestResult
+		{
+			SDL_HITTEST_NORMAL,		/* Region is normal. No special properties. */
+			SDL_HITTEST_DRAGGABLE,		/* Region can drag entire window. */
+			SDL_HITTEST_RESIZE_TOPLEFT,
+			SDL_HITTEST_RESIZE_TOP,
+			SDL_HITTEST_RESIZE_TOPRIGHT,
+			SDL_HITTEST_RESIZE_RIGHT,
+			SDL_HITTEST_RESIZE_BOTTOMRIGHT,
+			SDL_HITTEST_RESIZE_BOTTOM,
+			SDL_HITTEST_RESIZE_BOTTOMLEFT,
+			SDL_HITTEST_RESIZE_LEFT
 		}
 
 		public const int SDL_WINDOWPOS_UNDEFINED_MASK =	0x1FFF0000;
@@ -1051,6 +1099,10 @@ namespace SDL2
 			public int refresh_rate;
 			public IntPtr driverdata; // void*
 		}
+
+		/* win refers to an SDL_Window*, area to a cosnt SDL_Point*, data to a void* */
+		/* Only available in 2.0.4 */
+		public delegate SDL_HitTestResult SDL_HitTest(IntPtr win, IntPtr area, IntPtr data);
 
 		/// <summary>
 		/// Use this function to create a window with the specified position, dimensions, and flags.
@@ -1199,6 +1251,15 @@ namespace SDL2
 		public static extern int SDL_GetDisplayBounds(
 			int displayIndex,
 			out SDL_Rect rect
+		);
+
+		/* This function is only available in 2.0.4 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetDisplayDPI(
+			int displayIndex,
+			out float ddpi,
+			out float hdpi,
+			out float vdpi
 		);
 
 		/// <summary>
@@ -1627,6 +1688,20 @@ namespace SDL2
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_VideoQuit();
+
+		/* window refers to an SDL_Window*, callback_data to a void* */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetWindowHitTest(
+			IntPtr window,
+			SDL_HitTest callback,
+			IntPtr callback_data
+		);
+
+		/* IntPtr refers to an SDL_Window* */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetGrabbedWindow();
 
 		#endregion
 
@@ -2261,6 +2336,11 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetRenderTarget(IntPtr renderer);
 
+		/* renderer refers to an SDL_Renderer* */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_RenderIsClipEnabled(IntPtr renderer);
+
 		#endregion
 
 		#region SDL_pixels.h
@@ -2816,6 +2896,10 @@ namespace SDL2
 			public int h;
 		}
 
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_PointInRect(ref SDL_Point p, ref SDL_Rect r);
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_EnclosePoints(
 			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 1)]
@@ -3344,9 +3428,16 @@ namespace SDL2
 			/* Drag and drop events */
 			SDL_DROPFILE =			0x1000,
 
+			/* Audio hotplug events */
+			/* Only available in SDL 2.0.4 or higher */
+			SDL_AUDIODEVICEADDED =		0x1100,
+			SDL_AUDIODEVICEREMOVED,
+
 			/* Render events */
 			/* Only available in SDL 2.0.2 or higher */
 			SDL_RENDER_TARGETS_RESET =	0x2000,
+			/* Only available in SDL 2.0.4 or higher */
+			SDL_RENDER_DEVICE_RESET,
 
 			/* Events SDL_USEREVENT through SDL_LASTEVENT are for
 			 * your use, and should be allocated with
@@ -3356,6 +3447,13 @@ namespace SDL2
 
 			/* The last event, used for bouding arrays. */
 			SDL_LASTEVENT =			0xFFFF
+		}
+
+		/* Only available in 2.0.4 or higher */
+		public enum SDL_MouseWheelDirection : uint
+		{
+			SDL_MOUSEHWEEL_NORMAL,
+			SDL_MOUSEWHEEL_FLIPPED
 		}
 
 		/* Fields shared by every event */
@@ -3471,6 +3569,7 @@ namespace SDL2
 			public UInt32 which;
 			public Int32 x; /* amount scrolled horizontally */
 			public Int32 y; /* amount scrolled vertically */
+			public UInt32 direction; /* Set to one of the SDL_MOUSEWHEEL_* defines */
 		}
 
 // Ignore private members used for padding in this struct
@@ -4569,6 +4668,29 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetMouseState(IntPtr x, IntPtr y);
 
+		/* Get the current state of the mouse, in relation to the desktop */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(out int x, out int y);
+
+		/* Get the current state of the mouse, in relation to the desktop */
+		/* Only available in 2.0.4 */
+		/* This overload allows for passing NULL to x */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, out int y);
+
+		/* Get the current state of the mouse, in relation to the desktop */
+		/* Only available in 2.0.4 */
+		/* This overload allows for passing NULL to y */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(out int x, IntPtr y);
+
+		/* Get the current state of the mouse, in relation to the desktop */
+		/* Only available in 2.0.4 */
+		/* This overload allows for passing NULL to both x and y */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, IntPtr y);
+
 		/* Get the mouse state with relative coords*/
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetRelativeMouseState(out int x, out int y);
@@ -4578,9 +4700,19 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_WarpMouseInWindow(IntPtr window, int x, int y);
 
+		/* Set the mouse cursor's position in global screen space */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_WarpMouseGlobal(int x, int y);
+
 		/* Enable/Disable relative mouse mode (grabs mouse, rel coords) */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetRelativeMouseMode(SDL_bool enabled);
+
+		/* Capture the mouse, to track input outside an SDL window */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_CaptureMouse(SDL_bool enabled);
 
 		/* Query if the relative mouse mode is enabled */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -4702,6 +4834,17 @@ namespace SDL2
 		public const byte SDL_HAT_LEFTUP =	SDL_HAT_LEFT | SDL_HAT_UP;
 		public const byte SDL_HAT_LEFTDOWN =	SDL_HAT_LEFT | SDL_HAT_DOWN;
 
+		public enum SDL_JoystickPowerLevel
+		{
+			SDL_JOYSTICK_POWER_UNKNOWN = -1,
+			SDL_JOYSTICK_POWER_EMPTY,
+			SDL_JOYSTICK_POWER_LOW,
+			SDL_JOYSTICK_POWER_MEDIUM,
+			SDL_JOYSTICK_POWER_FULL,
+			SDL_JOYSTICK_POWER_WIRED,
+			SDL_JOYSTICK_POWER_MAX
+		}
+
 		/* joystick refers to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_JoystickClose(IntPtr joystick);
@@ -4815,6 +4958,20 @@ namespace SDL2
 		/* int refers to an SDL_JoystickID, joystick to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_JoystickInstanceID(IntPtr joystick);
+
+		/* joystick refers to an SDL_Joystick*.
+		 * This function is only available in 2.0.4 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_JoystickPowerLevel SDL_JoystickCurrentPowerLevel(
+			IntPtr joystick
+		);
+
+		/* int refers to an SDL_JoystickID, IntPtr to an SDL_Joystick*.
+		 * This function is only available in 2.0.4 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_JoystickFromInstanceID(int joyid);
 
 		#endregion
 
@@ -5012,6 +5169,12 @@ namespace SDL2
 		public static extern void SDL_GameControllerClose(
 			IntPtr gamecontroller
 		);
+
+		/* int refers to an SDL_JoystickID, IntPtr to an SDL_GameController*.
+		 * This function is only available in 2.0.4 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GameControllerFromInstanceID(int joyid);
 
 		#endregion
 
@@ -5601,6 +5764,25 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_UnlockAudioDevice(uint dev);
 
+		/* dev refers to an SDL_AudioDeviceID, data to a void* */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_QueueAudio(
+			uint dev,
+			IntPtr data,
+			UInt32 len
+		);
+
+		/* dev refers to an SDL_AudioDeviceID */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetQueuedAudioSize(uint dev);
+
+		/* dev refers to an SDL_AudioDeviceID */
+		/* Only available in 2.0.4 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_ClearQueuedAudio(uint dev);
+
 		#endregion
 
 		#region SDL_timer.h
@@ -5659,7 +5841,11 @@ namespace SDL2
 			SDL_SYSWM_X11,
 			SDL_SYSWM_DIRECTFB,
 			SDL_SYSWM_COCOA,
-			SDL_SYSWM_UIKIT
+			SDL_SYSWM_UIKIT,
+			SDL_SYSWM_WAYLAND,
+			SDL_SYSWM_MIR,
+			SDL_SYSWM_WINRT,
+			SDL_SYSWM_ANDROID
 		}
 
 		// FIXME: I wish these weren't public...
@@ -5667,6 +5853,13 @@ namespace SDL2
 		public struct INTERNAL_windows_wminfo
 		{
 			public IntPtr window; // Refers to an HWND
+			public IntPtr hdc; // Refers to an HDC
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_winrt_wminfo
+		{
+			public IntPtr window; // Refers to an IInspectable*
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -5694,6 +5887,31 @@ namespace SDL2
 		public struct INTERNAL_uikit_wminfo
 		{
 			public IntPtr window; // Refers to a UIWindow*
+			public uint framebuffer;
+			public uint colorbuffer;
+			public uint resolveFramebuffer;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_wayland_wminfo
+		{
+			public IntPtr display; // Refers to a wl_display*
+			public IntPtr surface; // Refers to a wl_surface*
+			public IntPtr shell_surface; // Refers to a wl_shell_surface*
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_mir_wminfo
+		{
+			public IntPtr connection; // Refers to a MirConnection*
+			public IntPtr surface; // Refers to a MirSurface*
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_android_wminfo
+		{
+			public IntPtr window; // Refers to an ANativeWindow
+			public IntPtr surface; // Refers to an EGLSurface
 		}
 
 		[StructLayout(LayoutKind.Explicit)]
@@ -5702,6 +5920,8 @@ namespace SDL2
 			[FieldOffset(0)]
 			public INTERNAL_windows_wminfo win;
 			[FieldOffset(0)]
+			public INTERNAL_winrt_wminfo winrt;
+			[FieldOffset(0)]
 			public INTERNAL_x11_wminfo x11;
 			[FieldOffset(0)]
 			public INTERNAL_directfb_wminfo dfb;
@@ -5709,6 +5929,12 @@ namespace SDL2
 			public INTERNAL_cocoa_wminfo cocoa;
 			[FieldOffset(0)]
 			public INTERNAL_uikit_wminfo uikit;
+			[FieldOffset(0)]
+			public INTERNAL_wayland_wminfo wl;
+			[FieldOffset(0)]
+			public INTERNAL_mir_wminfo mir;
+			[FieldOffset(0)]
+			public INTERNAL_android_wminfo android;
 			// private int dummy;
 		}
 
