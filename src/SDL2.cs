@@ -6012,6 +6012,38 @@ namespace SDL2
 
 		#endregion
 
+		#region SDL_power.h
+
+		/// <summary>
+		/// The basic state for the system's power supply.
+		/// </summary>
+		public enum SDL_PowerState
+		{
+			SDL_POWERSTATE_UNKNOWN = 0,
+			SDL_POWERSTATE_ON_BATTERY,
+			SDL_POWERSTATE_NO_BATTERY,
+			SDL_POWERSTATE_CHARGING,
+			SDL_POWERSTATE_CHARGED
+		}
+
+		/// <summary>
+		/// Get the current power supply details.
+		/// </summary>
+		/// <param name="secs">Seconds of battery life left. You can pass a NULL here if
+		/// you don't care. Will return -1 if we can't determine a
+		/// value, or we're not running on a battery.</param>
+		/// <param name="pct">Percentage of battery life left, between 0 and 100. You can
+		/// pass a NULL here if you don't care. Will return -1 if we
+		/// can't determine a value, or we're not running on a battery.</param>
+		/// <returns>The state of the battery (if any).</returns>
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_PowerState SDL_GetPowerInfo(
+			out int secs,
+			out int pct
+		);
+
+		#endregion
+
 		#region SDL_cpuinfo.h
 
 		/// <summary>
