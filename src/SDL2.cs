@@ -1240,6 +1240,10 @@ namespace SDL2
 			out SDL_DisplayMode mode
 		);
 
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+		public static extern string SDL_GetDisplayName(int index);
+
 		/// <summary>
 		/// Use this function to get the desktop area represented by a display, with the primary display located at 0,0.
 		/// </summary>
