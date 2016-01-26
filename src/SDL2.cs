@@ -1913,14 +1913,6 @@ namespace SDL2
 			out int h
 		);
 
-		/* texture refers to an SDL_Texture, pixels to a void* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_QueryTexturePixels(
-			IntPtr texture,
-			out IntPtr pixels,
-			out int pitch
-		);
-
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderClear(IntPtr renderer);
