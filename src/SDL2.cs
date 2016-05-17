@@ -4508,6 +4508,25 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetMouseFocus();
 
+		/* Get the current state of the mouse in desktop relative coordinates */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(out int x, out int y);
+
+		/* Get the current state of the mouse in desktop relative coordinates */
+		/* This overload allows for passing NULL to x */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, out int y);
+
+		/* Get the current state of the mouse in desktop relative coordinates */
+		/* This overload allows for passing NULL to y */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(out int x, IntPtr y);
+
+		/* Get the current state of the mouse in desktop relative coordinates */
+		/* This overload allows for passing NULL to both x and y */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, IntPtr y);
+
 		/* Get the current state of the mouse */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetMouseState(out int x, out int y);
@@ -4530,6 +4549,10 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 		/* Get the mouse state with relative coords*/
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetRelativeMouseState(out int x, out int y);
+
+		/* Set the mouse cursor's position relative to your desktop cooordinates */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_WarpMouseGlobal(int x, int y);
 
 		/* Set the mouse cursor's position (within a window) */
 		/* window is an SDL_Window pointer */
