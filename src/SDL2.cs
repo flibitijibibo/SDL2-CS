@@ -1274,9 +1274,12 @@ Commented while waiting for RuntimeArgumentHandle to be in CoreFX.
 			out SDL_DisplayMode mode
 		);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetDisplayName(int index);
+		public static string SDL_GetDisplayName(int index)
+		{
+			return Utf8String.String(SDL_GetDisplayNameNative(index));
+		}
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetDisplayName", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetDisplayNameNative(int index);
 
 		/// <summary>
 		/// Use this function to get the desktop area represented by a display, with the primary display located at 0,0.
