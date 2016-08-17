@@ -2385,7 +2385,7 @@ namespace SDL2
 
 		public static byte SDL_BITSPERPIXEL(uint X)
 		{
-			return (byte) ((X >> 8) & 0x0F);
+			return (byte) ((X >> 8) & 0xFF);
 		}
 
 		public static byte SDL_BYTESPERPIXEL(uint X)
