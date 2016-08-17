@@ -141,10 +141,7 @@ namespace SDL2
 		{
 			SDL.SDL_version result;
 			IntPtr result_ptr = INTERNAL_MIX_Linked_Version();
-			result = (SDL.SDL_version) Marshal.PtrToStructure(
-				result_ptr,
-				typeof(SDL.SDL_version)
-			);
+			result = (SDL.SDL_version) Marshal.PtrToStructure(result_ptr, typeof(SDL.SDL_version));
 			return result;
 		}
 
@@ -184,16 +181,18 @@ namespace SDL2
 		/* This is an RWops macro in the C header. */
 		public static IntPtr Mix_LoadWAV(string file)
 		{
-			IntPtr rwops = SDL.INTERNAL_SDL_RWFromFile(file, "rb");
+			IntPtr rwops = SDL.SDL_RWFromFile(file, "rb");
 			return Mix_LoadWAV_RW(rwops, 1);
 		}
 
 		/* IntPtr refers to a Mix_Music* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr Mix_LoadMUS(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string file
-		);
+		public static IntPtr Mix_LoadMUS( string file)
+		{
+			var fileUTF8 = Utf8String.ReusableBufferPtr(file);
+			return Mix_LoadMUSNative(fileUTF8);
+		}
+		[DllImport(nativeLibName, EntryPoint = "Mix_LoadMUS", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr Mix_LoadMUSNative( IntPtr file);
 
 		/* IntPtr refers to a Mix_Chunk* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -221,16 +220,22 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GetNumChunkDecoders();
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string Mix_GetChunkDecoder(int index);
+		public static string Mix_GetChunkDecoder( int index)
+		{
+			return Utf8String.String(Mix_GetChunkDecoderNative(index));
+		}
+		[DllImport(nativeLibName, EntryPoint = "Mix_GetChunkDecoder", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr Mix_GetChunkDecoderNative( int index);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GetNumMusicDecoders();
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string Mix_GetMusicDecoder(int index);
+		public static string Mix_GetMusicDecoder( int index)
+		{
+			return Utf8String.String(Mix_GetMusicDecoderNative(index));
+		}
+		[DllImport(nativeLibName, EntryPoint = "Mix_GetMusicDecoder", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr Mix_GetMusicDecoderNative( int index);
 
 		/* music refers to a Mix_Music* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -449,11 +454,13 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_PlayingMusic();
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int Mix_SetMusicCMD(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string command
-		);
+		public static int Mix_SetMusicCMD( string command)
+		{
+			var commandUTF8 = Utf8String.ReusableBufferPtr(command);
+			return Mix_SetMusicCMDNative(commandUTF8);
+		}
+		[DllImport(nativeLibName, EntryPoint = "Mix_SetMusicCMD", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int Mix_SetMusicCMDNative( IntPtr command);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_SetSynchroValue(int value);
@@ -461,15 +468,20 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_GetSynchroValue();
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int Mix_SetSoundFonts(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string paths
-		);
+		public static int Mix_SetSoundFonts( string paths)
+		{
+			var pathsUTF8 = Utf8String.ReusableBufferPtr(paths);
+			return Mix_SetSoundFontsNative(pathsUTF8);
+		}
+		[DllImport(nativeLibName, EntryPoint = "Mix_SetSoundFonts", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int Mix_SetSoundFontsNative( IntPtr paths);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string Mix_GetSoundFonts();
+		public static string Mix_GetSoundFonts()
+		{
+			return Utf8String.String(Mix_GetSoundFontsNative());
+		}
+		[DllImport(nativeLibName, EntryPoint = "Mix_GetSoundFonts", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr Mix_GetSoundFontsNative();
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int Mix_EachSoundFont(

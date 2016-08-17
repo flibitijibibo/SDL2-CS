@@ -74,10 +74,7 @@ namespace SDL2
 		{
 			SDL.SDL_version result;
 			IntPtr result_ptr = INTERNAL_IMG_LinkedVersion();
-			result = (SDL.SDL_version) Marshal.PtrToStructure(
-				result_ptr,
-				typeof(SDL.SDL_version)
-			);
+			result = (SDL.SDL_version) Marshal.PtrToStructure(result_ptr, typeof(SDL.SDL_version));
 			return result;
 		}
 
@@ -88,11 +85,13 @@ namespace SDL2
 		public static extern void IMG_Quit();
 
 		/* IntPtr refers to an SDL_Surface* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr IMG_Load(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string file
-		);
+		public static IntPtr IMG_Load( string file)
+		{
+			var fileUTF8 = Utf8String.ReusableBufferPtr(file);
+			return IMG_LoadNative(fileUTF8);
+		}
+		[DllImport(nativeLibName, EntryPoint = "IMG_LoadNative", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadNative( IntPtr file);
 
 		/* src refers to an SDL_RWops*, IntPtr to an SDL_Surface* */
 		/* THIS IS A PUBLIC RWops FUNCTION! */
@@ -104,21 +103,22 @@ namespace SDL2
 
 		/* src refers to an SDL_RWops*, IntPtr to an SDL_Surface* */
 		/* THIS IS A PUBLIC RWops FUNCTION! */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr IMG_LoadTyped_RW(
-			IntPtr src,
-			int freesrc,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string type
-		);
+		public static IntPtr IMG_LoadTyped_RW(IntPtr src, int freesrc, string type)
+		{
+			var typeUTF8 = Utf8String.ReusableBufferPtr(type);
+			return IMG_LoadTyped_RWNative(src, freesrc, typeUTF8);
+		}
+		[DllImport(nativeLibName, EntryPoint = "IMG_LoadTypedRW", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadTyped_RWNative( IntPtr src, int freesrc, IntPtr type );
 
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr IMG_LoadTexture(
-			IntPtr renderer,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string file
-		);
+		public static IntPtr IMG_LoadTexture(IntPtr renderer, string file)
+		{
+			var fileUTF8 = Utf8String.ReusableBufferPtr(file);
+			return IMG_LoadTextureNative(renderer, fileUTF8);
+		}
+		[DllImport(nativeLibName, EntryPoint = "IMG_loadTexture", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadTextureNative( IntPtr renderer, IntPtr file );
 
 		/* renderer refers to an SDL_Renderer*.
 		 * src refers to an SDL_RWops*.
@@ -137,14 +137,13 @@ namespace SDL2
 		 * IntPtr to an SDL_Texture*.
 		 */
 		/* THIS IS A PUBLIC RWops FUNCTION! */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr IMG_LoadTextureTyped_RW(
-			IntPtr renderer,
-			IntPtr src,
-			int freesrc,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string type
-		);
+		public static IntPtr IMG_LoadTextureTyped_RW(IntPtr renderer, IntPtr src, int freesrc, string type)
+		{
+			var typeUTF8 = Utf8String.ReusableBufferPtr(type);
+			return IMG_LoadTextureTyped_RWNative(renderer, src, freesrc, typeUTF8);
+		}
+		[DllImport(nativeLibName, EntryPoint = "IMG_LoadTextureTyped_RW", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadTextureTyped_RWNative( IntPtr renderer, IntPtr src, int freesrc, IntPtr type );
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int IMG_InvertAlpha(int on);
@@ -157,12 +156,13 @@ namespace SDL2
 		);
 
 		/* surface refers to an SDL_Surface* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int IMG_SavePNG(
-			IntPtr surface,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string file
-		);
+		public static int IMG_SavePNG(IntPtr surface, string file)
+		{
+			var fileUTF8 = Utf8String.ReusableBufferPtr(file);
+			return IMG_SavePNGNative(surface, fileUTF8);
+		}
+		[DllImport(nativeLibName, EntryPoint = "IMG_SavePNG", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int IMG_SavePNGNative( IntPtr surface, IntPtr file );
 
 		/* surface refers to an SDL_Surface*, dst to an SDL_RWops* */
 		/* THIS IS A PUBLIC RWops FUNCTION! */
