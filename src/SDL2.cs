@@ -288,6 +288,16 @@ namespace SDL2
 		public const string SDL_HINT_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION =
 			"SDL_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION";
 
+		/* Only available in 2.0.5 or higher */
+		public const string SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH =
+			"SDL_MOUSE_FOCUS_CLICKTHROUGH";
+		public const string SDL_HINT_BMP_SAVE_LEGACY_FORMAT =
+			"SDL_BMP_SAVE_LEGACY_FORMAT";
+		public const string SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING =
+			"SDL_WINDOWS_DISABLE_THREAD_NAMING";
+		public const string SDL_HINT_APPLE_TV_REMOTE_ALLOW_ROTATION =
+			"SDL_APPLE_TV_REMOTE_ALLOW_ROTATION";
+
 		public enum SDL_HintPriority
 		{
 			SDL_HINT_DEFAULT,
@@ -351,6 +361,14 @@ namespace SDL2
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string value,
 			SDL_HintPriority priority
+		);
+
+		/* Available in 2.0.5 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_GetHintBoolean(
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+				string name,
+			SDL_bool default_value
 		);
 
 		#endregion
@@ -1018,6 +1036,9 @@ namespace SDL2
 			SDL_WINDOWEVENT_FOCUS_GAINED,
 			SDL_WINDOWEVENT_FOCUS_LOST,
 			SDL_WINDOWEVENT_CLOSE,
+			/* Available in 2.0.5 or higher */
+			SDL_WINDOWEVENT_TAKE_FOCUS,
+			SDL_WINDOWEVENT_HIT_TEST
 		}
 
 		/// <summary>
@@ -1286,6 +1307,13 @@ namespace SDL2
 			out SDL_DisplayMode mode
 		);
 
+		/* Available in 2.0.5 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetDisplayUsableBounds(
+			int displayIndex,
+			out SDL_Rect rect
+		);
+
 		/// <summary>
 		/// Use this function to return the number of available display modes.
 		/// </summary>
@@ -1333,6 +1361,30 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern float SDL_GetWindowBrightness(
 			IntPtr window
+		);
+
+		/* window refers to an SDL_Window* */
+		/* Available in 2.0.5 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetWindowOpacity(
+			IntPtr window,
+			float opacity
+		);
+
+		/* window refers to an SDL_Window* */
+		/* Available in 2.0.5 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetWindowOpacity(
+			IntPtr window,
+			out float out_opacity
+		);
+
+		/* modal_window and parent_window refer to an SDL_Window*s */
+		/* Available in 2.0.5 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetWindowModalFor(
+			IntPtr modal_window,
+			IntPtr parent_window
 		);
 
 		/// <summary>
@@ -1657,6 +1709,24 @@ namespace SDL2
 		public static extern void SDL_SetWindowBordered(
 			IntPtr window,
 			SDL_bool bordered
+		);
+
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetWindowBordersSize(
+			IntPtr window,
+			out int top,
+			out int left,
+			out int bottom,
+			out int right
+		);
+
+		/* window refers to an SDL_Window* */
+		/* Available in 2.0.5 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetWindowResizable(
+			IntPtr window,
+			SDL_bool resizable
 		);
 
 		/* window refers to an SDL_Window* */
@@ -2253,6 +2323,14 @@ namespace SDL2
 			IntPtr renderer,
 			float scaleX,
 			float scaleY
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		/* Available in 2.0.5 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderSetIntegerScale(
+			IntPtr renderer,
+			SDL_bool enable
 		);
 
 		/* renderer refers to an SDL_Renderer* */
@@ -3135,6 +3213,29 @@ namespace SDL2
 			uint Amask
 		);
 
+		/* IntPtr refers to an SDL_Surface* */
+		/* Available in 2.0.5 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_CreateRGBSurfaceWithFormat(
+			uint flags,
+			int width,
+			int height,
+			int depth,
+			uint format
+		);
+
+		/* IntPtr refers to an SDL_Surface*, pixels to a void* */
+		/* Available in 2.0.5 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_CreateRGBSurfaceWithFormatFrom(
+			IntPtr pixels,
+			int width,
+			int height,
+			int depth,
+			int pitch,
+			uint format
+		);
+
 		/* dst refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_FillRect(
@@ -3423,6 +3524,10 @@ namespace SDL2
 
 			/* Drag and drop events */
 			SDL_DROPFILE =			0x1000,
+			/* Only available in 2.0.4 or higher */
+			SDL_DROPTEXT,
+			SDL_DROPBEGIN,
+			SDL_DROPCOMPLETE,
 
 			/* Audio hotplug events */
 			/* Only available in SDL 2.0.4 or higher */
@@ -5767,6 +5872,15 @@ namespace SDL2
 			uint dev,
 			IntPtr data,
 			UInt32 len
+		);
+
+		/* dev refers to an SDL_AudioDeviceID, data to a void* */
+		/* Only available in 2.0.5 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern uint SDL_DequeueAudio(
+			uint dev,
+			IntPtr data,
+			uint len
 		);
 
 		/* dev refers to an SDL_AudioDeviceID */
