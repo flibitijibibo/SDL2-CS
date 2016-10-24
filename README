@@ -33,6 +33,14 @@ be exactly as they are done in the C library, with little-to-no concern for
 names will indicate which library file the function/type/value exists in, and
 everything else will be as close to the C version as technically possible.
 
+About the Visual Studio Debugger
+--------------------------------
+When running C# applications under the Visual Studio debugger, native code that
+names threads with the 0x406D1388 exception will silently exit. To prevent this
+exception from being thrown by SDL, add this line before your SDL_Init call:
+
+SDL.SDL_SetHint(SDL.SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
+
 Roadmap
 -------
 To see the current roadmap for SDL2#, visit the GitHub issues page:
