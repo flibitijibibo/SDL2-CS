@@ -1387,6 +1387,11 @@ namespace SDL2
 			IntPtr parent_window
 		);
 
+		/* window refers to an SDL_Window* */
+		/* Available in 2.0.5 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetWindowInputFocus(IntPtr window);
+
 		/// <summary>
 		/// Use this function to retrieve the data pointer associated with a window.
 		/// </summary>
