@@ -2404,6 +2404,15 @@ namespace SDL2
 			IntPtr pixels,
 			int pitch
 		);
+		
+		/* texture refers to an SDL_Texture* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_UpdateTexture(
+			IntPtr texture,
+			IntPtr rect,
+			IntPtr pixels,
+			int pitch
+		);
 
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
