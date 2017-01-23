@@ -68,23 +68,50 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern void SDL_free(IntPtr memblock);
 
-		#endregion
+        	#endregion
 
-		#region SDL_rwops.h
+        	#region SDL_rwops.h
 
-		/* Note about SDL2# and Internal RWops:
+        	/* Note about SDL2# and Internal RWops:
 		 * These functions are currently not supported for public use.
 		 * They are only meant to be used internally in functions marked with
 		 * the phrase "THIS IS AN RWops FUNCTION!"
 		 */
+        	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        	public delegate Int64 rwSize(IntPtr rw);
 
-		/// <summary>
-		/// Use this function to create a new SDL_RWops structure for reading from and/or writing to a named file.
-		/// </summary>
-		/// <param name="file">a UTF-8 string representing the filename to open</param>
-		/// <param name="mode">an ASCII string representing the mode to be used for opening the file; see Remarks for details</param>
-		/// <returns>Returns a pointer to the SDL_RWops structure that is created, or NULL on failure; call SDL_GetError() for more information.</returns>
-		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile", CallingConvention = CallingConvention.Cdecl)]
+        	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        	public delegate Int64 rwSeek(IntPtr rw, Int64 offset, int whence);
+
+        	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        	public delegate int rwRead(IntPtr rw, IntPtr Ptr, int size, int maxnum);
+
+        	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        	public delegate int rwWrite(IntPtr rw, IntPtr Ptr, int size, int num);
+
+        	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        	public delegate int rwClose(IntPtr rw);
+
+        	[StructLayout(LayoutKind.Sequential)]
+        	public struct SDL_RWOps
+        	{
+            		public rwSize size;
+            		public rwSeek seek;
+            		public rwRead read;
+            		public rwWrite write;
+            		public rwClose close;
+            		public int type;
+            		public IntPtr data1;
+            		public IntPtr data2;
+        	}
+
+        	/// <summary>
+        	/// Use this function to create a new SDL_RWops structure for reading from and/or writing to a named file.
+        	/// </summary>
+        	/// <param name="file">a UTF-8 string representing the filename to open</param>
+        	/// <param name="mode">an ASCII string representing the mode to be used for opening the file; see Remarks for details</param>
+        	/// <returns>Returns a pointer to the SDL_RWops structure that is created, or NULL on failure; call SDL_GetError() for more information.</returns>
+        	[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile", CallingConvention = CallingConvention.Cdecl)]
 		internal static extern IntPtr INTERNAL_SDL_RWFromFile(
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string file,
