@@ -4960,6 +4960,19 @@ namespace SDL2
 			SDL_JOYSTICK_POWER_MAX
 		}
 
+		public enum SDL_JoystickType
+		{
+			SDL_JOYSTICK_TYPE_UNKNOWN,
+			SDL_JOYSTICK_TYPE_GAMECONTROLLER,
+			SDL_JOYSTICK_TYPE_WHEEL,
+			SDL_JOYSTICK_TYPE_ARCADE_STICK,
+			SDL_JOYSTICK_TYPE_FLIGHT_STICK,
+			SDL_JOYSTICK_TYPE_DANCE_PAD,
+			SDL_JOYSTICK_TYPE_GUITAR,
+			SDL_JOYSTICK_TYPE_DRUM_KIT,
+			SDL_JOYSTICK_TYPE_ARCADE_PAD
+		}
+
 		/* joystick refers to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_JoystickClose(IntPtr joystick);
@@ -4972,6 +4985,16 @@ namespace SDL2
 		public static extern short SDL_JoystickGetAxis(
 			IntPtr joystick,
 			int axis
+		);
+
+		/* joystick refers to an SDL_Joystick*.
+		 * This function is only available in 2.0.6 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_JoystickGetAxisInitialState(
+			IntPtr joystick,
+			int axis,
+			out ushort state
 		);
 
 		/* joystick refers to an SDL_Joystick* */
@@ -5065,6 +5088,52 @@ namespace SDL2
 			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
 				string pchGUID
 		);
+
+		/* This function is only available in 2.0.6 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern ushort SDL_JoystickGetDeviceVendor(int device_index);
+
+		/* This function is only available in 2.0.6 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern ushort SDL_JoystickGetDeviceProduct(int device_index);
+
+		/* This function is only available in 2.0.6 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern ushort SDL_JoystickGetDeviceProductVersion(int device_index);
+
+		/* This function is only available in 2.0.6 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_JoystickType SDL_JoystickGetDeviceType(int device_index);
+
+		/* int refers to an SDL_JoystickID.
+		 * This function is only available in 2.0.6 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_JoystickGetDeviceInstanceID(int device_index);
+
+		/* joystick refers to an SDL_Joystick*.
+		 * This function is only available in 2.0.6 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern ushort SDL_JoystickGetVendor(IntPtr joystick);
+
+		/* joystick refers to an SDL_Joystick*.
+		 * This function is only available in 2.0.6 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern ushort SDL_JoystickGetProduct(IntPtr joystick);
+
+		/* joystick refers to an SDL_Joystick*.
+		 * This function is only available in 2.0.6 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern ushort SDL_JoystickGetProductVersion(IntPtr joystick);
+
+		/* joystick refers to an SDL_Joystick*.
+		 * This function is only available in 2.0.6 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_JoystickType SDL_JoystickGetType(IntPtr joystick);
 
 		/* joystick refers to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5162,6 +5231,15 @@ namespace SDL2
 				string mappingString
 		);
 
+		/* This function is only available in 2.0.6 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GameControllerNumMappings();
+
+		/* This function is only available in 2.0.6 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+		public static extern string SDL_GameControllerMappingForIndex(int mapping_index);
+
 		/* THIS IS AN RWops FUNCTION! */
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerAddMappingsFromRW", CallingConvention = CallingConvention.Cdecl)]
 		private static extern int INTERNAL_SDL_GameControllerAddMappingsFromRW(
@@ -5204,6 +5282,30 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
 		public static extern string SDL_GameControllerName(
+			IntPtr gamecontroller
+		);
+
+		/* gamecontroller refers to an SDL_GameController*.
+		 * This function is only available in 2.0.6 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern ushort SDL_GameControllerGetVendor(
+			IntPtr gamecontroller
+		);
+
+		/* gamecontroller refers to an SDL_GameController*.
+		 * This function is only available in 2.0.6 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern ushort SDL_GameControllerGetProduct(
+			IntPtr gamecontroller
+		);
+
+		/* gamecontroller refers to an SDL_GameController*.
+		 * This function is only available in 2.0.6 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern ushort SDL_GameControllerGetProductVersion(
 			IntPtr gamecontroller
 		);
 
