@@ -989,7 +989,9 @@ namespace SDL2
 			SDL_GL_CONTEXT_PROFILE_MASK,
 			SDL_GL_SHARE_WITH_CURRENT_CONTEXT,
 			SDL_GL_FRAMEBUFFER_SRGB_CAPABLE,
-			SDL_GL_CONTEXT_RELEASE_BEHAVIOR
+			SDL_GL_CONTEXT_RELEASE_BEHAVIOR,
+			SDL_GL_CONTEXT_RESET_NOTIFICATION,	/* Only available in 2.0.6 */
+			SDL_GL_CONTEXT_NO_ERROR,		/* Only available in 2.0.6 */
 		}
 
 		/// <summary>
@@ -1063,6 +1065,12 @@ namespace SDL2
 			SDL_WINDOW_FOREIGN =		0x00000800,
 			SDL_WINDOW_ALLOW_HIGHDPI =	0x00002000,	/* Only available in 2.0.1 */
 			SDL_WINDOW_MOUSE_CAPTURE =	0x00004000,	/* Only available in 2.0.4 */
+			SDL_WINDOW_ALWAYS_ON_TOP =	0x00008000,	/* Only available in 2.0.5 */
+			SDL_WINDOW_SKIP_TASKBAR =	0x00010000,	/* Only available in 2.0.5 */
+			SDL_WINDOW_UTILITY =		0x00020000,	/* Only available in 2.0.5 */
+			SDL_WINDOW_TOOLTIP =		0x00040000,	/* Only available in 2.0.5 */
+			SDL_WINDOW_POPUP_MENU =		0x00080000,	/* Only available in 2.0.5 */
+			SDL_WINDOW_VULKAN =		0x00100000,	/* Only available in 2.0.6 */
 		}
 
 		/// <summary>
@@ -1781,6 +1789,57 @@ namespace SDL2
 		/* Only available in 2.0.4 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetGrabbedWindow();
+
+		#endregion
+
+		#region SDL_vulkan.h
+
+		/* Only available in 2.0.6 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_Vulkan_LoadLibrary(
+			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
+				string path
+		);
+
+		/* Only available in 2.0.6 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_Vulkan_GetVkGetInstanceProcAddr();
+
+		/* Only available in 2.0.6 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_Vulkan_UnloadLibrary();
+
+		/* window refers to an SDL_Window*, pNames to a const char**.
+		 * Only available in 2.0.6.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_Vulkan_GetInstanceExtensions(
+			IntPtr window,
+			out uint pCount,
+			out IntPtr pNames
+		);
+
+		/* window refers to an SDL_Window.
+		 * instance refers to a VkInstance.
+		 * surface refers to a VkSurfaceKHR.
+		 * Only available in 2.0.6.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_Vulkan_CreateSurface(
+			IntPtr window,
+			IntPtr instance,
+			ref IntPtr surface
+		);
+
+		/* window refers to an SDL_Window*.
+		 * Only available in 2.0.6.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_Vulkan_GetDrawableSize(
+			IntPtr window,
+			out int w,
+			out int h
+		);
 
 		#endregion
 
