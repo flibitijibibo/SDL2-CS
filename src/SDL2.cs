@@ -1816,7 +1816,7 @@ namespace SDL2
 		public static extern SDL_bool SDL_Vulkan_GetInstanceExtensions(
 			IntPtr window,
 			out uint pCount,
-			out IntPtr pNames
+			IntPtr[] pNames
 		);
 
 		/* window refers to an SDL_Window.
@@ -1828,7 +1828,7 @@ namespace SDL2
 		public static extern SDL_bool SDL_Vulkan_CreateSurface(
 			IntPtr window,
 			IntPtr instance,
-			ref IntPtr surface
+			out IntPtr surface
 		);
 
 		/* window refers to an SDL_Window*.
