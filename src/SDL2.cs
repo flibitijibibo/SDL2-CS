@@ -308,7 +308,7 @@ namespace SDL2
 		public const string SDL_HINT_MOUSE_RELATIVE_SPEED_SCALE =
 			"SDL_MOUSE_RELATIVE_SPEED_SCALE";
 		public const string SDL_HINT_TOUCH_MOUSE_EVENTS =
-			"SDL_HINT_TOUCH_MOUSE_EVENTS";
+			"SDL_TOUCH_MOUSE_EVENTS";
 
 		public enum SDL_HintPriority
 		{
