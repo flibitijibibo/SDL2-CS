@@ -298,6 +298,18 @@ namespace SDL2
 		public const string SDL_HINT_APPLE_TV_REMOTE_ALLOW_ROTATION =
 			"SDL_APPLE_TV_REMOTE_ALLOW_ROTATION";
 
+		/* Only available in 2.0.6 or higher */
+		public const string SDL_HINT_AUDIO_RESAMPLING_MODE =
+			"SDL_AUDIO_RESAMPLING_MODE";
+		public const string SDL_HINT_RENDER_LOGICAL_SIZE_MODE =
+			"SDL_RENDER_LOGICAL_SIZE_MODE";
+		public const string SDL_HINT_MOUSE_NORMAL_SPEED_SCALE =
+			"SDL_MOUSE_NORMAL_SPEED_SCALE";
+		public const string SDL_HINT_MOUSE_RELATIVE_SPEED_SCALE =
+			"SDL_MOUSE_RELATIVE_SPEED_SCALE";
+		public const string SDL_HINT_TOUCH_MOUSE_EVENTS =
+			"SDL_HINT_TOUCH_MOUSE_EVENTS";
+
 		public enum SDL_HintPriority
 		{
 			SDL_HINT_DEFAULT,
@@ -852,7 +864,7 @@ namespace SDL2
 		 */
 		public const int SDL_MAJOR_VERSION =	2;
 		public const int SDL_MINOR_VERSION =	0;
-		public const int SDL_PATCHLEVEL =	4;
+		public const int SDL_PATCHLEVEL =	6;
 
 		public static readonly int SDL_COMPILEDVERSION = SDL_VERSIONNUM(
 			SDL_MAJOR_VERSION,
@@ -946,19 +958,6 @@ namespace SDL2
 		#endregion
 
 		#region SDL_video.h
-
-		/* Actually, this is from SDL_blendmode.h */
-		/// <summary>
-		/// An enumeration of blend modes used in SDL_RenderCopy() and drawing operations.
-		/// </summary>
-		[Flags]
-		public enum SDL_BlendMode
-		{
-			SDL_BLENDMODE_NONE =	0x00000000,
-			SDL_BLENDMODE_BLEND =	0x00000001,
-			SDL_BLENDMODE_ADD =	0x00000002,
-			SDL_BLENDMODE_MOD =	0x00000004
-		}
 
 		/// <summary>
 		/// An enumeration of OpenGL configuration attributes.
@@ -1070,7 +1069,7 @@ namespace SDL2
 			SDL_WINDOW_UTILITY =		0x00020000,	/* Only available in 2.0.5 */
 			SDL_WINDOW_TOOLTIP =		0x00040000,	/* Only available in 2.0.5 */
 			SDL_WINDOW_POPUP_MENU =		0x00080000,	/* Only available in 2.0.5 */
-			SDL_WINDOW_VULKAN =		0x00100000,	/* Only available in 2.0.6 */
+			SDL_WINDOW_VULKAN =		0x10000000,	/* Only available in 2.0.6 */
 		}
 
 		/// <summary>
@@ -1789,6 +1788,57 @@ namespace SDL2
 		/* Only available in 2.0.4 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetGrabbedWindow();
+
+		#endregion
+
+		#region SDL_blendmode.h
+
+		/// <summary>
+		/// An enumeration of blend modes used in SDL_RenderCopy() and drawing operations.
+		/// </summary>
+		[Flags]
+		public enum SDL_BlendMode
+		{
+			SDL_BLENDMODE_NONE =	0x00000000,
+			SDL_BLENDMODE_BLEND =	0x00000001,
+			SDL_BLENDMODE_ADD =	0x00000002,
+			SDL_BLENDMODE_MOD =	0x00000004,
+			SDL_BLENDMODE_INVALID =	0x7FFFFFFF
+		}
+
+		public enum SDL_BlendOperation
+		{
+			SDL_BLENDOPERATION_ADD		= 0x1,
+			SDL_BLENDOPERATION_SUBTRACT	= 0x2,
+			SDL_BLENDOPERATION_REV_SUBTRACT	= 0x3,
+			SDL_BLENDOPERATION_MINIMUM	= 0x4,
+			SDL_BLENDOPERATION_MAXIMUM	= 0x5
+		}
+
+		public enum SDL_BlendFactor
+		{
+			SDL_BLENDFACTOR_ZERO			= 0x1,
+			SDL_BLENDFACTOR_ONE			= 0x2,
+			SDL_BLENDFACTOR_SRC_COLOR		= 0x3,
+			SDL_BLENDFACTOR_ONE_MINUS_SRC_COLOR	= 0x4,
+			SDL_BLENDFACTOR_SRC_ALPHA		= 0x5,
+			SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA	= 0x6,
+			SDL_BLENDFACTOR_DST_COLOR		= 0x7,
+			SDL_BLENDFACTOR_ONE_MINUS_DST_COLOR	= 0x8,
+			SDL_BLENDFACTOR_DST_ALPHA		= 0x9,
+			SDL_BLENDFACTOR_ONE_MINUS_DST_ALPHA	= 0xA
+		}
+
+		/* Only available in 2.0.6 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_BlendMode SDL_ComposeCustomBlendMode(
+			SDL_BlendFactor srcColorFactor,
+			SDL_BlendFactor dstColorFactor,
+			SDL_BlendOperation colorOperation,
+			SDL_BlendFactor srcAlphaFactor,
+			SDL_BlendFactor dstAlphaFactor,
+			SDL_BlendOperation alphaOperation
+		);
 
 		#endregion
 
@@ -3511,6 +3561,10 @@ namespace SDL2
 			IntPtr dst,
 			ref SDL_Rect dstrect
 		);
+
+		/* surface and IntPtr refer to an SDL_Surface* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_DuplicateSurface(IntPtr surface);
 
 		#endregion
 
