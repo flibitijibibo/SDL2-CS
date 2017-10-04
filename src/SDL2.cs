@@ -1603,7 +1603,7 @@ namespace SDL2
 
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_GL_SwapWindow(IntPtr window);
+		public static extern void SDL_GL_SwapWindow(IntPtr window);
 
 		/* texture refers to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
