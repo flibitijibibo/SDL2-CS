@@ -110,6 +110,20 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetMainReady();
 
+		/// <summary>
+		/// This is used as a function pointer to a C-style main() function for SDL_WinRTRunApp().
+		/// </summary>
+		public delegate int SDL_WinRT_mainFunction(int argc, IntPtr[] argv);
+
+		/// <summary>
+		/// Initializes and launches an SDL/WinRT application. Use with UWP!
+		/// </summary>
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_WinRTRunApp(
+			SDL_WinRT_mainFunction mainFunction,
+			IntPtr reserved
+		);
+
 		#endregion
 
 		#region SDL.h
