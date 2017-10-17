@@ -88,18 +88,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="src\" />
-  </ItemGroup>
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <Policies>
-          <StandardHeader Text="" IncludeInNewFiles="False" />
-        </Policies>
-      </Properties>
-    </MonoDevelop>
-  </ProjectExtensions>
-  <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
 </Project>
