@@ -41,6 +41,51 @@ namespace SDL2
 
 		#endregion
 
+		#region UTF8 Marshaling
+
+		internal static byte[] UTF8_ToNative(string s)
+		{
+			// Add a null terminator. That's kind of it... :/
+			return System.Text.Encoding.UTF8.GetBytes(s + '\0');
+		}
+
+		internal static unsafe string UTF8_ToManaged(IntPtr s, bool freePtr = false)
+		{
+			if (s == IntPtr.Zero)
+			{
+				return null;
+			}
+
+			/* We get to do strlen ourselves! */
+			byte* ptr = (byte*) s;
+			while (*ptr != 0)
+			{
+				ptr++;
+			}
+
+#if NETSTANDARD2_0
+			/* Modern C# lets you just send the byte*, nice! */
+			string result = System.Text.Encoding.UTF8.GetString(
+				bytes,
+				(int) (ptr - (byte*) s)
+			);
+#else
+			/* Old C# requires an extra memcpy, bleh! */
+			byte[] bytes = new byte[ptr - (byte*) s];
+			Marshal.Copy(s, bytes, 0, bytes.Length);
+			string result = System.Text.Encoding.UTF8.GetString(bytes);
+#endif
+
+			/* Some SDL functions will malloc, we have to free! */
+			if (freePtr)
+			{
+				SDL_free(s);
+			}
+			return result;
+		}
+
+		#endregion
+
 		#region SDL_stdinc.h
 
 		public static uint SDL_FOURCC(byte A, byte B, byte C, byte D)
@@ -74,12 +119,19 @@ namespace SDL2
 
 		/* IntPtr refers to an SDL_RWops* */
 		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile", CallingConvention = CallingConvention.Cdecl)]
-		internal static extern IntPtr INTERNAL_SDL_RWFromFile(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string file,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string mode
+		private static extern IntPtr INTERNAL_SDL_RWFromFile(
+			byte[] file,
+			byte[] mode
 		);
+		internal static IntPtr INTERNAL_SDL_RWFromFile(
+			string file,
+			string mode
+		) {
+			return INTERNAL_SDL_RWFromFile(
+				UTF8_ToNative(file),
+				UTF8_ToNative(mode)
+			);
+		}
 
 		/* These are the public RWops functions. They should be used by
 		 * functions marked with the phrase "THIS IS A PUBLIC RWops FUNCTION!"
@@ -142,9 +194,12 @@ namespace SDL2
 
 		#region SDL_platform.h
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetPlatform();
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetPlatform", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetPlatform();
+		public static string SDL_GetPlatform()
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetPlatform());
+		}
 
 		#endregion
 
@@ -271,37 +326,63 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_ClearHints();
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetHint(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string name
-		);
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetHint", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetHint(byte[] name);
+		public static string SDL_GetHint(string name)
+		{
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GetHint(
+					UTF8_ToNative(name)
+				)
+			);
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_bool SDL_SetHint(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string name,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string value
+		[DllImport(nativeLibName, EntryPoint = "SDL_SetHint", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDL_bool INTERNAL_SDL_SetHint(
+			byte[] name,
+			byte[] value
 		);
+		public static SDL_bool SDL_SetHint(string name, string value)
+		{
+			return INTERNAL_SDL_SetHint(
+				UTF8_ToNative(name),
+				UTF8_ToNative(value)
+			);
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_bool SDL_SetHintWithPriority(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string name,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string value,
+		[DllImport(nativeLibName, EntryPoint = "SDL_SetHintWithPriority", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDL_bool INTERNAL_SDL_SetHintWithPriority(
+			byte[] name,
+			byte[] value,
 			SDL_HintPriority priority
 		);
+		public static SDL_bool SDL_SetHintWithPriority(
+			string name,
+			string value,
+			SDL_HintPriority priority
+		) {
+			return INTERNAL_SDL_SetHintWithPriority(
+				UTF8_ToNative(name),
+				UTF8_ToNative(value),
+				priority
+			);
+		}
 
 		/* Available in 2.0.5 or higher */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_bool SDL_GetHintBoolean(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string name,
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetHintBoolean", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDL_bool INTERNAL_SDL_GetHintBoolean(
+			byte[] name,
 			SDL_bool default_value
 		);
+		public static SDL_bool SDL_GetHintBoolean(
+			string name,
+			SDL_bool default_value
+		) {
+			return INTERNAL_SDL_GetHintBoolean(
+				UTF8_ToNative(name),
+				default_value
+			);
+		}
 
 		#endregion
 
@@ -310,16 +391,25 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_ClearError();
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetError();
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetError", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetError();
+		public static string SDL_GetError()
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetError());
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetError(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string fmt,
+		[DllImport(nativeLibName, EntryPoint = "SDL_SetError", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_SetError(
+			byte[] fmt,
 			__arglist
 		);
+		public static void SDL_SetError(string fmt, __arglist)
+		{
+			INTERNAL_SDL_SetError(
+				UTF8_ToNative(fmt),
+				__arglist(__arglist) /* Barf */
+			);
+		}
 
 		#endregion
 
@@ -379,78 +469,170 @@ namespace SDL2
 			IntPtr message
 		);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_Log(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string fmt,
+		[DllImport(nativeLibName, EntryPoint = "SDL_Log", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_Log(
+			byte[] fmt,
 			__arglist
 		);
+		public static void SDL_Log(
+			string fmt,
+			__arglist
+		) {
+			INTERNAL_SDL_Log(
+				UTF8_ToNative(fmt),
+				__arglist(__arglist) /* Barf */
+			);
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_LogVerbose(
+		[DllImport(nativeLibName, EntryPoint = "SDL_LogVerbose", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_LogVerbose(
 			int category,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string fmt,
+			byte[] fmt,
 			__arglist
 		);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_LogDebug(
+		public static void SDL_LogVerbose(
 			int category,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string fmt,
+			string fmt,
 			__arglist
-		);
+		) {
+			INTERNAL_SDL_LogVerbose(
+				category,
+				UTF8_ToNative(fmt),
+				__arglist(__arglist) /* Barf */
+			);
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_LogInfo(
+		[DllImport(nativeLibName, EntryPoint = "SDL_LogDebug", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_LogDebug(
 			int category,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string fmt,
+			byte[] fmt,
 			__arglist
 		);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_LogWarn(
+		public static void SDL_LogDebug(
 			int category,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string fmt,
+			string fmt,
 			__arglist
-		);
+		) {
+			INTERNAL_SDL_LogDebug(
+				category,
+				UTF8_ToNative(fmt),
+				__arglist(__arglist) /* Barf */
+			);
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_LogError(
+		[DllImport(nativeLibName, EntryPoint = "SDL_LogInfo", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_LogInfo(
 			int category,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string fmt,
+			byte[] fmt,
 			__arglist
 		);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_LogCritical(
+		public static void SDL_LogInfo(
 			int category,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string fmt,
+			string fmt,
+			__arglist
+		) {
+			INTERNAL_SDL_LogInfo(
+				category,
+				UTF8_ToNative(fmt),
+				__arglist(__arglist) /* Barf */
+			);
+		}
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_LogWarn", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_LogWarn(
+			int category,
+			byte[] fmt,
 			__arglist
 		);
+		public static void SDL_LogWarn(
+			int category,
+			string fmt,
+			__arglist
+		) {
+			INTERNAL_SDL_LogWarn(
+				category,
+				UTF8_ToNative(fmt),
+				__arglist(__arglist) /* Barf */
+			);
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_LogMessage(
+		[DllImport(nativeLibName, EntryPoint = "SDL_LogError", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_LogError(
+			int category,
+			byte[] fmt,
+			__arglist
+		);
+		public static void SDL_LogError(
+			int category,
+			string fmt,
+			__arglist
+		) {
+			INTERNAL_SDL_LogError(
+				category,
+				UTF8_ToNative(fmt),
+				__arglist(__arglist) /* Barf */
+			);
+		}
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_LogCritical", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_LogCritical(
+			int category,
+			byte[] fmt,
+			__arglist
+		);
+		public static void SDL_LogCritical(
+			int category,
+			string fmt,
+			__arglist
+		) {
+			INTERNAL_SDL_LogCritical(
+				category,
+				UTF8_ToNative(fmt),
+				__arglist(__arglist) /* Barf */
+			);
+		}
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_LogMessage", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_LogMessage(
 			int category,
 			SDL_LogPriority priority,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string fmt,
+			byte[] fmt,
 			__arglist
 		);
-
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_LogMessageV(
+		public static void SDL_LogMessage(
 			int category,
 			SDL_LogPriority priority,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string fmt,
+			string fmt,
+			__arglist
+		) {
+			INTERNAL_SDL_LogMessage(
+				category,
+				priority,
+				UTF8_ToNative(fmt),
+				__arglist(__arglist) /* Barf */
+			);
+		}
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_LogMessageV", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_LogMessageV(
+			int category,
+			SDL_LogPriority priority,
+			byte[] fmt,
 			__arglist
 		);
+		public static void SDL_LogMessageV(
+			int category,
+			SDL_LogPriority priority,
+			string fmt,
+			__arglist
+		) {
+			INTERNAL_SDL_LogMessageV(
+				category,
+				priority,
+				UTF8_ToNative(fmt),
+				__arglist(__arglist) /* Barf */
+			);
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_LogPriority SDL_LogGetPriority(
@@ -570,16 +752,27 @@ namespace SDL2
 		[DllImport(nativeLibName, EntryPoint = "SDL_ShowMessageBox", CallingConvention = CallingConvention.Cdecl)]
 		private static extern int INTERNAL_SDL_ShowMessageBox([In()] ref INTERNAL_SDL_MessageBoxData messageboxdata, out int buttonid);
 
+		/* Ripped from Jameson's LpUtf8StrMarshaler */
+		private static IntPtr INTERNAL_AllocUTF8(string str)
+		{
+			if (string.IsNullOrEmpty(str))
+			{
+				return IntPtr.Zero;
+			}
+			byte[] bytes = System.Text.Encoding.UTF8.GetBytes(str + '\0');
+			IntPtr mem = SDL.SDL_malloc((IntPtr) bytes.Length);
+			Marshal.Copy(bytes, 0, mem, bytes.Length);
+			return mem;
+		}
+
 		public static unsafe int SDL_ShowMessageBox([In()] ref SDL_MessageBoxData messageboxdata, out int buttonid)
 		{
-			var utf8 = LPUtf8StrMarshaler.GetInstance(null);
-
 			var data = new INTERNAL_SDL_MessageBoxData()
 			{
 				flags = messageboxdata.flags,
 				window = messageboxdata.window,
-				title = utf8.MarshalManagedToNative(messageboxdata.title),
-				message = utf8.MarshalManagedToNative(messageboxdata.message),
+				title = INTERNAL_AllocUTF8(messageboxdata.title),
+				message = INTERNAL_AllocUTF8(messageboxdata.message),
 				numbuttons = messageboxdata.numbuttons,
 			};
 
@@ -590,7 +783,7 @@ namespace SDL2
 				{
 					flags = messageboxdata.buttons[i].flags,
 					buttonid = messageboxdata.buttons[i].buttonid,
-					text = utf8.MarshalManagedToNative(messageboxdata.buttons[i].text),
+					text = INTERNAL_AllocUTF8(messageboxdata.buttons[i].text),
 				};
 			}
 
@@ -610,24 +803,35 @@ namespace SDL2
 			Marshal.FreeHGlobal(data.colorScheme);
 			for (int i = 0; i < messageboxdata.numbuttons; i++)
 			{
-				utf8.CleanUpNativeData(buttons[i].text);
+				SDL_free(buttons[i].text);
 			}
-			utf8.CleanUpNativeData(data.message);
-			utf8.CleanUpNativeData(data.title);
+			SDL_free(data.message);
+			SDL_free(data.title);
 
 			return result;
 		}
 
 		/* window refers to an SDL_Window* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_ShowSimpleMessageBox(
+		[DllImport(nativeLibName, EntryPoint = "SDL_ShowSimpleMessageBox", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_SDL_ShowSimpleMessageBox(
 			SDL_MessageBoxFlags flags,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string title,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string message,
+			byte[] title,
+			byte[] message,
 			IntPtr window
 		);
+		public static int SDL_ShowSimpleMessageBox(
+			SDL_MessageBoxFlags flags,
+			string title,
+			string message,
+			IntPtr window
+		) {
+			return INTERNAL_SDL_ShowSimpleMessageBox(
+				flags,
+				UTF8_ToNative(title),
+				UTF8_ToNative(message),
+				window
+			);
+		}
 
 		#endregion
 
@@ -675,9 +879,12 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_GetVersion(out SDL_version ver);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetRevision();
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetRevision", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetRevision();
+		public static string SDL_GetRevision()
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetRevision());
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetRevisionNumber();
@@ -838,16 +1045,29 @@ namespace SDL2
 		public delegate SDL_HitTestResult SDL_HitTest(IntPtr win, IntPtr area, IntPtr data);
 
 		/* IntPtr refers to an SDL_Window* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_CreateWindow(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string title,
+		[DllImport(nativeLibName, EntryPoint = "SDL_CreateWindow", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_CreateWindow(
+			byte[] title,
 			int x,
 			int y,
 			int w,
 			int h,
 			SDL_WindowFlags flags
 		);
+		public static IntPtr SDL_CreateWindow(
+			string title,
+			int x,
+			int y,
+			int w,
+			int h,
+			SDL_WindowFlags flags
+		) {
+			return INTERNAL_SDL_CreateWindow(
+				UTF8_ToNative(title),
+				x, y, w, h,
+				flags
+			);
+		}
 
 		/* window refers to an SDL_Window*, renderer to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -887,9 +1107,12 @@ namespace SDL2
 			out SDL_DisplayMode mode
 		);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetCurrentVideoDriver();
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentVideoDriver", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetCurrentVideoDriver();
+		public static string SDL_GetCurrentVideoDriver()
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetCurrentVideoDriver());
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetDesktopDisplayMode(
@@ -897,9 +1120,12 @@ namespace SDL2
 			out SDL_DisplayMode mode
 		);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetDisplayName(int index);
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetDisplayName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetDisplayName(int index);
+		public static string SDL_GetDisplayName(int index)
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetDisplayName(index));
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetDisplayBounds(
@@ -941,11 +1167,14 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetNumVideoDrivers();
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetVideoDriver(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetVideoDriver", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetVideoDriver(
 			int index
 		);
+		public static string SDL_GetVideoDriver(int index)
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetVideoDriver(index));
+		}
 
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -983,12 +1212,20 @@ namespace SDL2
 		public static extern int SDL_SetWindowInputFocus(IntPtr window);
 
 		/* window refers to an SDL_Window*, IntPtr to a void* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GetWindowData(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetWindowData", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetWindowData(
 			IntPtr window,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string name
+			byte[] name
 		);
+		public static IntPtr SDL_GetWindowData(
+			IntPtr window,
+			string name
+		) {
+			return INTERNAL_SDL_GetWindowData(
+				window,
+				UTF8_ToNative(name)
+			);
+		}
 
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1074,11 +1311,16 @@ namespace SDL2
 		public static extern IntPtr SDL_GetWindowSurface(IntPtr window);
 
 		/* window refers to an SDL_Window* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetWindowTitle(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetWindowTitle", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetWindowTitle(
 			IntPtr window
 		);
+		public static string SDL_GetWindowTitle(IntPtr window)
+		{
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GetWindowTitle(window)
+			);
+		}
 
 		/* texture refers to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1097,17 +1339,27 @@ namespace SDL2
 		public static extern void SDL_GL_DeleteContext(IntPtr context);
 
 		/* IntPtr refers to a function pointer */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_GL_GetProcAddress(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string proc
+		[DllImport(nativeLibName, EntryPoint = "SDL_GL_GetProcAddress", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GL_GetProcAddress(
+			byte[] proc
 		);
+		public static IntPtr SDL_GL_GetProcAddress(string proc)
+		{
+			return INTERNAL_SDL_GL_GetProcAddress(
+				UTF8_ToNative(proc)
+			);
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_bool SDL_GL_ExtensionSupported(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string extension
+		[DllImport(nativeLibName, EntryPoint = "SDL_GL_ExtensionSupported", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDL_bool INTERNAL_SDL_GL_ExtensionSupported(
+			byte[] extension
 		);
+		public static SDL_bool SDL_GL_ExtensionSupported(string extension)
+		{
+			return INTERNAL_SDL_GL_ExtensionSupported(
+				UTF8_ToNative(extension)
+			);
+		}
 
 		/* Only available in SDL 2.0.2 or higher */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1193,13 +1445,23 @@ namespace SDL2
 		);
 
 		/* IntPtr and userdata are void*, window is an SDL_Window* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_SetWindowData(
+		[DllImport(nativeLibName, EntryPoint = "SDL_SetWindowData", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_SetWindowData(
 			IntPtr window,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string name,
+			byte[] name,
 			IntPtr userdata
 		);
+		public static IntPtr SDL_SetWindowData(
+			IntPtr window,
+			string name,
+			IntPtr userdata
+		) {
+			return INTERNAL_SDL_SetWindowData(
+				window,
+				UTF8_ToNative(name),
+				userdata
+			);
+		}
 
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1299,12 +1561,20 @@ namespace SDL2
 		);
 
 		/* window refers to an SDL_Window* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_SetWindowTitle(
+		[DllImport(nativeLibName, EntryPoint = "SDL_SetWindowTitle", CallingConvention = CallingConvention.Cdecl)]
+		private static extern void INTERNAL_SDL_SetWindowTitle(
 			IntPtr window,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string title
+			byte[] title
 		);
+		public static void SDL_SetWindowTitle(
+			IntPtr window,
+			string title
+		) {
+			INTERNAL_SDL_SetWindowTitle(
+				window,
+				UTF8_ToNative(title)
+			);
+		}
 
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1323,11 +1593,16 @@ namespace SDL2
 			int numrects
 		);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_VideoInit(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string driver_name
+		[DllImport(nativeLibName, EntryPoint = "SDL_VideoInit", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_SDL_VideoInit(
+			byte[] driver_name
 		);
+		public static int SDL_VideoInit(string driver_name)
+		{
+			return INTERNAL_SDL_VideoInit(
+				UTF8_ToNative(driver_name)
+			);
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_VideoQuit();
@@ -1399,11 +1674,16 @@ namespace SDL2
 		#region SDL_vulkan.h
 
 		/* Only available in 2.0.6 */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_Vulkan_LoadLibrary(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string path
+		[DllImport(nativeLibName, EntryPoint = "SDL_Vulkan_LoadLibrary", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_SDL_Vulkan_LoadLibrary(
+			byte[] path
 		);
+		public static int SDL_Vulkan_LoadLibrary(string path)
+		{
+			return INTERNAL_SDL_Vulkan_LoadLibrary(
+				UTF8_ToNative(path)
+			);
+		}
 
 		/* Only available in 2.0.6 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2526,11 +2806,16 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_FreePalette(IntPtr palette);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetPixelFormatName(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetPixelFormatName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetPixelFormatName(
 			uint format
 		);
+		public static string SDL_GetPixelFormatName(uint format)
+		{
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GetPixelFormatName(format)
+			);
+		}
 
 		/* format refers to an SDL_PixelFormat* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3108,15 +3393,24 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasClipboardText();
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetClipboardText();
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetClipboardText", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetClipboardText();
+		public static string SDL_GetClipboardText()
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetClipboardText());
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_SetClipboardText(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string text
+		[DllImport(nativeLibName, EntryPoint = "SDL_SetClipboardText", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_SDL_SetClipboardText(
+			byte[] text
 		);
+		public static int SDL_SetClipboardText(
+			string text
+		) {
+			return INTERNAL_SDL_SetClipboardText(
+				UTF8_ToNative(text)
+			);
+		}
 
 		#endregion
 
@@ -4335,26 +4629,44 @@ namespace SDL2
 		public static extern SDL_Scancode SDL_GetScancodeFromKey(SDL_Keycode key);
 
 		/* Wrapper for SDL_GetScancodeName */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetScancodeName(SDL_Scancode scancode);
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetScancodeName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetScancodeName(SDL_Scancode scancode);
+		public static string SDL_GetScancodeName(SDL_Scancode scancode)
+		{
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GetScancodeName(scancode)
+			);
+		}
 
 		/* Get a scancode from a human-readable name */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_Scancode SDL_GetScancodeFromName(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string name
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetScancodeFromName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDL_Scancode INTERNAL_SDL_GetScancodeFromName(
+			byte[] name
 		);
+		public static SDL_Scancode SDL_GetScancodeFromName(string name)
+		{
+			return INTERNAL_SDL_GetScancodeFromName(
+				UTF8_ToNative(name)
+			);
+		}
 
 		/* Wrapper for SDL_GetKeyName */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetKeyName(SDL_Keycode key);
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetKeyName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetKeyName(SDL_Keycode key);
+		public static string SDL_GetKeyName(SDL_Keycode key)
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetKeyName(key));
+		}
 
 		/* Get a key code from a human-readable name */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_Keycode SDL_GetKeyFromName(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string name
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetKeyFromName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDL_Keycode INTERNAL_SDL_GetKeyFromName(
+			byte[] name
 		);
+		public static SDL_Keycode SDL_GetKeyFromName(string name)
+		{
+			return INTERNAL_SDL_GetKeyFromName(UTF8_ToNative(name));
+		}
 
 		/* Start accepting Unicode text input events, show keyboard */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -4669,17 +4981,27 @@ namespace SDL2
 		);
 
 		/* joystick refers to an SDL_Joystick* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_JoystickName(
+		[DllImport(nativeLibName, EntryPoint = "SDL_JoystickName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_JoystickName(
 			IntPtr joystick
 		);
+		public static string SDL_JoystickName(IntPtr joystick)
+		{
+			return UTF8_ToManaged(
+				INTERNAL_SDL_JoystickName(joystick)
+			);
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_JoystickNameForIndex(
+		[DllImport(nativeLibName, EntryPoint = "SDL_JoystickNameForIndex", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_JoystickNameForIndex(
 			int device_index
 		);
+		public static string SDL_JoystickNameForIndex(int device_index)
+		{
+			return UTF8_ToManaged(
+				INTERNAL_SDL_JoystickNameForIndex(device_index)
+			);
+		}
 
 		/* joystick refers to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -4731,11 +5053,16 @@ namespace SDL2
 			int cbGUID
 		);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern Guid SDL_JoystickGetGUIDFromString(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string pchGUID
+		[DllImport(nativeLibName, EntryPoint = "SDL_JoystickGetGUIDFromString", CallingConvention = CallingConvention.Cdecl)]
+		private static extern Guid INTERNAL_SDL_JoystickGetGUIDFromString(
+			byte[] pchGUID
 		);
+		public static Guid SDL_JoystickGetGUIDFromString(string pchGuid)
+		{
+			return INTERNAL_SDL_JoystickGetGUIDFromString(
+				UTF8_ToNative(pchGuid)
+			);
+		}
 
 		/* This function is only available in 2.0.6 or higher. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -4873,20 +5200,33 @@ namespace SDL2
 			public INTERNAL_GameControllerButtonBind_hat hat;
 		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_GameControllerAddMapping(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string mappingString
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerAddMapping", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_SDL_GameControllerAddMapping(
+			byte[] mappingString
 		);
+		public static int SDL_GameControllerAddMapping(
+			string mappingString
+		) {
+			return INTERNAL_SDL_GameControllerAddMapping(
+				UTF8_ToNative(mappingString)
+			);
+		}
 
 		/* This function is only available in 2.0.6 or higher. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GameControllerNumMappings();
 
 		/* This function is only available in 2.0.6 or higher. */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-		public static extern string SDL_GameControllerMappingForIndex(int mapping_index);
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerMappingForIndex", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GameControllerMappingForIndex(int mapping_index);
+		public static string SDL_GameControllerMappingForIndex(int mapping_index)
+		{
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GameControllerMappingForIndex(
+					mapping_index
+				)
+			);
+		}
 
 		/* THIS IS AN RWops FUNCTION! */
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerAddMappingsFromRW", CallingConvention = CallingConvention.Cdecl)]
@@ -4900,38 +5240,63 @@ namespace SDL2
 			return INTERNAL_SDL_GameControllerAddMappingsFromRW(rwops, 1);
 		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GameControllerMappingForGUID(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerMappingForGUID", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GameControllerMappingForGUID(
 			Guid guid
 		);
+		public static string SDL_GameControllerMappingForGUID(Guid guid)
+		{
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GameControllerMappingForGUID(guid)
+			);
+		}
 
 		/* gamecontroller refers to an SDL_GameController* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GameControllerMapping(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerMapping", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GameControllerMapping(
 			IntPtr gamecontroller
 		);
+		public static string SDL_GameControllerMapping(
+			IntPtr gamecontroller
+		) {
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GameControllerMapping(
+					gamecontroller
+				)
+			);
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_IsGameController(int joystick_index);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GameControllerNameForIndex(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerNameForIndex", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GameControllerNameForIndex(
 			int joystick_index
 		);
+		public static string SDL_GameControllerNameForIndex(
+			int joystick_index
+		) {
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GameControllerNameForIndex(joystick_index)
+			);
+		}
 
 		/* IntPtr refers to an SDL_GameController* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GameControllerOpen(int joystick_index);
 
 		/* gamecontroller refers to an SDL_GameController* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GameControllerName(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GameControllerName(
 			IntPtr gamecontroller
 		);
+		public static string SDL_GameControllerName(
+			IntPtr gamecontroller
+		) {
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GameControllerName(gamecontroller)
+			);
+		}
 
 		/* gamecontroller refers to an SDL_GameController*.
 		 * This function is only available in 2.0.6 or higher.
@@ -4977,17 +5342,31 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_GameControllerUpdate();
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_GameControllerAxis SDL_GameControllerGetAxisFromString(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string pchString
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetAxisFromString", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDL_GameControllerAxis INTERNAL_SDL_GameControllerGetAxisFromString(
+			byte[] pchString
 		);
+		public static SDL_GameControllerAxis SDL_GameControllerGetAxisFromString(
+			string pchString
+		) {
+			return INTERNAL_SDL_GameControllerGetAxisFromString(
+				UTF8_ToNative(pchString)
+			);
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GameControllerGetStringForAxis(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetStringForAxis", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GameControllerGetStringForAxis(
 			SDL_GameControllerAxis axis
 		);
+		public static string SDL_GameControllerGetStringForAxis(
+			SDL_GameControllerAxis axis
+		) {
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GameControllerGetStringForAxis(
+					axis
+				)
+			);
+		}
 
 		/* gamecontroller refers to an SDL_GameController* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5003,17 +5382,29 @@ namespace SDL2
 			SDL_GameControllerAxis axis
 		);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_GameControllerButton SDL_GameControllerGetButtonFromString(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string pchString
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetButtonFromString", CallingConvention = CallingConvention.Cdecl)]
+		private static extern SDL_GameControllerButton INTERNAL_SDL_GameControllerGetButtonFromString(
+			byte[] pchString
 		);
+		public static SDL_GameControllerButton SDL_GameControllerGetButtonFromString(
+			string pchString
+		) {
+			return INTERNAL_SDL_GameControllerGetButtonFromString(
+				UTF8_ToNative(pchString)
+			);
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GameControllerGetStringForButton(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetStringForButton", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GameControllerGetStringForButton(
 			SDL_GameControllerButton button
 		);
+		public static string SDL_GameControllerGetStringForButton(
+			SDL_GameControllerButton button
+		) {
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GameControllerGetStringForButton(button)
+			);
+		}
 
 		/* gamecontroller refers to an SDL_GameController* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5250,9 +5641,12 @@ namespace SDL2
 		public static extern int SDL_HapticIndex(IntPtr haptic);
 
 		/* haptic refers to an SDL_Haptic* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_HapticName(int device_index);
+		[DllImport(nativeLibName, EntryPoint = "SDL_HapticName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_HapticName(int device_index);
+		public static string SDL_HapticName(int device_index)
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_HapticName(device_index));
+		}
 
 		/* haptic refers to an SDL_Haptic* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5484,11 +5878,16 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_AudioDeviceConnected(uint dev);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_AudioInit(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string driver_name
+		[DllImport(nativeLibName, EntryPoint = "SDL_AudioInit", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_SDL_AudioInit(
+			byte[] driver_name
 		);
+		public static int SDL_AudioInit(string driver_name)
+		{
+			return INTERNAL_SDL_AudioInit(
+				UTF8_ToNative(driver_name)
+			);
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_AudioQuit();
@@ -5504,12 +5903,19 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_FreeWAV(IntPtr audio_buf);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetAudioDeviceName(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetAudioDeviceName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetAudioDeviceName(
 			int index,
 			int iscapture
 		);
+		public static string SDL_GetAudioDeviceName(
+			int index,
+			int iscapture
+		) {
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GetAudioDeviceName(index, iscapture)
+			);
+		}
 
 		/* dev refers to an SDL_AudioDeviceID */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5517,16 +5923,24 @@ namespace SDL2
 			uint dev
 		);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetAudioDriver(int index);
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetAudioDriver", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetAudioDriver(int index);
+		public static string SDL_GetAudioDriver(int index)
+		{
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GetAudioDriver(index)
+			);
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_AudioStatus SDL_GetAudioStatus();
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
-		public static extern string SDL_GetCurrentAudioDriver();
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetCurrentAudioDriver", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetCurrentAudioDriver();
+		public static string SDL_GetCurrentAudioDriver()
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetCurrentAudioDriver());
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetNumAudioDevices(int iscapture);
@@ -5608,15 +6022,29 @@ namespace SDL2
 		);
 
 		/* uint refers to an SDL_AudioDeviceID */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_OpenAudioDevice(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string device,
+		[DllImport(nativeLibName, EntryPoint = "SDL_OpenAudioDevice", CallingConvention = CallingConvention.Cdecl)]
+		private static extern uint INTERNAL_SDL_OpenAudioDevice(
+			byte[] device,
 			int iscapture,
 			ref SDL_AudioSpec desired,
 			out SDL_AudioSpec obtained,
 			int allowed_changes
 		);
+		public static uint SDL_OpenAudioDevice(
+			string device,
+			int iscapture,
+			ref SDL_AudioSpec desired,
+			out SDL_AudioSpec obtained,
+			int allowed_changes
+		) {
+			return INTERNAL_SDL_OpenAudioDevice(
+				UTF8_ToNative(device),
+				iscapture,
+				ref desired,
+				out obtained,
+				allowed_changes
+			);
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_PauseAudio(int pause_on);
@@ -5838,19 +6266,29 @@ namespace SDL2
 		#region SDL_filesystem.h
 
 		/* Only available in 2.0.1 */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-		public static extern string SDL_GetBasePath();
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetBasePath", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetBasePath();
+		public static string SDL_GetBasePath()
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetBasePath(), true);
+		}
 
 		/* Only available in 2.0.1 */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		[return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-		public static extern string SDL_GetPrefPath(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-			string org,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-			string app
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetPrefPath", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetPrefPath(
+			byte[] org,
+			byte[] app
 		);
+		public static string SDL_GetPrefPath(string org, string app)
+		{
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GetPrefPath(
+					UTF8_ToNative(org),
+					UTF8_ToNative(app)
+				),
+				true
+			);
+		}
 
 		#endregion
 

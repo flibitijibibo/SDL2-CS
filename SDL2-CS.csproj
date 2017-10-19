@@ -80,7 +80,6 @@
     <Compile Include="src\SDL2_image.cs" />
     <Compile Include="src\SDL2_mixer.cs" />
     <Compile Include="src\SDL2_ttf.cs" />
-    <Compile Include="src\LPUtf8StrMarshaler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2-CS.dll.config">

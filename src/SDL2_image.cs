@@ -88,11 +88,14 @@ namespace SDL2
 		public static extern void IMG_Quit();
 
 		/* IntPtr refers to an SDL_Surface* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr IMG_Load(
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string file
+		[DllImport(nativeLibName, EntryPoint = "IMG_Load", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_IMG_Load(
+			byte[] file
 		);
+		public static IntPtr IMG_Load(string file)
+		{
+			return INTERNAL_IMG_Load(SDL.UTF8_ToNative(file));
+		}
 
 		/* src refers to an SDL_RWops*, IntPtr to an SDL_Surface* */
 		/* THIS IS A PUBLIC RWops FUNCTION! */
@@ -104,21 +107,39 @@ namespace SDL2
 
 		/* src refers to an SDL_RWops*, IntPtr to an SDL_Surface* */
 		/* THIS IS A PUBLIC RWops FUNCTION! */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr IMG_LoadTyped_RW(
+		[DllImport(nativeLibName, EntryPoint = "IMG_LoadTyped_RW", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_IMG_LoadTyped_RW(
 			IntPtr src,
 			int freesrc,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string type
+			byte[] type
 		);
+		public static IntPtr IMG_LoadTyped_RW(
+			IntPtr src,
+			int freesrc,
+			string type
+		) {
+			return INTERNAL_IMG_LoadTyped_RW(
+				src,
+				freesrc,
+				SDL.UTF8_ToNative(type)
+			);
+		}
 
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr IMG_LoadTexture(
+		[DllImport(nativeLibName, EntryPoint = "IMG_LoadTexture", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_IMG_LoadTexture(
 			IntPtr renderer,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string file
+			byte[] file
 		);
+		public static IntPtr IMG_LoadTexture(
+			IntPtr renderer,
+			string file
+		) {
+			return INTERNAL_IMG_LoadTexture(
+				renderer,
+				SDL.UTF8_ToNative(file)
+			);
+		}
 
 		/* renderer refers to an SDL_Renderer*.
 		 * src refers to an SDL_RWops*.
@@ -137,14 +158,26 @@ namespace SDL2
 		 * IntPtr to an SDL_Texture*.
 		 */
 		/* THIS IS A PUBLIC RWops FUNCTION! */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr IMG_LoadTextureTyped_RW(
+		[DllImport(nativeLibName, EntryPoint = "IMG_LoadTextureTyped_RW", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_IMG_LoadTextureTyped_RW(
 			IntPtr renderer,
 			IntPtr src,
 			int freesrc,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string type
+			byte[] type
 		);
+		public static IntPtr IMG_LoadTextureTyped_RW(
+			IntPtr renderer,
+			IntPtr src,
+			int freesrc,
+			string type
+		) {
+			return INTERNAL_IMG_LoadTextureTyped_RW(
+				renderer,
+				src,
+				freesrc,
+				SDL.UTF8_ToNative(type)
+			);
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int IMG_InvertAlpha(int on);
@@ -157,12 +190,18 @@ namespace SDL2
 		);
 
 		/* surface refers to an SDL_Surface* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int IMG_SavePNG(
+		[DllImport(nativeLibName, EntryPoint = "IMG_SavePNG", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_IMG_SavePNG(
 			IntPtr surface,
-			[In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-				string file
+			byte[] file
 		);
+		public static int IMG_SavePNG(IntPtr surface, string file)
+		{
+			return INTERNAL_IMG_SavePNG(
+				surface,
+				SDL.UTF8_ToNative(file)
+			);
+		}
 
 		/* surface refers to an SDL_Surface*, dst to an SDL_RWops* */
 		/* THIS IS A PUBLIC RWops FUNCTION! */
