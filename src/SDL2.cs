@@ -66,7 +66,7 @@ namespace SDL2
 #if NETSTANDARD2_0
 			/* Modern C# lets you just send the byte*, nice! */
 			string result = System.Text.Encoding.UTF8.GetString(
-				bytes,
+				(byte*) s,
 				(int) (ptr - (byte*) s)
 			);
 #else
