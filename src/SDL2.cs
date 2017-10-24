@@ -843,7 +843,7 @@ namespace SDL2
 		 */
 		public const int SDL_MAJOR_VERSION =	2;
 		public const int SDL_MINOR_VERSION =	0;
-		public const int SDL_PATCHLEVEL =	6;
+		public const int SDL_PATCHLEVEL =	7;
 
 		public static readonly int SDL_COMPILEDVERSION = SDL_VERSIONNUM(
 			SDL_MAJOR_VERSION,
@@ -5132,6 +5132,14 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_JoystickFromInstanceID(int joyid);
 
+		/* Only available in 2.0.7 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_LockJoysticks();
+
+		/* Only available in 2.0.7 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_UnlockJoysticks();
+
 		#endregion
 
 		#region SDL_gamecontroller.h
@@ -6090,6 +6098,58 @@ namespace SDL2
 		/* Only available in 2.0.4 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_ClearQueuedAudio(uint dev);
+
+		/* src_format and dst_format refer to SDL_AudioFormats.
+		 * IntPtr refers to an SDL_AudioStream*.
+		 * Only available in 2.0.7
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_NewAudioStream(
+			ushort src_format,
+			byte src_channels,
+			int src_rate,
+			ushort dst_format,
+			byte dst_channels,
+			int dst_rate
+		);
+
+		/* stream refers to an SDL_AudioStream*, buf to a void*.
+		 * Only available in 2.0.7
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_AudioStreamPut(
+			IntPtr stream,
+			IntPtr buf,
+			int len
+		);
+
+		/* stream refers to an SDL_AudioStream*, buf to a void*.
+		 * Only available in 2.0.7
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_AudioStreamGet(
+			IntPtr stream,
+			IntPtr buf,
+			int len
+		);
+
+		/* stream refers to an SDL_AudioStream*.
+		 * Only available in 2.0.7
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_AudioStreamAvailable(IntPtr stream);
+
+		/* stream refers to an SDL_AudioStream*.
+		 * Only available in 2.0.7
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_AudioStreamClear(IntPtr stream);
+
+		/* stream refers to an SDL_AudioStream*.
+		 * Only available in 2.0.7
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_FreeAudioStream(IntPtr stream);
 
 		#endregion
 
