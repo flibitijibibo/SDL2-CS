@@ -262,6 +262,14 @@ namespace SDL2
 		public const string SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES =
 			"SDL_VIDEO_MAC_FULLSCREEN_SPACES";
 
+		/* Only available in SDL 2.0.3 or higher */
+		public const string SDL_HINT_WINRT_PRIVACY_POLICY_URL =
+			"SDL_WINRT_PRIVACY_POLICY_URL";
+		public const string SDL_HINT_WINRT_PRIVACY_POLICY_LABEL =
+			"SDL_WINRT_PRIVACY_POLICY_LABEL";
+		public const string SDL_HINT_WINRT_HANDLE_BACK_BUTTON =
+			"SDL_WINRT_HANDLE_BACK_BUTTON";
+
 		/* Only available in SDL 2.0.4 or higher */
 		public const string SDL_HINT_NO_SIGNAL_HANDLERS =
 			"SDL_NO_SIGNAL_HANDLERS";
