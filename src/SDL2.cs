@@ -141,14 +141,6 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RWFromMem(IntPtr mem, int size);
 
-		/* context refers to an SDL_RWops* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern long SDL_RWtell(IntPtr context);
-
-		/* context refers to an SDL_RWops* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int SDL_RWclose(IntPtr context);
-
 		#endregion
 
 		#region SDL_main.h
