@@ -50,7 +50,7 @@ namespace SDL2
 		 */
 		public const int SDL_IMAGE_MAJOR_VERSION =	2;
 		public const int SDL_IMAGE_MINOR_VERSION =	0;
-		public const int SDL_IMAGE_PATCHLEVEL =		0;
+		public const int SDL_IMAGE_PATCHLEVEL =		2;
 
 		[Flags]
 		public enum IMG_InitFlags
@@ -210,6 +210,32 @@ namespace SDL2
 			IntPtr surface,
 			IntPtr dst,
 			int freedst
+		);
+
+		/* surface refers to an SDL_Surface* */
+		[DllImport(nativeLibName, EntryPoint = "IMG_SaveJPG", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_IMG_SaveJPG(
+			IntPtr surface,
+			byte[] file,
+			int quality
+		);
+		public static int IMG_SaveJPG(IntPtr surface, string file, int quality)
+		{
+			return INTERNAL_IMG_SaveJPG(
+				surface,
+				SDL.UTF8_ToNative(file),
+				quality
+			);
+		}
+
+		/* surface refers to an SDL_Surface*, dst to an SDL_RWops* */
+		/* THIS IS A PUBLIC RWops FUNCTION! */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int IMG_SaveJPG_RW(
+			IntPtr surface,
+			IntPtr dst,
+			int freedst,
+			int quality
 		);
 
 		#endregion

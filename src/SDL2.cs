@@ -137,9 +137,17 @@ namespace SDL2
 		 * functions marked with the phrase "THIS IS A PUBLIC RWops FUNCTION!"
 		 */
 
-		/* IntPtr refers to an SDL_RWops* */
+		/* mem refers to a void*, IntPtr to an SDL_RWops* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_RWFromMem(byte[] mem, int size);
+		public static extern IntPtr SDL_RWFromMem(IntPtr mem, int size);
+
+		/* context refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern long SDL_RWtell(IntPtr context);
+
+		/* context refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern int SDL_RWclose(IntPtr context);
 
 		#endregion
 
