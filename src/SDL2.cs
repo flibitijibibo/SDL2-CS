@@ -1050,6 +1050,7 @@ namespace SDL2
 
 		/* win refers to an SDL_Window*, area to a cosnt SDL_Point*, data to a void* */
 		/* Only available in 2.0.4 */
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate SDL_HitTestResult SDL_HitTest(IntPtr win, IntPtr area, IntPtr data);
 
 		/* IntPtr refers to an SDL_Window* */
@@ -6192,6 +6193,7 @@ namespace SDL2
 		public static extern UInt64 SDL_GetPerformanceFrequency();
 
 		/* param refers to a void* */
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate UInt32 SDL_TimerCallback(UInt32 interval, IntPtr param);
 
 		/* int refers to an SDL_TimerID, param to a void* */
