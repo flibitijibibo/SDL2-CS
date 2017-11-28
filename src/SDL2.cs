@@ -37,7 +37,11 @@ namespace SDL2
 	{
 		#region SDL2# Variables
 
+		#if TIZEN
+		private const string nativeLibName = "libSDL2-2.0.so.0";
+		#else
 		private const string nativeLibName = "SDL2.dll";
+		#endif
 
 		#endregion
 
