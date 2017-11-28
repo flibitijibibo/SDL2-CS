@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <AssemblyName>SDL2-CS</AssemblyName>
+    <RootNamespace>SDL2</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP2_0;TIZEN;</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug\Tizen</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="src\SDL2.cs" />
+    <Compile Include="src\SDL2_image.cs" />
+    <Compile Include="src\SDL2_mixer.cs" />
+    <Compile Include="src\SDL2_ttf.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SDL2-CS.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
