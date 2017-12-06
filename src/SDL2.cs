@@ -3760,6 +3760,22 @@ namespace SDL2
 						 */
 		}
 
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
+		/* Audio device event (event.adevice.*) */
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_AudioDeviceEvent
+		{
+			public UInt32 type;
+			public UInt32 timestamp;
+			public UInt32 which;
+			public byte iscapture;
+			private byte padding1;
+			private byte padding2;
+			private byte padding3;
+		}
+#pragma warning restore 0169
+
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_TouchFingerEvent
 		{
@@ -3878,6 +3894,8 @@ namespace SDL2
 			public SDL_ControllerButtonEvent cbutton;
 			[FieldOffset(0)]
 			public SDL_ControllerDeviceEvent cdevice;
+			[FieldOffset(0)]
+			public SDL_AudioDeviceEvent adevice;
 			[FieldOffset(0)]
 			public SDL_QuitEvent quit;
 			[FieldOffset(0)]
