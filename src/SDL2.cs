@@ -3518,7 +3518,7 @@ namespace SDL2
 		/* Only available in 2.0.4 or higher */
 		public enum SDL_MouseWheelDirection : uint
 		{
-			SDL_MOUSEHWEEL_NORMAL,
+			SDL_MOUSEWHEEL_NORMAL,
 			SDL_MOUSEWHEEL_FLIPPED
 		}
 
