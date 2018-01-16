@@ -45,15 +45,13 @@ namespace SDL2
 
 		internal static byte[] UTF8_ToNative(string s)
 		{
-			if (s != null)
-			{
-				// Add a null terminator. That's kind of it... :/
-				return System.Text.Encoding.UTF8.GetBytes(s + '\0');
-			}
-			else
+			if (s == null)
 			{
 				return null;
 			}
+
+			// Add a null terminator. That's kind of it... :/
+			return System.Text.Encoding.UTF8.GetBytes(s + '\0');
 		}
 
 		internal static unsafe string UTF8_ToManaged(IntPtr s, bool freePtr = false)
