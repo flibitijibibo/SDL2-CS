@@ -68,6 +68,19 @@ namespace SDL2
 				ptr++;
 			}
 
+			/* TODO: This #ifdef is only here because the equivalent
+			 * .NET 2.0 constructor appears to be less efficient?
+			 * Here's the pretty version, maybe steal this instead:
+			 *
+			string result = new string(
+				(sbyte*) s, // Also, why sbyte???
+				0,
+				(int) (ptr - (byte*) s),
+				System.Text.Encoding.UTF8
+			);
+			 * See the CoreCLR source for more info.
+			 * -flibit
+			 */
 #if NETSTANDARD2_0
 			/* Modern C# lets you just send the byte*, nice! */
 			string result = System.Text.Encoding.UTF8.GetString(
