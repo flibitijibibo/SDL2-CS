@@ -50,7 +50,7 @@ namespace SDL2
 		 */
 		public const int SDL_MIXER_MAJOR_VERSION =	2;
 		public const int SDL_MIXER_MINOR_VERSION =	0;
-		public const int SDL_MIXER_PATCHLEVEL =		0;
+		public const int SDL_MIXER_PATCHLEVEL =		2;
 
 		/* In C, you can redefine this value before including SDL_mixer.h.
 		 * We're not going to allow this in SDL2#, since the value of this
@@ -69,9 +69,9 @@ namespace SDL2
 		{
 			MIX_INIT_FLAC =		0x00000001,
 			MIX_INIT_MOD =		0x00000002,
-			MIX_INIT_MP3 =		0x00000004,
-			MIX_INIT_OGG =		0x00000008,
-			MIX_INIT_FLUIDSYNTH =	0x00000010,
+			MIX_INIT_MP3 =		0x00000008,
+			MIX_INIT_OGG =		0x00000010,
+			MIX_INIT_MID =		0x00000020,
 		}
 
 		public enum Mix_Fading
