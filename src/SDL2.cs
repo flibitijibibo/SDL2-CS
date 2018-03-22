@@ -681,10 +681,31 @@ namespace SDL2
 
 		/* userdata refers to a void* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_LogGetOutputFunction(
-			out SDL_LogOutputFunction callback,
+		private static extern void SDL_LogGetOutputFunction(
+			out IntPtr callback,
 			out IntPtr userdata
 		);
+		public static void SDL_LogGetOutputFunction(
+			out SDL_LogOutputFunction callback,
+			out IntPtr userdata
+		) {
+			IntPtr result = IntPtr.Zero;
+			SDL_LogGetOutputFunction(
+				out result,
+				out userdata
+			);
+			if (result != IntPtr.Zero)
+			{
+				callback = (SDL_LogOutputFunction) Marshal.GetDelegateForFunctionPointer(
+					result,
+					typeof(SDL_LogOutputFunction)
+				);
+			}
+			else
+			{
+				callback = null;
+			}
+		}
 
 		/* userdata refers to a void* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -4007,10 +4028,29 @@ namespace SDL2
 
 		/* userdata refers to a void* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_bool SDL_GetEventFilter(
-			out SDL_EventFilter filter,
+		private static extern SDL_bool SDL_GetEventFilter(
+			out IntPtr filter,
 			out IntPtr userdata
 		);
+		public static SDL_bool SDL_GetEventFilter(
+			out SDL_EventFilter filter,
+			out IntPtr userdata
+		) {
+			IntPtr result = IntPtr.Zero;
+			SDL_bool retval = SDL_GetEventFilter(out result, out userdata);
+			if (result != IntPtr.Zero)
+			{
+				filter = (SDL_EventFilter) Marshal.GetDelegateForFunctionPointer(
+					result,
+					typeof(SDL_EventFilter)
+				);
+			}
+			else
+			{
+				filter = null;
+			}
+			return retval;
+		}
 
 		/* userdata refers to a void* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
