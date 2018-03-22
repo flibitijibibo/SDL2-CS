@@ -1377,6 +1377,10 @@ namespace SDL2
 			);
 		}
 
+		/* IntPtr refers to a function pointer, proc to a const char* */
+		[DllImport(nativeLibName, EntryPoint = "SDL_GL_GetProcAddress", CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GL_GetProcAddress(IntPtr proc);
+
 		[DllImport(nativeLibName, EntryPoint = "SDL_GL_ExtensionSupported", CallingConvention = CallingConvention.Cdecl)]
 		private static extern SDL_bool INTERNAL_SDL_GL_ExtensionSupported(
 			byte[] extension
