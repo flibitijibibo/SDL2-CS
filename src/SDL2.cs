@@ -5301,6 +5301,16 @@ namespace SDL2
 			public INTERNAL_GameControllerButtonBind_union value;
 		}
 
+		/* This exists to deal with C# being stupid about blittable types. */
+		[StructLayout(LayoutKind.Sequential)]
+		private struct INTERNAL_SDL_GameControllerButtonBind
+		{
+			public int bindType;
+			/* Largest data type in the union is two ints in size */
+			public int unionVal0;
+			public int unionVal1;
+		}
+
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerAddMapping", CallingConvention = CallingConvention.Cdecl)]
 		private static extern int INTERNAL_SDL_GameControllerAddMapping(
 			byte[] mappingString
@@ -5470,11 +5480,26 @@ namespace SDL2
 		}
 
 		/* gamecontroller refers to an SDL_GameController* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_GameControllerButtonBind SDL_GameControllerGetBindForAxis(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetBindForAxis", CallingConvention = CallingConvention.Cdecl)]
+		private static extern INTERNAL_SDL_GameControllerButtonBind INTERNAL_SDL_GameControllerGetBindForAxis(
 			IntPtr gamecontroller,
 			SDL_GameControllerAxis axis
 		);
+		public static SDL_GameControllerButtonBind SDL_GameControllerGetBindForAxis(
+			IntPtr gamecontroller,
+			SDL_GameControllerAxis axis
+		) {
+			// This is guaranteed to never be null
+			INTERNAL_SDL_GameControllerButtonBind dumb = INTERNAL_SDL_GameControllerGetBindForAxis(
+				gamecontroller,
+				axis
+			);
+			SDL_GameControllerButtonBind result = new SDL_GameControllerButtonBind();
+			result.bindType = (SDL_GameControllerBindType) dumb.bindType;
+			result.value.hat.hat = dumb.unionVal0;
+			result.value.hat.hat_mask = dumb.unionVal1;
+			return result;
+		}
 
 		/* gamecontroller refers to an SDL_GameController* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5508,11 +5533,26 @@ namespace SDL2
 		}
 
 		/* gamecontroller refers to an SDL_GameController* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_GameControllerButtonBind SDL_GameControllerGetBindForButton(
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetBindForButton", CallingConvention = CallingConvention.Cdecl)]
+		private static extern INTERNAL_SDL_GameControllerButtonBind INTERNAL_SDL_GameControllerGetBindForButton(
 			IntPtr gamecontroller,
 			SDL_GameControllerButton button
 		);
+		public static SDL_GameControllerButtonBind SDL_GameControllerGetBindForButton(
+			IntPtr gamecontroller,
+			SDL_GameControllerButton button
+		) {
+			// This is guaranteed to never be null
+			INTERNAL_SDL_GameControllerButtonBind dumb = INTERNAL_SDL_GameControllerGetBindForButton(
+				gamecontroller,
+				button
+			);
+			SDL_GameControllerButtonBind result = new SDL_GameControllerButtonBind();
+			result.bindType = (SDL_GameControllerBindType) dumb.bindType;
+			result.value.hat.hat = dumb.unionVal0;
+			result.value.hat.hat_mask = dumb.unionVal1;
+			return result;
+		}
 
 		/* gamecontroller refers to an SDL_GameController* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
