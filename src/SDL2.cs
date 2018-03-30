@@ -5282,19 +5282,23 @@ namespace SDL2
 			public int hat_mask;
 		}
 
-		/* This struct has a union in it, hence the Explicit layout. */
+		// FIXME: I'd rather this somehow be private...
 		[StructLayout(LayoutKind.Explicit)]
+		public struct INTERNAL_GameControllerButtonBind_union
+		{
+			[FieldOffset(0)]
+			public int button;
+			[FieldOffset(0)]
+			public int axis;
+			[FieldOffset(0)]
+			public INTERNAL_GameControllerButtonBind_hat hat;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_GameControllerButtonBind
 		{
-			/* Note: enum size is 4 bytes. */
-			[FieldOffset(0)]
 			public SDL_GameControllerBindType bindType;
-			[FieldOffset(4)]
-			public int button;
-			[FieldOffset(4)]
-			public int axis;
-			[FieldOffset(4)]
-			public INTERNAL_GameControllerButtonBind_hat hat;
+			public INTERNAL_GameControllerButtonBind_union value;
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerAddMapping", CallingConvention = CallingConvention.Cdecl)]
