@@ -2966,8 +2966,15 @@ namespace SDL2
 		}
 
 		/* Only available in 2.0.4 */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_bool SDL_PointInRect(ref SDL_Point p, ref SDL_Rect r);
+		public static SDL_bool SDL_PointInRect(ref SDL_Point p, ref SDL_Rect r)
+		{
+			return (	(p.x >= r.x) &&
+					(p.x < (r.x + r.w)) &&
+					(p.y >= r.y) &&
+					(p.y < (r.y + r.h))	) ?
+				SDL_bool.SDL_TRUE :
+				SDL_bool.SDL_FALSE;
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_EnclosePoints(
@@ -3000,14 +3007,24 @@ namespace SDL2
 			ref int Y2
 		);
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_bool SDL_RectEmpty(ref SDL_Rect rect);
+		public static SDL_bool SDL_RectEmpty(ref SDL_Rect r)
+		{
+			return ((r.w <= 0) || (r.h <= 0)) ?
+				SDL_bool.SDL_TRUE :
+				SDL_bool.SDL_FALSE;
+		}
 
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_bool SDL_RectEquals(
-			ref SDL_Rect A,
-			ref SDL_Rect B
-		);
+		public static SDL_bool SDL_RectEquals(
+			ref SDL_Rect a,
+			ref SDL_Rect b
+		) {
+			return (	(a.x == b.x) &&
+					(a.y == b.y) &&
+					(a.w == b.w) &&
+					(a.h == b.h)	) ?
+				SDL_bool.SDL_TRUE :
+				SDL_bool.SDL_FALSE;
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_UnionRect(
@@ -5114,10 +5131,6 @@ namespace SDL2
 
 		/* joystick refers to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_JoystickOpened(int device_index);
-
-		/* joystick refers to an SDL_Joystick* */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_JoystickUpdate();
 
 		/* joystick refers to an SDL_Joystick* */
@@ -6014,10 +6027,6 @@ namespace SDL2
 			IntPtr stream,
 			int len
 		);
-
-		/* dev refers to an SDL_AudioDeviceID */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_AudioDeviceConnected(uint dev);
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_AudioInit", CallingConvention = CallingConvention.Cdecl)]
 		private static extern int INTERNAL_SDL_AudioInit(
