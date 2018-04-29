@@ -424,16 +424,13 @@ namespace SDL2
 			return UTF8_ToManaged(INTERNAL_SDL_GetError());
 		}
 
+		/* Use string.Format for arglists */
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetError", CallingConvention = CallingConvention.Cdecl)]
-		private static extern void INTERNAL_SDL_SetError(
-			byte[] fmt,
-			__arglist
-		);
-		public static void SDL_SetError(string fmt, __arglist)
+		private static extern void INTERNAL_SDL_SetError(byte[] fmtAndArglist);
+		public static void SDL_SetError(string fmtAndArglist)
 		{
 			INTERNAL_SDL_SetError(
-				UTF8_ToNative(fmt),
-				__arglist(__arglist) /* Barf */
+				UTF8_ToNative(fmtAndArglist)
 			);
 		}
 
@@ -495,168 +492,147 @@ namespace SDL2
 			IntPtr message
 		);
 
+		/* Use string.Format for arglists */
 		[DllImport(nativeLibName, EntryPoint = "SDL_Log", CallingConvention = CallingConvention.Cdecl)]
-		private static extern void INTERNAL_SDL_Log(
-			byte[] fmt,
-			__arglist
-		);
-		public static void SDL_Log(
-			string fmt,
-			__arglist
-		) {
+		private static extern void INTERNAL_SDL_Log(byte[] fmtAndArglist);
+		public static void SDL_Log(string fmtAndArglist)
+		{
 			INTERNAL_SDL_Log(
-				UTF8_ToNative(fmt),
-				__arglist(__arglist) /* Barf */
+				UTF8_ToNative(fmtAndArglist)
 			);
 		}
 
+		/* Use string.Format for arglists */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogVerbose", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void INTERNAL_SDL_LogVerbose(
 			int category,
-			byte[] fmt,
-			__arglist
+			byte[] fmtAndArglist
 		);
 		public static void SDL_LogVerbose(
 			int category,
-			string fmt,
-			__arglist
+			string fmtAndArglist
 		) {
 			INTERNAL_SDL_LogVerbose(
 				category,
-				UTF8_ToNative(fmt),
-				__arglist(__arglist) /* Barf */
+				UTF8_ToNative(fmtAndArglist)
 			);
 		}
 
+		/* Use string.Format for arglists */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogDebug", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void INTERNAL_SDL_LogDebug(
 			int category,
-			byte[] fmt,
-			__arglist
+			byte[] fmtAndArglist
 		);
 		public static void SDL_LogDebug(
 			int category,
-			string fmt,
-			__arglist
+			string fmtAndArglist
 		) {
 			INTERNAL_SDL_LogDebug(
 				category,
-				UTF8_ToNative(fmt),
-				__arglist(__arglist) /* Barf */
+				UTF8_ToNative(fmtAndArglist)
 			);
 		}
 
+		/* Use string.Format for arglists */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogInfo", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void INTERNAL_SDL_LogInfo(
 			int category,
-			byte[] fmt,
-			__arglist
+			byte[] fmtAndArglist
 		);
 		public static void SDL_LogInfo(
 			int category,
-			string fmt,
-			__arglist
+			string fmtAndArglist
 		) {
 			INTERNAL_SDL_LogInfo(
 				category,
-				UTF8_ToNative(fmt),
-				__arglist(__arglist) /* Barf */
+				UTF8_ToNative(fmtAndArglist)
 			);
 		}
 
+		/* Use string.Format for arglists */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogWarn", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void INTERNAL_SDL_LogWarn(
 			int category,
-			byte[] fmt,
-			__arglist
+			byte[] fmtAndArglist
 		);
 		public static void SDL_LogWarn(
 			int category,
-			string fmt,
-			__arglist
+			string fmtAndArglist
 		) {
 			INTERNAL_SDL_LogWarn(
 				category,
-				UTF8_ToNative(fmt),
-				__arglist(__arglist) /* Barf */
+				UTF8_ToNative(fmtAndArglist)
 			);
 		}
 
+		/* Use string.Format for arglists */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogError", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void INTERNAL_SDL_LogError(
 			int category,
-			byte[] fmt,
-			__arglist
+			byte[] fmtAndArglist
 		);
 		public static void SDL_LogError(
 			int category,
-			string fmt,
-			__arglist
+			string fmtAndArglist
 		) {
 			INTERNAL_SDL_LogError(
 				category,
-				UTF8_ToNative(fmt),
-				__arglist(__arglist) /* Barf */
+				UTF8_ToNative(fmtAndArglist)
 			);
 		}
 
+		/* Use string.Format for arglists */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogCritical", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void INTERNAL_SDL_LogCritical(
 			int category,
-			byte[] fmt,
-			__arglist
+			byte[] fmtAndArglist
 		);
 		public static void SDL_LogCritical(
 			int category,
-			string fmt,
-			__arglist
+			string fmtAndArglist
 		) {
 			INTERNAL_SDL_LogCritical(
 				category,
-				UTF8_ToNative(fmt),
-				__arglist(__arglist) /* Barf */
+				UTF8_ToNative(fmtAndArglist)
 			);
 		}
 
+		/* Use string.Format for arglists */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogMessage", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void INTERNAL_SDL_LogMessage(
 			int category,
 			SDL_LogPriority priority,
-			byte[] fmt,
-			__arglist
+			byte[] fmtAndArglist
 		);
 		public static void SDL_LogMessage(
 			int category,
 			SDL_LogPriority priority,
-			string fmt,
-			__arglist
+			string fmtAndArglist
 		) {
 			INTERNAL_SDL_LogMessage(
 				category,
 				priority,
-				UTF8_ToNative(fmt),
-				__arglist(__arglist) /* Barf */
+				UTF8_ToNative(fmtAndArglist)
 			);
 		}
 
+		/* Use string.Format for arglists */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LogMessageV", CallingConvention = CallingConvention.Cdecl)]
 		private static extern void INTERNAL_SDL_LogMessageV(
 			int category,
 			SDL_LogPriority priority,
-			byte[] fmt,
-			__arglist
+			byte[] fmtAndArglist
 		);
 		public static void SDL_LogMessageV(
 			int category,
 			SDL_LogPriority priority,
-			string fmt,
-			__arglist
+			string fmtAndArglist
 		) {
 			INTERNAL_SDL_LogMessageV(
 				category,
 				priority,
-				UTF8_ToNative(fmt),
-				__arglist(__arglist) /* Barf */
+				UTF8_ToNative(fmtAndArglist)
 			);
 		}
 
