@@ -89,9 +89,10 @@ namespace SDL2
 			);
 #else
 			/* Old C# requires an extra memcpy, bleh! */
-			byte[] bytes = new byte[ptr - (byte*) s];
-			Marshal.Copy(s, bytes, 0, bytes.Length);
-			string result = System.Text.Encoding.UTF8.GetString(bytes);
+			int len = (int) (ptr - (byte*) s);
+			char* chars = stackalloc char[len];
+			System.Text.Encoding.UTF8.GetChars((byte*) s, len, chars, len);
+			string result = new string(chars);
 #endif
 
 			/* Some SDL functions will malloc, we have to free! */
