@@ -91,8 +91,8 @@ namespace SDL2
 			/* Old C# requires an extra memcpy, bleh! */
 			int len = (int) (ptr - (byte*) s);
 			char* chars = stackalloc char[len];
-			System.Text.Encoding.UTF8.GetChars((byte*) s, len, chars, len);
-			string result = new string(chars);
+			int strLen = System.Text.Encoding.UTF8.GetChars((byte*) s, len, chars, len);
+			string result = new string(chars, 0, strLen);
 #endif
 
 			/* Some SDL functions will malloc, we have to free! */
