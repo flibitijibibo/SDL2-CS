@@ -1431,6 +1431,13 @@ namespace SDL2
 			SDL_GLattr attr,
 			int value
 		);
+		
+		public static int SDL_GL_SetAttribute(
+			SDL_GLattr attr,
+			SDL_GLprofile profile
+		) {
+			return SDL_GL_SetAttribute(attr, (int)profile);
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GL_SetSwapInterval(int interval);
