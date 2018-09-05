@@ -3486,6 +3486,14 @@ namespace SDL2
 			/* Application events */
 			SDL_QUIT = 			0x100,
 
+			/* iOS/Android/WinRT app events */
+			SDL_APP_TERMINATING,
+			SDL_APP_LOWMEMORY,
+			SDL_APP_WILLENTERBACKGROUND,
+			SDL_APP_DIDENTERBACKGROUND,
+			SDL_APP_WILLENTERFOREGROUND,
+			SDL_APP_DIDENTERFOREGROUND,
+
 			/* Window events */
 			SDL_WINDOWEVENT = 		0x200,
 			SDL_SYSWMEVENT,
@@ -3495,6 +3503,7 @@ namespace SDL2
 			SDL_KEYUP,
 			SDL_TEXTEDITING,
 			SDL_TEXTINPUT,
+			SDL_KEYMAPCHANGED,
 
 			/* Mouse events */
 			SDL_MOUSEMOTION = 		0x400,
