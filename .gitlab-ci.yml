@@ -6,6 +6,8 @@ stages:
 build_net461:
   image: mono
   stage: build
+  only:
+    - schedules
   script:
     - ./gitlab-ci/build-net461.sh
   artifacts:
@@ -17,6 +19,8 @@ build_net461:
 build_netcore:
   image: microsoft/dotnet:2.1-sdk
   stage: build
+  only:
+    - schedules
   script:
     - ./gitlab-ci/build-netcore.sh
   artifacts:
@@ -28,6 +32,8 @@ build_netcore:
 package_nuget:
   image: mono
   stage: package
+  only:
+    - schedules
   script:
     - ./gitlab-ci/package.sh
   dependencies:
@@ -40,6 +46,8 @@ package_nuget:
 deploy_nuget:
   image: mono
   stage: deploy
+  only:
+    - schedules
   script:
     - ./gitlab-ci/deploy.sh
   dependencies:
