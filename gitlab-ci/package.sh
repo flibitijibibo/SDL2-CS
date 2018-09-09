@@ -2,11 +2,11 @@
 
 set -e
 
-timestamp=`date +"%Y%m%d%H%M%S"`
+version=`date +"%Y.%m.%d"`
 
 nuspec="gitlab-ci/SDL2-CS.nuspec"
 
-sed -i -e "s/%timestamp%/$timestamp/g" $nuspec
+sed -i -e "s/%version%/$version/g" $nuspec
 
 nuget pack $nuspec
 

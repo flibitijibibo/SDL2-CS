@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>SDL2-CS-Rolling</id>
-    <version>1.0.0-alpha20180909140041</version>
+    <version>%version%</version>
     <authors>flibitijibibo</authors>
     <owners>beannaich</owners>
     <licenseUrl>https://github.com/flibitijibibo/SDL2-CS/blob/master/LICENSE</licenseUrl>
