@@ -1,0 +1,20 @@
+image: mono
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+  - ./build.sh
+  tags:
+  - docker
+
+deploy:
+  stage: deploy
+  script:
+  - ./deploy.sh
+  environment:
+    name: nuget
+    url: http://nuget.org/

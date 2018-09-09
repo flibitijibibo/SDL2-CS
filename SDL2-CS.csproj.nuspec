@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SDL2-CS-Rolling</id>
+    <version>1.0.0-alpha%timestamp%</version>
+    <authors>flibitijibibo</authors>
+    <owners>flibitijibibo</owners>
+    <licenseUrl>https://github.com/flibitijibibo/SDL2-CS/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/flibitijibibo/SDL2-CS</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SDL2# - C# Wrapper for SDL2</description>
+    <copyright>Copyright 2018</copyright>
+    <tags>SDL2# SDL2 SDL</tags>
+  </metadata>
+  <files>
+    <file src="bin\Debug\*.dll" target="lib" />
+    <file src="bin\Debug\*.dll.config" target="lib" />
+    <file src="bin\Debug\*.pdb" target="lib" />
+  </files>
+</package>
