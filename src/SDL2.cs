@@ -37,7 +37,7 @@ namespace SDL2
 	{
 		#region SDL2# Variables
 
-		private const string nativeLibName = "SDL2.dll";
+		private const string nativeLibName = "SDL2";
 
 		#endregion
 
