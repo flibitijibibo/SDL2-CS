@@ -13,7 +13,7 @@ SRC = \
 debug: clean-debug
 	mkdir -p bin/Debug
 	cp SDL2-CS.dll.config bin/Debug
-	dmcs /unsafe -debug -out:bin/Debug/SDL2-CS.dll -target:library $(SRC)
+	mcs /unsafe -debug -out:bin/Debug/SDL2-CS.dll -target:library $(SRC)
 
 clean-debug:
 	rm -rf bin/Debug
@@ -21,7 +21,7 @@ clean-debug:
 release: clean-release
 	mkdir -p bin/Release
 	cp SDL2-CS.dll.config bin/Release
-	dmcs /unsafe -optimize -out:bin/Release/SDL2-CS.dll -target:library $(SRC)
+	mcs /unsafe -optimize -out:bin/Release/SDL2-CS.dll -target:library $(SRC)
 
 clean-release:
 	rm -rf bin/Release
