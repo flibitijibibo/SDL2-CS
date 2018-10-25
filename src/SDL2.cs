@@ -2374,6 +2374,20 @@ namespace SDL2
 			IntPtr pixels,
 			int pitch
 		);
+		
+		/* texture refers to an SDL_Texture* */
+		/* Available in 2.0.1 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_UpdateYUVTexture(
+			IntPtr texture,
+			ref SDL_Rect rect,
+			IntPtr yPlane,
+			int yPitch,
+			IntPtr uPlane,
+			int uPitch,
+			IntPtr vPlane,
+			int vPitch
+		);
 
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
