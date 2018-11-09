@@ -1,4 +1,3 @@
 #!/bin/bash
 
-msbuild /p:Configuration=Debug SDL2-CS.csproj
-
+msbuild /p:Configuration=Release SDL2-CS.csproj
