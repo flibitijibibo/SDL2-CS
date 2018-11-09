@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>SDL2-CS-Rolling</id>
-    <version>%version%</version>
+    <version>2000.1.1</version>
     <authors>flibitijibibo</authors>
     <owners>beannaich</owners>
     <licenseUrl>https://github.com/flibitijibibo/SDL2-CS/blob/master/LICENSE</licenseUrl>

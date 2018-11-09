@@ -1,4 +1,3 @@
 #!/bin/bash
 
-dotnet build SDL2-CS.Core.csproj
-
+dotnet build -c Release SDL2-CS.Core.csproj
