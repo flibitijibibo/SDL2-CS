@@ -188,11 +188,12 @@ namespace SDL2
 		public const uint SDL_INIT_HAPTIC =		0x00001000;
 		public const uint SDL_INIT_GAMECONTROLLER =	0x00002000;
 		public const uint SDL_INIT_EVENTS =		0x00004000;
+		public const uint SDL_INIT_SENSOR =		0x00008000;
 		public const uint SDL_INIT_NOPARACHUTE =	0x00100000;
 		public const uint SDL_INIT_EVERYTHING = (
 			SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | 
 			SDL_INIT_EVENTS | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC |
-			SDL_INIT_GAMECONTROLLER
+			SDL_INIT_GAMECONTROLLER | SDL_INIT_SENSOR
 		);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -343,6 +344,28 @@ namespace SDL2
 			"SDL_WINDOWS_INTRESOURCE_ICON";
 		public const string SDL_HINT_WINDOWS_INTRESOURCE_ICON_SMALL =
 			"SDL_WINDOWS_INTRESOURCE_ICON_SMALL";
+
+		/* Only available in 2.0.9 or higher */
+		public const string SDL_HINT_MOUSE_DOUBLE_CLICK_TIME =
+			"SDL_MOUSE_DOUBLE_CLICK_TIME";
+		public const string SDL_HINT_MOUSE_DOUBLE_CLICK_RADIUS =
+			"SDL_MOUSE_DOUBLE_CLICK_RADIUS";
+		public const string SDL_HINT_JOYSTICK_HIDAPI =
+			"SDL_JOYSTICK_HIDAPI";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_PS4 =
+			"SDL_JOYSTICK_HIDAPI_PS4";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_PS4_RUMBLE =
+			"SDL_JOYSTICK_HIDAPI_PS4_RUMBLE";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_STEAM =
+			"SDL_JOYSTICK_HIDAPI_STEAM";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_SWITCH =
+			"SDL_JOYSTICK_HIDAPI_SWITCH";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_XBOX =
+			"SDL_JOYSTICK_HIDAPI_XBOX";
+		public const string SDL_HINT_ENABLE_STEAM_CONTROLLERS =
+			"SDL_ENABLE_STEAM_CONTROLLERS";
+		public const string SDL_HINT_ANDROID_TRAP_BACK_BUTTON =
+			"SDL_ANDROID_TRAP_BACK_BUTTON";
 
 		public enum SDL_HintPriority
 		{
@@ -868,7 +891,7 @@ namespace SDL2
 		 */
 		public const int SDL_MAJOR_VERSION =	2;
 		public const int SDL_MINOR_VERSION =	0;
-		public const int SDL_PATCHLEVEL =	8;
+		public const int SDL_PATCHLEVEL =	9;
 
 		public static readonly int SDL_COMPILEDVERSION = SDL_VERSIONNUM(
 			SDL_MAJOR_VERSION,
@@ -986,6 +1009,21 @@ namespace SDL2
 			/* Available in 2.0.5 or higher */
 			SDL_WINDOWEVENT_TAKE_FOCUS,
 			SDL_WINDOWEVENT_HIT_TEST
+		}
+
+		public enum SDL_DisplayEventID
+		{
+			SDL_DISPLAYEVENT_NONE,
+			SDL_DISPLAYEVENT_ORIENTATION
+		}
+
+		public enum SDL_DisplayOrientation
+		{
+			SDL_ORIENTATION_UNKNOWN,
+			SDL_ORIENTATION_LANDSCAPE,
+			SDL_ORIENTATION_LANDSCAPE_FLIPPED,
+			SDL_ORIENTATION_PORTRAIT,
+			SDL_ORIENTATION_PORTRAIT_FLIPPED
 		}
 
 		[Flags]
@@ -1166,6 +1204,12 @@ namespace SDL2
 			out float ddpi,
 			out float hdpi,
 			out float vdpi
+		);
+
+		/* This function is only available in 2.0.9 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_DisplayOrientation SDL_GetDisplayOrientation(
+			int displayIndex
 		);
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3286,6 +3330,12 @@ namespace SDL2
 			out SDL_Rect rect
 		);
 
+		/* surface refers to an SDL_Surface*.
+		 * This function is only available in 2.0.9 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_HasColorKey(IntPtr surface);
+
 		/* surface refers to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetColorKey(
@@ -3508,6 +3558,10 @@ namespace SDL2
 			SDL_APP_WILLENTERFOREGROUND,
 			SDL_APP_DIDENTERFOREGROUND,
 
+			/* Display events */
+			/* Only available in SDL 2.0.9 or higher */
+			SDL_DISPLAYEVENT =		0x150,
+
 			/* Window events */
 			SDL_WINDOWEVENT = 		0x200,
 			SDL_SYSWMEVENT,
@@ -3567,6 +3621,10 @@ namespace SDL2
 			SDL_AUDIODEVICEADDED =		0x1100,
 			SDL_AUDIODEVICEREMOVED,
 
+			/* Sensor events */
+			/* Only available in SDL 2.0.9 or higher */
+			SDL_SENSORUPDATE =		0x1200,
+
 			/* Render events */
 			/* Only available in SDL 2.0.2 or higher */
 			SDL_RENDER_TARGETS_RESET =	0x2000,
@@ -3597,6 +3655,22 @@ namespace SDL2
 			public SDL_EventType type;
 			public UInt32 timestamp;
 		}
+
+// Ignore private members used for padding in this struct
+#pragma warning disable 0169
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_DisplayEvent
+		{
+			public SDL_EventType type;
+			public UInt32 timestamp;
+			public UInt32 display;
+			public byte displayEvent; // event, lolC#
+			private byte padding1;
+			private byte padding2;
+			private byte padding3;
+			public Int32 data1;
+		}
+#pragma warning restore 0169
 
 // Ignore private members used for padding in this struct
 #pragma warning disable 0169
@@ -3896,6 +3970,15 @@ namespace SDL2
 			public IntPtr file; /* char* filename, to be freed */
 		}
 
+		[StructLayout(LayoutKind.Sequential)]
+		public unsafe struct SDL_SensorEvent
+		{
+			public SDL_EventType type;
+			public UInt32 timestamp;
+			public Int32 which;
+			public fixed float data[6];
+		}
+
 		/* The "quit requested" event */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_QuitEvent
@@ -3933,6 +4016,8 @@ namespace SDL2
 			[FieldOffset(0)]
 			public SDL_EventType type;
 			[FieldOffset(0)]
+			public SDL_DisplayEvent display;
+			[FieldOffset(0)]
 			public SDL_WindowEvent window;
 			[FieldOffset(0)]
 			public SDL_KeyboardEvent key;
@@ -3964,6 +4049,8 @@ namespace SDL2
 			public SDL_ControllerDeviceEvent cdevice;
 			[FieldOffset(0)]
 			public SDL_AudioDeviceEvent adevice;
+			[FieldOffset(0)]
+			public SDL_SensorEvent sensor;
 			[FieldOffset(0)]
 			public SDL_QuitEvent quit;
 			[FieldOffset(0)]
@@ -5047,6 +5134,17 @@ namespace SDL2
 			SDL_JOYSTICK_TYPE_ARCADE_PAD
 		}
 
+		/* joystick refers to an SDL_Joystick*.
+		 * This function is only available in 2.0.9 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_JoystickRumble(
+			IntPtr joystick,
+			UInt16 low_frequency_rumble,
+			UInt16 high_frequency_rumble,
+			UInt32 duration_ms
+		);
+
 		/* joystick refers to an SDL_Joystick* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_JoystickClose(IntPtr joystick);
@@ -5413,6 +5511,19 @@ namespace SDL2
 			);
 		}
 
+		/* Only available in 2.0.9 or higher */
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerMappingForDeviceIndex", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GameControllerMappingForDeviceIndex(
+			int joystick_index
+		);
+		public static string SDL_GameControllerMappingForDeviceIndex(
+			int joystick_index
+		) {
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GameControllerMappingForDeviceIndex(joystick_index)
+			);
+		}
+
 		/* IntPtr refers to an SDL_GameController* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GameControllerOpen(int joystick_index);
@@ -5580,6 +5691,17 @@ namespace SDL2
 		public static extern byte SDL_GameControllerGetButton(
 			IntPtr gamecontroller,
 			SDL_GameControllerButton button
+		);
+
+		/* gamecontroller refers to an SDL_GameController*.
+		 * This function is only available in 2.0.9 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GameControllerRumble(
+			IntPtr gamecontroller,
+			UInt16 low_frequency_rumble,
+			UInt16 high_frequency_rumble,
+			UInt32 duration_ms
 		);
 
 		/* gamecontroller refers to an SDL_GameController* */
@@ -5931,6 +6053,86 @@ namespace SDL2
 
 		#endregion
 
+		#region SDL_sensor.h
+
+		/* This region is only available in 2.0.9 or higher. */
+
+		public enum SDL_SensorType
+		{
+			SDL_SENSOR_INVALID = -1,
+			SDL_SENSOR_UNKNOWN,
+			SDL_SENSOR_ACCEL,
+			SDL_SENSOR_GYRO
+		}
+
+		public const float SDL_STANDARD_GRAVITY = 9.80665f;
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_NumSensors();
+
+		[DllImport(nativeLibName, EntryPoint = "SDL_SensorGetDeviceName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_SensorGetDeviceName(int device_index);
+		public static string SDL_SensorGetDeviceName(int device_index)
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_SensorGetDeviceName(device_index));
+		}
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_SensorType SDL_SensorGetDeviceType(int device_index);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SensorGetDeviceNonPortableType(int device_index);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern Int32 SDL_SensorGetDeviceInstanceID(int device_index);
+
+		/* IntPtr refers to an SDL_Sensor* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_SensorOpen(int device_index);
+
+		/* IntPtr refers to an SDL_Sensor* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_SensorFromInstanceID(
+			Int32 instance_id
+		);
+
+		/* sensor refers to an SDL_Sensor* */
+		[DllImport(nativeLibName, EntryPoint = "SDL_SensorGetName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_SensorGetName(IntPtr sensor);
+		public static string SDL_SensorGetName(IntPtr sensor)
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_SensorGetName(sensor));
+		}
+
+		/* sensor refers to an SDL_Sensor* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_SensorType SDL_SensorGetType(IntPtr sensor);
+
+		/* sensor refers to an SDL_Sensor* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SensorGetNonPortableType(IntPtr sensor);
+
+		/* sensor refers to an SDL_Sensor* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern Int32 SDL_SensorGetInstanceID(IntPtr sensor);
+
+		/* sensor refers to an SDL_Sensor* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SensorGetData(
+			IntPtr sensor,
+			float[] data,
+			int num_values
+		);
+
+		/* sensor refers to an SDL_Sensor* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SensorClose(IntPtr sensor);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SensorUpdate();
+
+		#endregion
+
 		#region SDL_audio.h
 
 		public const ushort SDL_AUDIO_MASK_BITSIZE =	0xFF;
@@ -5998,12 +6200,14 @@ namespace SDL2
 			BitConverter.IsLittleEndian ? AUDIO_F32LSB : AUDIO_F32MSB;
 
 		public const uint SDL_AUDIO_ALLOW_FREQUENCY_CHANGE =	0x00000001;
-		public const uint SDL_AUDIO_ALLOW_FORMAT_CHANGE =	0x00000001;
-		public const uint SDL_AUDIO_ALLOW_CHANNELS_CHANGE =	0x00000001;
+		public const uint SDL_AUDIO_ALLOW_FORMAT_CHANGE =	0x00000002;
+		public const uint SDL_AUDIO_ALLOW_CHANNELS_CHANGE =	0x00000004;
+		public const uint SDL_AUDIO_ALLOW_SAMPLES_CHANGE =	0x00000008;
 		public const uint SDL_AUDIO_ALLOW_ANY_CHANGE = (
 			SDL_AUDIO_ALLOW_FREQUENCY_CHANGE |
 			SDL_AUDIO_ALLOW_FORMAT_CHANGE |
-			SDL_AUDIO_ALLOW_CHANNELS_CHANGE
+			SDL_AUDIO_ALLOW_CHANNELS_CHANGE |
+			SDL_AUDIO_ALLOW_SAMPLES_CHANGE
 		);
 
 		public const int SDL_MIX_MAXVOLUME = 128;
@@ -6446,6 +6650,9 @@ namespace SDL2
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_WinRT_DeviceFamily SDL_WinRTGetDeviceFamily();
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_IsTablet();
 
 		#endregion
 
