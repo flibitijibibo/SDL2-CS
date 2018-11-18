@@ -1011,7 +1011,7 @@ namespace SDL2
 			SDL_WINDOWEVENT_HIT_TEST
 		}
 
-		public enum SDL_DisplayEventID
+		public enum SDL_DisplayEventID : byte
 		{
 			SDL_DISPLAYEVENT_NONE,
 			SDL_DISPLAYEVENT_ORIENTATION
@@ -3664,7 +3664,7 @@ namespace SDL2
 			public SDL_EventType type;
 			public UInt32 timestamp;
 			public UInt32 display;
-			public byte displayEvent; // event, lolC#
+			public SDL_DisplayEventID displayEvent; // event, lolC#
 			private byte padding1;
 			private byte padding2;
 			private byte padding3;
