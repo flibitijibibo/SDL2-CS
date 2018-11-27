@@ -54,7 +54,8 @@ namespace SDL2
 			return System.Text.Encoding.UTF8.GetBytes(s + '\0');
 		}
 
-		internal static unsafe string UTF8_ToManaged(IntPtr s, bool freePtr = false)
+		/* This is public because SDL_DropEvent needs it! */
+		public static unsafe string UTF8_ToManaged(IntPtr s, bool freePtr = false)
 		{
 			if (s == IntPtr.Zero)
 			{
@@ -3967,7 +3968,12 @@ namespace SDL2
 		{
 			public SDL_EventType type;
 			public UInt32 timestamp;
-			public IntPtr file; /* char* filename, to be freed */
+
+			/* char* filename, to be freed.
+			 * Access the variable EXACTLY ONCE like this:
+			 * string s = SDL.UTF8_ToManaged(evt.drop.file, true);
+			 */
+			public IntPtr file;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
