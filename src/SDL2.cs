@@ -3974,6 +3974,7 @@ namespace SDL2
 			 * string s = SDL.UTF8_ToManaged(evt.drop.file, true);
 			 */
 			public IntPtr file;
+			public UInt32 windowID;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
