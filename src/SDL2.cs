@@ -192,7 +192,7 @@ namespace SDL2
 		public const uint SDL_INIT_SENSOR =		0x00008000;
 		public const uint SDL_INIT_NOPARACHUTE =	0x00100000;
 		public const uint SDL_INIT_EVERYTHING = (
-			SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | 
+			SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO |
 			SDL_INIT_EVENTS | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC |
 			SDL_INIT_GAMECONTROLLER | SDL_INIT_SENSOR
 		);
@@ -1477,7 +1477,7 @@ namespace SDL2
 			SDL_GLattr attr,
 			int value
 		);
-		
+
 		public static int SDL_GL_SetAttribute(
 			SDL_GLattr attr,
 			SDL_GLprofile profile
@@ -1670,7 +1670,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_UpdateWindowSurfaceRects(
 			IntPtr window,
-			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
 				SDL_Rect[] rects,
 			int numrects
 		);
@@ -2188,7 +2188,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawLines(
 			IntPtr renderer,
-			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
 				SDL_Point[] points,
 			int count
 		);
@@ -2205,7 +2205,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawPoints(
 			IntPtr renderer,
-			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
 				SDL_Point[] points,
 			int count
 		);
@@ -2230,7 +2230,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawRects(
 			IntPtr renderer,
-			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
 				SDL_Rect[] rects,
 			int count
 		);
@@ -2255,7 +2255,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderFillRects(
 			IntPtr renderer,
-			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
 				SDL_Rect[] rects,
 			int count
 		);
@@ -2410,7 +2410,7 @@ namespace SDL2
 			IntPtr pixels,
 			int pitch
 		);
-		
+
 		/* texture refers to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_UpdateTexture(
@@ -2419,7 +2419,7 @@ namespace SDL2
 			IntPtr pixels,
 			int pitch
 		);
-		
+
 		/* texture refers to an SDL_Texture* */
 		/* Available in 2.0.1 or higher */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2976,7 +2976,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetPaletteColors(
 			IntPtr palette,
-			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct)]
+			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
 				SDL_Color[] colors,
 			int firstcolor,
 			int ncolors
@@ -3022,7 +3022,7 @@ namespace SDL2
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_EnclosePoints(
-			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 1)]
+			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]
 				SDL_Point[] points,
 			int count,
 			ref SDL_Rect clip,
@@ -3314,7 +3314,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_FillRects(
 			IntPtr dst,
-			[In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
+			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
 				SDL_Rect[] rects,
 			int count,
 			uint color
@@ -4093,7 +4093,7 @@ namespace SDL2
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_PeepEvents(
-			[Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 1)]
+			[Out] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]
 				SDL_Event[] events,
 			int numevents,
 			SDL_eventaction action,
@@ -6383,7 +6383,7 @@ namespace SDL2
 			ref SDL_AudioSpec desired,
 			out SDL_AudioSpec obtained
 		);
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_OpenAudio(
 			ref SDL_AudioSpec desired,
