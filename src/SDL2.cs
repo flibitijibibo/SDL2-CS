@@ -1670,8 +1670,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_UpdateWindowSurfaceRects(
 			IntPtr window,
-			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
-				SDL_Rect[] rects,
+			[In] SDL_Rect[] rects,
 			int numrects
 		);
 
@@ -2188,8 +2187,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawLines(
 			IntPtr renderer,
-			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
-				SDL_Point[] points,
+			[In] SDL_Point[] points,
 			int count
 		);
 
@@ -2205,8 +2203,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawPoints(
 			IntPtr renderer,
-			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
-				SDL_Point[] points,
+			[In] SDL_Point[] points,
 			int count
 		);
 
@@ -2230,8 +2227,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawRects(
 			IntPtr renderer,
-			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
-				SDL_Rect[] rects,
+			[In] SDL_Rect[] rects,
 			int count
 		);
 
@@ -2255,8 +2251,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderFillRects(
 			IntPtr renderer,
-			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
-				SDL_Rect[] rects,
+			[In] SDL_Rect[] rects,
 			int count
 		);
 
@@ -2976,8 +2971,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetPaletteColors(
 			IntPtr palette,
-			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
-				SDL_Color[] colors,
+			[In] SDL_Color[] colors,
 			int firstcolor,
 			int ncolors
 		);
@@ -3022,8 +3016,7 @@ namespace SDL2
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_EnclosePoints(
-			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]
-				SDL_Point[] points,
+			[In] SDL_Point[] points,
 			int count,
 			ref SDL_Rect clip,
 			out SDL_Rect result
@@ -3314,8 +3307,7 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_FillRects(
 			IntPtr dst,
-			[In] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
-				SDL_Rect[] rects,
+			[In] SDL_Rect[] rects,
 			int count,
 			uint color
 		);
@@ -4093,8 +4085,7 @@ namespace SDL2
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_PeepEvents(
-			[Out] [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]
-				SDL_Event[] events,
+			[Out] SDL_Event[] events,
 			int numevents,
 			SDL_eventaction action,
 			SDL_EventType minType,
