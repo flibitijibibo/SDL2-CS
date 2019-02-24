@@ -5741,7 +5741,7 @@ namespace SDL2
 		public const byte SDL_HAPTIC_SPHERICAL =	2;
 
 		/* SDL_HapticRunEffect */
-		public const uint SDL_HAPTIC_INFINITY = 4292967295U;
+		public const uint SDL_HAPTIC_INFINITY = 4294967295U;
 
 		[StructLayout(LayoutKind.Sequential)]
 		public unsafe struct SDL_HapticDirection
