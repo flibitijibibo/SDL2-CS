@@ -1421,9 +1421,21 @@ namespace SDL2
 			);
 		}
 
+		[DllImport(nativeLibName, EntryPoint = "SDL_GL_LoadLibrary", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_SDL_GL_LoadLibrary(byte[] path);
+		public static int SDL_GL_LoadLibrary(string path)
+		{
+			return INTERNAL_SDL_GL_LoadLibrary(
+				UTF8_ToNative(path)
+			);
+		}
+
 		/* IntPtr refers to a function pointer, proc to a const char* */
-		[DllImport(nativeLibName, EntryPoint = "SDL_GL_GetProcAddress", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GL_GetProcAddress(IntPtr proc);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_GL_UnloadLibrary();
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GL_ExtensionSupported", CallingConvention = CallingConvention.Cdecl)]
 		private static extern SDL_bool INTERNAL_SDL_GL_ExtensionSupported(
