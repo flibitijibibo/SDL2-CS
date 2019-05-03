@@ -2450,6 +2450,20 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetRenderTarget(IntPtr renderer);
+		
+		/* renderer refers to an SDL_Renderer* */
+		/* Available in 2.0.8 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RenderGetMetalLayer(
+			IntPtr renderer
+		);
+		
+		/* renderer refers to an SDL_Renderer* */
+		/* Available in 2.0.8 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RenderGetMetalCommandEncoder(
+			IntPtr renderer
+		);
 
 		/* renderer refers to an SDL_Renderer* */
 		/* Only available in 2.0.4 */
