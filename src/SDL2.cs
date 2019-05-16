@@ -377,6 +377,10 @@ namespace SDL2
 			"SDL_ENABLE_STEAM_CONTROLLERS";
 		public const string SDL_HINT_ANDROID_TRAP_BACK_BUTTON =
 			"SDL_ANDROID_TRAP_BACK_BUTTON";
+		
+		/* Only available in 2.0.10 or higher */
+		public const string SDL_HINT_MOUSE_TOUCH_EVENTS =
+			"SDL_MOUSE_TOUCH_EVENTS";
 
 		public enum SDL_HintPriority
 		{
