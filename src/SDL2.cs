@@ -91,6 +91,10 @@ namespace SDL2
 #else
 			/* Old C# requires an extra memcpy, bleh! */
 			int len = (int) (ptr - (byte*) s);
+			if (len == 0)
+			{
+				return string.Empty;
+			}
 			char* chars = stackalloc char[len];
 			int strLen = System.Text.Encoding.UTF8.GetChars((byte*) s, len, chars, len);
 			string result = new string(chars, 0, strLen);
