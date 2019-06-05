@@ -91,6 +91,10 @@ namespace SDL2
 #else
 			/* Old C# requires an extra memcpy, bleh! */
 			int len = (int) (ptr - (byte*) s);
+			if (len == 0)
+			{
+				return string.Empty;
+			}
 			char* chars = stackalloc char[len];
 			int strLen = System.Text.Encoding.UTF8.GetChars((byte*) s, len, chars, len);
 			string result = new string(chars, 0, strLen);
@@ -1435,9 +1439,21 @@ namespace SDL2
 			);
 		}
 
+		[DllImport(nativeLibName, EntryPoint = "SDL_GL_LoadLibrary", CallingConvention = CallingConvention.Cdecl)]
+		private static extern int INTERNAL_SDL_GL_LoadLibrary(byte[] path);
+		public static int SDL_GL_LoadLibrary(string path)
+		{
+			return INTERNAL_SDL_GL_LoadLibrary(
+				UTF8_ToNative(path)
+			);
+		}
+
 		/* IntPtr refers to a function pointer, proc to a const char* */
-		[DllImport(nativeLibName, EntryPoint = "SDL_GL_GetProcAddress", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GL_GetProcAddress(IntPtr proc);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_GL_UnloadLibrary();
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_GL_ExtensionSupported", CallingConvention = CallingConvention.Cdecl)]
 		private static extern SDL_bool INTERNAL_SDL_GL_ExtensionSupported(
@@ -2452,6 +2468,20 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetRenderTarget(IntPtr renderer);
+		
+		/* renderer refers to an SDL_Renderer* */
+		/* Available in 2.0.8 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RenderGetMetalLayer(
+			IntPtr renderer
+		);
+		
+		/* renderer refers to an SDL_Renderer* */
+		/* Available in 2.0.8 or higher */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RenderGetMetalCommandEncoder(
+			IntPtr renderer
+		);
 
 		/* renderer refers to an SDL_Renderer* */
 		/* Only available in 2.0.4 */
