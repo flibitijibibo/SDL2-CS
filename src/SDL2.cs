@@ -349,6 +349,10 @@ namespace SDL2
 			"SDL_WINDOWS_INTRESOURCE_ICON";
 		public const string SDL_HINT_WINDOWS_INTRESOURCE_ICON_SMALL =
 			"SDL_WINDOWS_INTRESOURCE_ICON_SMALL";
+		
+		/* Only available in 2.0.8 or higher */
+		public const string SDL_HINT_IOS_HIDE_HOME_INDICATOR =
+			"SDL_IOS_HIDE_HOME_INDICATOR";
 
 		/* Only available in 2.0.9 or higher */
 		public const string SDL_HINT_MOUSE_DOUBLE_CLICK_TIME =
