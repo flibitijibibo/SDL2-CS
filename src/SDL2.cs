@@ -385,6 +385,22 @@ namespace SDL2
 		/* Only available in 2.0.10 or higher */
 		public const string SDL_HINT_MOUSE_TOUCH_EVENTS =
 			"SDL_MOUSE_TOUCH_EVENTS";
+		public const string SDL_HINT_GAMECONTROLLERCONFIG_FILE =
+			"SDL_GAMECONTROLLERCONFIG_FILE";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_GAMECUBE =
+			"SDL_JOYSTICK_HIDAPI_GAMECUBE";
+		public const string SDL_HINT_ANDROID_BLOCK_ON_PAUSE =
+			"SDL_ANDROID_BLOCK_ON_PAUSE";
+		public const string SDL_HINT_RENDER_BATCHING =
+			"SDL_RENDER_BATCHING";
+		public const string SDL_HINT_EVENT_LOGGING =
+			"SDL_EVENT_LOGGING";
+		public const string SDL_HINT_WAVE_RIFF_CHUNK_SIZE =
+			"SDL_WAVE_RIFF_CHUNK_SIZE";
+		public const string SDL_HINT_WAVE_TRUNCATION =
+			"SDL_WAVE_TRUNCATION";
+		public const string SDL_HINT_WAVE_FACT_CHUNK =
+			"SDL_WAVE_FACT_CHUNK";
 
 		public enum SDL_HintPriority
 		{
