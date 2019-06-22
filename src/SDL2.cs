@@ -165,6 +165,58 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RWFromMem(IntPtr mem, int size);
 
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWsize(IntPtr context);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWseek(
+			IntPtr context,
+			long offset,
+			int whence
+		);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWtell(IntPtr context);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops*, ptr refers to a void* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWread(
+			IntPtr context,
+			IntPtr ptr,
+			uint size,
+			uint maxnum
+		);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops*, ptr refers to a const void* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWwrite(
+			IntPtr context,
+			IntPtr ptr,
+			uint size,
+			uint maxnum
+		);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWclose(IntPtr context);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* file refers to a const char*
+		 * datasize refers to a size_t*
+		 * IntPtr refers to a void*
+		*/
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_LoadFile(IntPtr file, IntPtr datasize);
+
 		#endregion
 
 		#region SDL_main.h
