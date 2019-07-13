@@ -5505,7 +5505,8 @@ namespace SDL2
 		public static extern IntPtr SDL_GetTouchFinger(long touchID, int index);
 
 		/* Only available in SDL 2.0.10 or higher. */
-		public static extern SDL_TouchDeviceType SDL_GetTouchDeviceType(SDL_TouchID touchID);
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_TouchDeviceType SDL_GetTouchDeviceType(Int64 touchID);
 
 		#endregion
 
