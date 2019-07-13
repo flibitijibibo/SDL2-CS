@@ -7258,8 +7258,6 @@ namespace SDL2
 		/* Only available in SDL 2.0.10 or higher. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SIMDFree(IntPtr ptr);
-		
-		/* Availab
 
 		#endregion
 	}
