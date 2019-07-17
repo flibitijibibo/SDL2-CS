@@ -7250,7 +7250,7 @@ namespace SDL2
 		
 		/* Only available in SDL 2.0.10 or higher. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern uint SDL_SDL_SIMDGetAlignment();
+		public static extern uint SDL_SIMDGetAlignment();
 
 		/* Only available in SDL 2.0.10 or higher. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
