@@ -353,6 +353,8 @@ namespace SDL2
 		/* Only available in 2.0.8 or higher */
 		public const string SDL_HINT_IOS_HIDE_HOME_INDICATOR =
 			"SDL_IOS_HIDE_HOME_INDICATOR";
+		public const string SDL_HINT_TV_REMOTE_AS_JOYSTICK =
+			"SDL_TV_REMOTE_AS_JOYSTICK";
 
 		/* Only available in 2.0.9 or higher */
 		public const string SDL_HINT_MOUSE_DOUBLE_CLICK_TIME =
