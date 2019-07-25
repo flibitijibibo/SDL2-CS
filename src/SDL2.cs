@@ -165,6 +165,58 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RWFromMem(IntPtr mem, int size);
 
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWsize(IntPtr context);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWseek(
+			IntPtr context,
+			long offset,
+			int whence
+		);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWtell(IntPtr context);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops*, ptr refers to a void* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWread(
+			IntPtr context,
+			IntPtr ptr,
+			uint size,
+			uint maxnum
+		);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops*, ptr refers to a const void* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWwrite(
+			IntPtr context,
+			IntPtr ptr,
+			uint size,
+			uint maxnum
+		);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* context refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern long SDL_RWclose(IntPtr context);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		/* file refers to a const char*
+		 * datasize refers to a size_t*
+		 * IntPtr refers to a void*
+		*/
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_LoadFile(IntPtr file, IntPtr datasize);
+
 		#endregion
 
 		#region SDL_main.h
@@ -172,14 +224,24 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetMainReady();
 
-		/* This is used as a function pointer to a C main() function for SDL_WinRTRunApp() */
-		public delegate int SDL_WinRT_mainFunction(int argc, IntPtr[] argv);
+		/* This is used as a function pointer to a C main() function */
+		public delegate int SDL_main_func(int argc, IntPtr argv);
 
 		/* Use this function with UWP to call your C# Main() function! */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_WinRTRunApp(
-			SDL_WinRT_mainFunction mainFunction,
+			SDL_main_func mainFunction,
 			IntPtr reserved
+		);
+		
+		/* Use this function with iOS to call your C# Main() function!
+		 * Only available in SDL 2.0.10 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_UIKitRunApp(
+			int argc,
+			IntPtr argv,
+			SDL_main_func mainFunction
 		);
 
 		#endregion
@@ -377,6 +439,24 @@ namespace SDL2
 			"SDL_ENABLE_STEAM_CONTROLLERS";
 		public const string SDL_HINT_ANDROID_TRAP_BACK_BUTTON =
 			"SDL_ANDROID_TRAP_BACK_BUTTON";
+		
+		/* Only available in 2.0.10 or higher */
+		public const string SDL_HINT_MOUSE_TOUCH_EVENTS =
+			"SDL_MOUSE_TOUCH_EVENTS";
+		public const string SDL_HINT_GAMECONTROLLERCONFIG_FILE =
+			"SDL_GAMECONTROLLERCONFIG_FILE";
+		public const string SDL_HINT_ANDROID_BLOCK_ON_PAUSE =
+			"SDL_ANDROID_BLOCK_ON_PAUSE";
+		public const string SDL_HINT_RENDER_BATCHING =
+			"SDL_RENDER_BATCHING";
+		public const string SDL_HINT_EVENT_LOGGING =
+			"SDL_EVENT_LOGGING";
+		public const string SDL_HINT_WAVE_RIFF_CHUNK_SIZE =
+			"SDL_WAVE_RIFF_CHUNK_SIZE";
+		public const string SDL_HINT_WAVE_TRUNCATION =
+			"SDL_WAVE_TRUNCATION";
+		public const string SDL_HINT_WAVE_FACT_CHUNK =
+			"SDL_WAVE_FACT_CHUNK";
 
 		public enum SDL_HintPriority
 		{
@@ -902,7 +982,7 @@ namespace SDL2
 		 */
 		public const int SDL_MAJOR_VERSION =	2;
 		public const int SDL_MINOR_VERSION =	0;
-		public const int SDL_PATCHLEVEL =	9;
+		public const int SDL_PATCHLEVEL =	10;
 
 		public static readonly int SDL_COMPILEDVERSION = SDL_VERSIONNUM(
 			SDL_MAJOR_VERSION,
@@ -2276,6 +2356,270 @@ namespace SDL2
 			[In] SDL_Rect[] rects,
 			int count
 		);
+		
+		#region Floating Point Render Functions
+			
+		/* This region only available in SDL 2.0.10 or higher. */
+			
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyF(
+			IntPtr renderer,
+			IntPtr texture,
+			ref SDL_Rect srcrect,
+			ref SDL_FRect dstrect
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyF(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			ref SDL_FRect dstrect
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyF(
+			IntPtr renderer,
+			IntPtr texture,
+			ref SDL_Rect srcrect,
+			IntPtr dstrect
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source and destination rectangles are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for both SDL_Rects.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyF(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			IntPtr dstrect
+		);
+		
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			ref SDL_Rect srcrect,
+			ref SDL_FRect dstrect,
+			double angle,
+			ref SDL_FPoint center,
+			SDL_RendererFlip flip
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyEx(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			ref SDL_FRect dstrect,
+			double angle,
+			ref SDL_FPoint center,
+			SDL_RendererFlip flip
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyExF(
+			IntPtr renderer,
+			IntPtr texture,
+			ref SDL_Rect srcrect,
+			IntPtr dstrect,
+			double angle,
+			ref SDL_FPoint center,
+			SDL_RendererFlip flip
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for center.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyExF(
+			IntPtr renderer,
+			IntPtr texture,
+			ref SDL_Rect srcrect,
+			ref SDL_FRect dstrect,
+			double angle,
+			IntPtr center,
+			SDL_RendererFlip flip
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for both
+		 * srcrect and dstrect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyExF(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			IntPtr dstrect,
+			double angle,
+			ref SDL_FPoint center,
+			SDL_RendererFlip flip
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for both
+		 * srcrect and center.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyExF(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			ref SDL_FRect dstrect,
+			double angle,
+			IntPtr center,
+			SDL_RendererFlip flip
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for both
+		 * dstrect and center.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyExF(
+			IntPtr renderer,
+			IntPtr texture,
+			ref SDL_Rect srcrect,
+			IntPtr dstrect,
+			double angle,
+			IntPtr center,
+			SDL_RendererFlip flip
+		);
+
+		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture*.
+		 * Internally, this function contains logic to use default values when
+		 * source, destination, and/or center are passed as NULL.
+		 * This overload allows for IntPtr.Zero (null) to be passed for all
+		 * three parameters.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderCopyExF(
+			IntPtr renderer,
+			IntPtr texture,
+			IntPtr srcrect,
+			IntPtr dstrect,
+			double angle,
+			IntPtr center,
+			SDL_RendererFlip flip
+		);
+		
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderDrawPointF(
+			IntPtr renderer,
+			float x,
+			float y
+		);
+		
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderDrawPointsF(
+			IntPtr renderer,
+			[In] SDL_FPoint[] points,
+			int count
+		);
+		
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderDrawLineF(
+			IntPtr renderer,
+			float x1,
+			float y1,
+			float x2,
+			float y2
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderDrawLinesF(
+			IntPtr renderer,
+			[In] SDL_FPoint[] points,
+			int count
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderDrawRectF(
+			IntPtr renderer,
+			ref SDL_FRect rect
+		);
+
+		/* renderer refers to an SDL_Renderer*, rect to an SDL_Rect*.
+		 * This overload allows for IntPtr.Zero (null) to be passed for rect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderDrawRectF(
+			IntPtr renderer,
+			IntPtr rect
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderDrawRectsF(
+			IntPtr renderer,
+			[In] SDL_FRect[] rects,
+			int count
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderFillRectF(
+			IntPtr renderer,
+			ref SDL_FRect rect
+		);
+
+		/* renderer refers to an SDL_Renderer*, rect to an SDL_Rect*.
+		 * This overload allows for IntPtr.Zero (null) to be passed for rect.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderFillRectF(
+			IntPtr renderer,
+			IntPtr rect
+		);
+
+		/* renderer refers to an SDL_Renderer* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderFillRectsF(
+			IntPtr renderer,
+			[In] SDL_FRect[] rects,
+			int count
+		);
+		
+		#endregion
 
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2479,6 +2823,11 @@ namespace SDL2
 		/* Only available in 2.0.4 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_RenderIsClipEnabled(IntPtr renderer);
+
+		/* renderer refers to an SDL_Renderer* */
+		/* Available in 2.0.10 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderFlush(IntPtr renderer);
 
 		#endregion
 
@@ -3037,6 +3386,24 @@ namespace SDL2
 			public int y;
 			public int w;
 			public int h;
+		}
+		
+		/* Only available in 2.0.10 or higher. */
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_FPoint
+		{
+			public float x;
+			public float y;
+		}
+
+		/* Only available in 2.0.10 or higher. */
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_FRect
+		{
+			public float x;
+			public float y;
+			public float w;
+			public float h;
 		}
 
 		/* Only available in 2.0.4 */
@@ -5104,6 +5471,15 @@ namespace SDL2
 			public float y;
 			public float pressure;
 		}
+		
+		/* Only available in SDL 2.0.10 or higher. */
+		public enum SDL_TouchDeviceType
+		{
+			SDL_TOUCH_DEVICE_INVALID = -1,
+			SDL_TOUCH_DEVICE_DIRECT,            /* touch screen with window-relative coordinates */
+			SDL_TOUCH_DEVICE_INDIRECT_ABSOLUTE, /* trackpad with absolute device coordinates */
+			SDL_TOUCH_DEVICE_INDIRECT_RELATIVE  /* trackpad with screen cursor-relative coordinates */
+		}
 
 		/**
 		 *  \brief Get the number of registered touch devices.
@@ -5129,6 +5505,10 @@ namespace SDL2
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetTouchFinger(long touchID, int index);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_TouchDeviceType SDL_GetTouchDeviceType(Int64 touchID);
 
 		#endregion
 
@@ -6869,6 +7249,18 @@ namespace SDL2
 		/* Only available in 2.0.1 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetSystemRAM();
+		
+		/* Only available in SDL 2.0.10 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern uint SDL_SIMDGetAlignment();
+
+		/* Only available in SDL 2.0.10 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_SIMDAlloc(uint len);
+
+		/* Only available in SDL 2.0.10 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SIMDFree(IntPtr ptr);
 
 		#endregion
 	}
