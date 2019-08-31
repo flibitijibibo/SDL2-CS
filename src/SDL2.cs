@@ -1895,7 +1895,7 @@ namespace SDL2
 		public static extern SDL_bool SDL_Vulkan_CreateSurface(
 			IntPtr window,
 			IntPtr instance,
-			out IntPtr surface
+			out ulong surface
 		);
 
 		/* window refers to an SDL_Window*.
