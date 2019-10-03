@@ -2030,6 +2030,22 @@ namespace SDL2
 
 		#endregion
 
+		#region SDL_metal.h
+
+		/* Only available in SDL 2.0.11. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_Metal_CreateView(
+			IntPtr window
+		);
+
+		/* Only available in SDL 2.0.11. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_Metal_DestroyView(
+			IntPtr view
+		);
+
+		#endregion
+
 		#region SDL_render.h
 
 		[Flags]
