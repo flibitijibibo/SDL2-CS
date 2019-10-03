@@ -2032,13 +2032,13 @@ namespace SDL2
 
 		#region SDL_metal.h
 
-		/* Only available in SDL 2.0.11. */
+		/* Only available in 2.0.11. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_Metal_CreateView(
 			IntPtr window
 		);
 
-		/* Only available in SDL 2.0.11. */
+		/* Only available in 2.0.11. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_Metal_DestroyView(
 			IntPtr view
@@ -2219,6 +2219,29 @@ namespace SDL2
 			IntPtr rect,
 			out IntPtr pixels,
 			out int pitch
+		);
+
+		/* texture refers to an SDL_Texture*, surface to an SDL_Surface*
+		 * Only available in 2.0.11.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_LockTextureToSurface(
+			IntPtr texture,
+			ref SDL_Rect rect,
+			out IntPtr surface
+		);
+
+		/* texture refers to an SDL_Texture*, surface to an SDL_Surface*
+		 * Internally, this function contains logic to use default values when
+		 * the rectangle is passed as NULL.
+		 * This overload allows for IntPtr.Zero to be passed for rect.
+		 * Only available in 2.0.11.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_LockTextureToSurface(
+			IntPtr texture,
+			IntPtr rect,
+			out IntPtr surface
 		);
 
 		/* texture refers to an SDL_Texture* */
