@@ -135,6 +135,10 @@ namespace SDL2
 
 		#region SDL_rwops.h
 
+		public const int RW_SEEK_SET = 0;
+		public const int RW_SEEK_CUR = 1;
+		public const int RW_SEEK_END = 2;
+
 		/* Note about SDL2# and Internal RWops:
 		 * These functions are currently not supported for public use.
 		 * They are only meant to be used internally in functions marked with
