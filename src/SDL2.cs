@@ -164,6 +164,10 @@ namespace SDL2
 		/* mem refers to a void*, IntPtr to an SDL_RWops* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RWFromMem(IntPtr mem, int size);
+		
+		/* mem refers to a const void*, IntPtr to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RWFromConstMem(IntPtr mem, int size);
 
 		/* Only available in SDL 2.0.10 or higher. */
 		/* context refers to an SDL_RWops* */
