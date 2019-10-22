@@ -4355,7 +4355,7 @@ namespace SDL2
 			public float y;
 		}
 
-		/* File open request by system (event.drop.*), disabled by
+		/* File open request by system (event.drop.*), enabled by
 		 * default
 		 */
 		[StructLayout(LayoutKind.Sequential)]
