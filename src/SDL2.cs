@@ -4223,17 +4223,39 @@ namespace SDL2
 			public fixed byte text[SDL_TEXTEDITINGEVENT_TEXT_SIZE];
 			public Int32 start;
 			public Int32 length;
+
+			public SDL_TextEditingEvent_SAFE ToSafe()
+			{
+				SDL_TextEditingEvent_SAFE result =
+					default(SDL_TextEditingEvent_SAFE);
+
+				GCHandle handle = GCHandle.Alloc(this, GCHandleType.Pinned);
+
+				try
+				{
+					IntPtr ptr = handle.AddrOfPinnedObject();
+					result = (SDL_TextEditingEvent_SAFE)
+						Marshal.PtrToStructure(
+							ptr, typeof(SDL_TextEditingEvent_SAFE));
+				}
+				finally
+				{
+					handle.Free();
+				}
+
+				return result;
+			}
 		}
 
-		[StructLayout(LayoutKind.Sequential)]
-		public unsafe struct SDL_TextEditingEvent_SAFE
+		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+		public struct SDL_TextEditingEvent_SAFE
 		{
 			public SDL_EventType type;
 			public UInt32 timestamp;
 			public UInt32 windowID;
-			[MarshalAs(UnmanagedType.ByValArray, 
+			[MarshalAs(UnmanagedType.ByValTStr, 
 				SizeConst = SDL_TEXTEDITINGEVENT_TEXT_SIZE)]
-			public byte[] text;
+			public string text;
 			public Int32 start;
 			public Int32 length;
 		}
@@ -4245,17 +4267,39 @@ namespace SDL2
 			public UInt32 timestamp;
 			public UInt32 windowID;
 			public fixed byte text[SDL_TEXTINPUTEVENT_TEXT_SIZE];
+
+			public SDL_TextInputEvent_SAFE ToSafe()
+			{
+				SDL_TextInputEvent_SAFE result =
+					default(SDL_TextInputEvent_SAFE);
+
+				GCHandle handle = GCHandle.Alloc(this, GCHandleType.Pinned);
+
+				try
+				{
+					IntPtr ptr = handle.AddrOfPinnedObject();
+					result = (SDL_TextInputEvent_SAFE)
+						Marshal.PtrToStructure(
+							ptr, typeof(SDL_TextInputEvent_SAFE));
+				}
+				finally
+				{
+					handle.Free();
+				}
+
+				return result;
+			}
 		}
 
-		[StructLayout(LayoutKind.Sequential)]
-		public unsafe struct SDL_TextInputEvent_SAFE
+		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+		public struct SDL_TextInputEvent_SAFE
 		{
 			public SDL_EventType type;
 			public UInt32 timestamp;
 			public UInt32 windowID;
-			[MarshalAs(UnmanagedType.ByValArray, 
+			[MarshalAs(UnmanagedType.ByValTStr, 
 				SizeConst = SDL_TEXTINPUTEVENT_TEXT_SIZE)]
-			public byte[] text;
+			public string text;
 		}
 
 // Ignore private members used for padding in this struct
