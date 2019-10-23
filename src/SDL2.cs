@@ -147,35 +147,38 @@ namespace SDL2
 		public const UInt32 SDL_RWOPS_MEMORY_RO = 5; /* Read-Only memory stream */
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-		public delegate long SDLRWopsSizeCallback(
-			IntPtr context);
+		public delegate long SDLRWopsSizeCallback(IntPtr context);
 		
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate long SDLRWopsSeekCallback(
 			IntPtr context,
 			long offset,
-			int whence);
+			int whence
+		);
 		
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate uint SDLRWopsReadCallback(
 			IntPtr context,
 			IntPtr ptr,
-			uint size,
-			uint maxnum);
+			IntPtr size,
+			IntPtr maxnum
+		);
 		
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate uint SDLRWopsWriteCallback(
 			IntPtr context,
 			IntPtr ptr,
-			uint size,
-			uint num);
+			IntPtr size,
+			IntPtr num
+		);
 		
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate int SDLRWopsCloseCallback(
-			IntPtr context);
+			IntPtr context
+		);
 		
 		[StructLayout(LayoutKind.Sequential)]
-		public unsafe struct SDL_RWops
+		public struct SDL_RWops
 		{
 			public IntPtr size;
 			public IntPtr seek;
@@ -185,8 +188,7 @@ namespace SDL2
 
 			public UInt32 type;
 
-			/*
-			 * This isn't the full structure since
+			/* NOTE: This isn't the full structure since
 			 * the native SDL_RWops contains a hidden union full of
 			 * internal information and platform-specific stuff depending
 			 * on what conditions the native library was built with
@@ -254,8 +256,8 @@ namespace SDL2
 		public static extern long SDL_RWread(
 			IntPtr context,
 			IntPtr ptr,
-			uint size,
-			uint maxnum
+			IntPtr size,
+			IntPtr maxnum
 		);
 
 		/* Only available in SDL 2.0.10 or higher. */
@@ -264,8 +266,8 @@ namespace SDL2
 		public static extern long SDL_RWwrite(
 			IntPtr context,
 			IntPtr ptr,
-			uint size,
-			uint maxnum
+			IntPtr size,
+			IntPtr maxnum
 		);
 
 		/* Read endian functions */
