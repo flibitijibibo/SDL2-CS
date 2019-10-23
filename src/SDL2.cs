@@ -135,11 +135,63 @@ namespace SDL2
 
 		#region SDL_rwops.h
 
-		/* Note about SDL2# and Internal RWops:
-		 * These functions are currently not supported for public use.
-		 * They are only meant to be used internally in functions marked with
-		 * the phrase "THIS IS AN RWops FUNCTION!"
-		 */
+		public const int RW_SEEK_SET = 0;
+		public const int RW_SEEK_CUR = 1;
+		public const int RW_SEEK_END = 2;
+
+		public const UInt32 SDL_RWOPS_UNKNOWN	= 0; /* Unknown stream type */
+		public const UInt32 SDL_RWOPS_WINFILE	= 1; /* Win32 file */
+		public const UInt32 SDL_RWOPS_STDFILE	= 2; /* Stdio file */
+		public const UInt32 SDL_RWOPS_JNIFILE	= 3; /* Android asset */
+		public const UInt32 SDL_RWOPS_MEMORY	= 4; /* Memory stream */
+		public const UInt32 SDL_RWOPS_MEMORY_RO = 5; /* Read-Only memory stream */
+
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate long SDLRWopsSizeCallback(
+			IntPtr context);
+		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate long SDLRWopsSeekCallback(
+			IntPtr context,
+			long offset,
+			int whence);
+		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate uint SDLRWopsReadCallback(
+			IntPtr context,
+			IntPtr ptr,
+			uint size,
+			uint maxnum);
+		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate uint SDLRWopsWriteCallback(
+			IntPtr context,
+			IntPtr ptr,
+			uint size,
+			uint num);
+		
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		public delegate int SDLRWopsCloseCallback(
+			IntPtr context);
+		
+		[StructLayout(LayoutKind.Sequential)]
+		public unsafe struct SDL_RWops
+		{
+			public IntPtr size;
+			public IntPtr seek;
+			public IntPtr read;
+			public IntPtr write;
+			public IntPtr close;
+
+			public UInt32 type;
+
+			/*
+			 * This isn't the full structure since
+			 * the native SDL_RWops contains a hidden union full of
+			 * internal information and platform-specific stuff depending
+			 * on what conditions the native library was built with
+			 */
+		}
 
 		/* IntPtr refers to an SDL_RWops* */
 		[DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile", CallingConvention = CallingConvention.Cdecl)]
@@ -147,7 +199,7 @@ namespace SDL2
 			byte[] file,
 			byte[] mode
 		);
-		internal static IntPtr INTERNAL_SDL_RWFromFile(
+		public static IntPtr SDL_RWFromFile(
 			string file,
 			string mode
 		) {
@@ -156,14 +208,26 @@ namespace SDL2
 				UTF8_ToNative(mode)
 			);
 		}
+		
+		/* IntPtr refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_AllocRW();
 
-		/* These are the public RWops functions. They should be used by
-		 * functions marked with the phrase "THIS IS A PUBLIC RWops FUNCTION!"
-		 */
+		/* area refers to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_FreeRW(IntPtr area);
+
+		/* fp refers to a void* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RWFromFP(IntPtr fp, SDL_bool autoclose);
 
 		/* mem refers to a void*, IntPtr to an SDL_RWops* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RWFromMem(IntPtr mem, int size);
+		
+		/* mem refers to a const void*, IntPtr to an SDL_RWops* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RWFromConstMem(IntPtr mem, int size);
 
 		/* Only available in SDL 2.0.10 or higher. */
 		/* context refers to an SDL_RWops* */
@@ -203,6 +267,52 @@ namespace SDL2
 			uint size,
 			uint maxnum
 		);
+
+		/* Read endian functions */
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern byte SDL_ReadU8(IntPtr src);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt16 SDL_ReadLE16(IntPtr src);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt16 SDL_ReadBE16(IntPtr src);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_ReadLE32(IntPtr src);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt32 SDL_ReadBE32(IntPtr src);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt64 SDL_ReadLE64(IntPtr src);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt64 SDL_ReadBE64(IntPtr src);
+
+		/* Write endian functions */
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern uint SDL_WriteU8(IntPtr dst, byte value);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern uint SDL_WriteLE16(IntPtr dst, UInt16 value);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern uint SDL_WriteBE16(IntPtr dst, UInt16 value);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern uint SDL_WriteLE32(IntPtr dst, UInt32 value);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern uint SDL_WriteBE32(IntPtr dst, UInt32 value);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern uint SDL_WriteLE64(IntPtr dst, UInt64 value);
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern uint SDL_WriteBE64(IntPtr dst, UInt64 value);
 
 		/* Only available in SDL 2.0.10 or higher. */
 		/* context refers to an SDL_RWops* */
@@ -3772,7 +3882,7 @@ namespace SDL2
 		);
 		public static IntPtr SDL_LoadBMP(string file)
 		{
-			IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "rb");
+			IntPtr rwops = SDL_RWFromFile(file, "rb");
 			return INTERNAL_SDL_LoadBMP_RW(rwops, 1);
 		}
 
@@ -3809,7 +3919,7 @@ namespace SDL2
 		);
 		public static int SDL_SaveBMP(IntPtr surface, string file)
 		{
-			IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "wb");
+			IntPtr rwops = SDL_RWFromFile(file, "wb");
 			return INTERNAL_SDL_SaveBMP_RW(surface, rwops, 1);
 		}
 
@@ -5880,7 +5990,7 @@ namespace SDL2
 		);
 		public static int SDL_GameControllerAddMappingsFromFile(string file)
 		{
-			IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "rb");
+			IntPtr rwops = SDL_RWFromFile(file, "rb");
 			return INTERNAL_SDL_GameControllerAddMappingsFromRW(rwops, 1);
 		}
 
@@ -6741,7 +6851,7 @@ namespace SDL2
 			out uint audio_len
 		) {
 			SDL_AudioSpec result;
-			IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "rb");
+			IntPtr rwops = SDL_RWFromFile(file, "rb");
 			IntPtr result_ptr = INTERNAL_SDL_LoadWAV_RW(
 				rwops,
 				1,
