@@ -148,14 +148,14 @@ namespace SDL2
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate long SDLRWopsSizeCallback(IntPtr context);
-		
+
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate long SDLRWopsSeekCallback(
 			IntPtr context,
 			long offset,
 			int whence
 		);
-		
+
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate IntPtr SDLRWopsReadCallback(
 			IntPtr context,
@@ -163,7 +163,7 @@ namespace SDL2
 			IntPtr size,
 			IntPtr maxnum
 		);
-		
+
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate IntPtr SDLRWopsWriteCallback(
 			IntPtr context,
@@ -171,12 +171,12 @@ namespace SDL2
 			IntPtr size,
 			IntPtr num
 		);
-		
+
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public delegate int SDLRWopsCloseCallback(
 			IntPtr context
 		);
-		
+
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_RWops
 		{
@@ -210,7 +210,7 @@ namespace SDL2
 				UTF8_ToNative(mode)
 			);
 		}
-		
+
 		/* IntPtr refers to an SDL_RWops* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_AllocRW();
@@ -226,7 +226,7 @@ namespace SDL2
 		/* mem refers to a void*, IntPtr to an SDL_RWops* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RWFromMem(IntPtr mem, int size);
-		
+
 		/* mem refers to a const void*, IntPtr to an SDL_RWops* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RWFromConstMem(IntPtr mem, int size);
@@ -345,7 +345,7 @@ namespace SDL2
 			SDL_main_func mainFunction,
 			IntPtr reserved
 		);
-		
+
 		/* Use this function with iOS to call your C# Main() function!
 		 * Only available in SDL 2.0.10 or higher.
 		 */
@@ -523,7 +523,7 @@ namespace SDL2
 			"SDL_WINDOWS_INTRESOURCE_ICON";
 		public const string SDL_HINT_WINDOWS_INTRESOURCE_ICON_SMALL =
 			"SDL_WINDOWS_INTRESOURCE_ICON_SMALL";
-		
+
 		/* Only available in 2.0.8 or higher */
 		public const string SDL_HINT_IOS_HIDE_HOME_INDICATOR =
 			"SDL_IOS_HIDE_HOME_INDICATOR";
@@ -551,7 +551,7 @@ namespace SDL2
 			"SDL_ENABLE_STEAM_CONTROLLERS";
 		public const string SDL_HINT_ANDROID_TRAP_BACK_BUTTON =
 			"SDL_ANDROID_TRAP_BACK_BUTTON";
-		
+
 		/* Only available in 2.0.10 or higher */
 		public const string SDL_HINT_MOUSE_TOUCH_EVENTS =
 			"SDL_MOUSE_TOUCH_EVENTS";
@@ -2468,11 +2468,11 @@ namespace SDL2
 			[In] SDL_Rect[] rects,
 			int count
 		);
-		
+
 		#region Floating Point Render Functions
-			
+
 		/* This region only available in SDL 2.0.10 or higher. */
-			
+
 		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderCopyF(
@@ -2520,7 +2520,7 @@ namespace SDL2
 			IntPtr srcrect,
 			IntPtr dstrect
 		);
-		
+
 		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderCopyEx(
@@ -2648,7 +2648,7 @@ namespace SDL2
 			IntPtr center,
 			SDL_RendererFlip flip
 		);
-		
+
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawPointF(
@@ -2656,7 +2656,7 @@ namespace SDL2
 			float x,
 			float y
 		);
-		
+
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawPointsF(
@@ -2664,7 +2664,7 @@ namespace SDL2
 			[In] SDL_FPoint[] points,
 			int count
 		);
-		
+
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawLineF(
@@ -2730,7 +2730,7 @@ namespace SDL2
 			[In] SDL_FRect[] rects,
 			int count
 		);
-		
+
 		#endregion
 
 		/* renderer refers to an SDL_Renderer* */
@@ -2916,14 +2916,14 @@ namespace SDL2
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetRenderTarget(IntPtr renderer);
-		
+
 		/* renderer refers to an SDL_Renderer* */
 		/* Available in 2.0.8 or higher */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RenderGetMetalLayer(
 			IntPtr renderer
 		);
-		
+
 		/* renderer refers to an SDL_Renderer* */
 		/* Available in 2.0.8 or higher */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3499,7 +3499,7 @@ namespace SDL2
 			public int w;
 			public int h;
 		}
-		
+
 		/* Only available in 2.0.10 or higher. */
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_FPoint
@@ -5583,7 +5583,7 @@ namespace SDL2
 			public float y;
 			public float pressure;
 		}
-		
+
 		/* Only available in SDL 2.0.10 or higher. */
 		public enum SDL_TouchDeviceType
 		{
@@ -7357,53 +7357,53 @@ namespace SDL2
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetCPUCount();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetCPUCacheLineSize();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasRDTSC();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasAltiVec();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasMMX();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_Has3DNow();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasSSE();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasSSE2();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasSSE3();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasSSE41();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasSSE42();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasAVX();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasAVX2();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasAVX512F();
-		
+
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_HasNEON();
 
 		/* Only available in 2.0.1 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetSystemRAM();
-		
+
 		/* Only available in SDL 2.0.10 or higher. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_SIMDGetAlignment();
