@@ -157,7 +157,7 @@ namespace SDL2
 		);
 		
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-		public delegate uint SDLRWopsReadCallback(
+		public delegate IntPtr SDLRWopsReadCallback(
 			IntPtr context,
 			IntPtr ptr,
 			IntPtr size,
@@ -165,7 +165,7 @@ namespace SDL2
 		);
 		
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-		public delegate uint SDLRWopsWriteCallback(
+		public delegate IntPtr SDLRWopsWriteCallback(
 			IntPtr context,
 			IntPtr ptr,
 			IntPtr size,
