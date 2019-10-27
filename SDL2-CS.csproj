@@ -82,9 +82,7 @@
     <Compile Include="src\SDL2_ttf.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SDL2-CS.dll.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
