@@ -5975,6 +5975,16 @@ namespace SDL2
 			SDL_CONTROLLER_BUTTON_MAX,
 		}
 
+		public enum SDL_GameControllerType
+		{
+			SDL_CONTROLLER_TYPE_UNKNOWN = 0,
+			SDL_CONTROLLER_TYPE_XBOX360,
+			SDL_CONTROLLER_TYPE_XBOXONE,
+			SDL_CONTROLLER_TYPE_PS3,
+			SDL_CONTROLLER_TYPE_PS4,
+			SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO
+		}
+
 		// FIXME: I'd rather this somehow be private...
 		[StructLayout(LayoutKind.Sequential)]
 		public struct INTERNAL_GameControllerButtonBind_hat
@@ -6297,6 +6307,20 @@ namespace SDL2
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GameControllerFromInstanceID(int joyid);
+
+		/* This function is only available in 2.0.11 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_GameControllerType SDL_GameControllerTypeForIndex(
+			int joystick_index
+		);
+
+		/* IntPtr refers to an SDL_GameController*.
+		 * This function is only available in 2.0.11 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_GameControllerType SDL_GameControllerGetType(
+			IntPtr gamecontroller
+		);
 
 		#endregion
 
@@ -7482,6 +7506,10 @@ namespace SDL2
 		/* Only available in SDL 2.0.10 or higher. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SIMDFree(IntPtr ptr);
+
+		/* Only available in SDL 2.0.11 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_HasARMSIMD();
 
 		#endregion
 	}
