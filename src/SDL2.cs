@@ -4023,7 +4023,7 @@ namespace SDL2
 		private static extern IntPtr INTERNAL_SDL_GetClipboardText();
 		public static string SDL_GetClipboardText()
 		{
-			return UTF8_ToManaged(INTERNAL_SDL_GetClipboardText());
+			return UTF8_ToManaged(INTERNAL_SDL_GetClipboardText(), true);
 		}
 
 		[DllImport(nativeLibName, EntryPoint = "SDL_SetClipboardText", CallingConvention = CallingConvention.Cdecl)]
