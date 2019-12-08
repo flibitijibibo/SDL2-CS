@@ -4989,6 +4989,10 @@ namespace SDL2
 			SDL_SCANCODE_APP1 = 283,
 			SDL_SCANCODE_APP2 = 284,
 
+			/* These come from the USB consumer page (0x0C) */
+			SDL_SCANCODE_AUDIOREWIND = 285,
+			SDL_SCANCODE_AUDIOFASTFORWARD = 286,
+
 			/* This is not a key, simply marks the number of scancodes
 			 * so that you know how big to make your arrays. */
 			SDL_NUM_SCANCODES = 512
@@ -5272,7 +5276,12 @@ namespace SDL2
 			SDLK_KBDILLUMDOWN = (int)SDL_Scancode.SDL_SCANCODE_KBDILLUMDOWN | SDLK_SCANCODE_MASK,
 			SDLK_KBDILLUMUP = (int)SDL_Scancode.SDL_SCANCODE_KBDILLUMUP | SDLK_SCANCODE_MASK,
 			SDLK_EJECT = (int)SDL_Scancode.SDL_SCANCODE_EJECT | SDLK_SCANCODE_MASK,
-			SDLK_SLEEP = (int)SDL_Scancode.SDL_SCANCODE_SLEEP | SDLK_SCANCODE_MASK
+			SDLK_SLEEP = (int)SDL_Scancode.SDL_SCANCODE_SLEEP | SDLK_SCANCODE_MASK,
+			SDLK_APP1 = (int)SDL_Scancode.SDL_SCANCODE_APP1 | SDLK_SCANCODE_MASK,
+			SDLK_APP2 = (int)SDL_Scancode.SDL_SCANCODE_APP2 | SDLK_SCANCODE_MASK,
+
+			SDLK_AUDIOREWIND = (int)SDL_Scancode.SDL_SCANCODE_AUDIOREWIND | SDLK_SCANCODE_MASK,
+			SDLK_AUDIOFASTFORWARD = (int)SDL_Scancode.SDL_SCANCODE_AUDIOFASTFORWARD | SDLK_SCANCODE_MASK
 		}
 
 		/* Key modifiers (bitfield) */
@@ -7195,7 +7204,9 @@ namespace SDL2
 			SDL_SYSWM_WAYLAND,
 			SDL_SYSWM_MIR,
 			SDL_SYSWM_WINRT,
-			SDL_SYSWM_ANDROID
+			SDL_SYSWM_ANDROID,
+			SDL_SYSWM_VIVANTE,
+			SDL_SYSWM_OS2
 		}
 
 		// FIXME: I wish these weren't public...
@@ -7264,6 +7275,13 @@ namespace SDL2
 			public IntPtr surface; // Refers to an EGLSurface
 		}
 
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_vivante_wminfo
+		{
+			public IntPtr display; // Refers to an EGLNativeDisplayType
+			public IntPtr window; // Refers to an EGLNativeWindowType
+		}
+
 		[StructLayout(LayoutKind.Explicit)]
 		public struct INTERNAL_SysWMDriverUnion
 		{
@@ -7285,6 +7303,8 @@ namespace SDL2
 			public INTERNAL_mir_wminfo mir;
 			[FieldOffset(0)]
 			public INTERNAL_android_wminfo android;
+			[FieldOffset(0)]
+			public INTERNAL_vivante_wminfo vivante;
 			// private int dummy;
 		}
 
