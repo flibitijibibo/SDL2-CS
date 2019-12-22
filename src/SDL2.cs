@@ -5981,7 +5981,7 @@ namespace SDL2
 		 * This function is only available in 2.0.4 or higher.
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_JoystickFromInstanceID(int joyid);
+		public static extern IntPtr SDL_JoystickFromInstanceID(int instance_id);
 
 		/* Only available in 2.0.7 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5990,6 +5990,21 @@ namespace SDL2
 		/* Only available in 2.0.7 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_UnlockJoysticks();
+
+		/* IntPtr refers to an SDL_Joystick*.
+		 * Only available in 2.0.11 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_JoystickFromPlayerIndex(int player_index);
+
+		/* IntPtr refers to an SDL_Joystick*.
+		 * Only available in 2.0.11 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_JoystickSetPlayerIndex(
+			IntPtr joystick,
+			int player_index
+		);
 
 		#endregion
 
@@ -6381,6 +6396,23 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_GameControllerType SDL_GameControllerGetType(
 			IntPtr gamecontroller
+		);
+
+		/* IntPtr refers to an SDL_GameController*.
+		 * This function is only available in 2.0.11 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GameControllerFromPlayerIndex(
+			int player_index
+		);
+
+		/* IntPtr refers to an SDL_GameController*.
+		 * This function is only available in 2.0.11 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_GameControllerSetPlayerIndex(
+			IntPtr gamecontroller,
+			int player_index
 		);
 
 		#endregion
