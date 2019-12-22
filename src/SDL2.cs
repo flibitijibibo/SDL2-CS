@@ -2115,6 +2115,14 @@ namespace SDL2
 			public int max_texture_height;
 		}
 
+		/* Only available in 2.0.11 or higher. */
+		public enum SDL_ScaleMode
+		{
+			SDL_ScaleModeNearest,
+			SDL_ScaleModeLinear,
+			SDL_ScaleModeBest
+		}
+
 		/* IntPtr refers to an SDL_Renderer*, window to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_CreateRenderer(
@@ -2163,6 +2171,24 @@ namespace SDL2
 		public static extern int SDL_GetRenderDrawBlendMode(
 			IntPtr renderer,
 			out SDL_BlendMode blendMode
+		);
+
+		/* texture refers to an SDL_Texture*
+		 * Only available in 2.0.11 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetTextureScaleMode(
+			IntPtr texture,
+			SDL_ScaleMode scaleMode
+		);
+
+		/* texture refers to an SDL_Texture*
+		 * Only available in 2.0.11 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetTextureScaleMode(
+			IntPtr texture,
+			out SDL_ScaleMode scaleMode
 		);
 
 		/* renderer refers to an SDL_Renderer* */
