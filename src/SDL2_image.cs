@@ -50,7 +50,7 @@ namespace SDL2
 		 */
 		public const int SDL_IMAGE_MAJOR_VERSION =	2;
 		public const int SDL_IMAGE_MINOR_VERSION =	0;
-		public const int SDL_IMAGE_PATCHLEVEL =		2;
+		public const int SDL_IMAGE_PATCHLEVEL =		6;
 
 		[Flags]
 		public enum IMG_InitFlags
@@ -234,6 +234,54 @@ namespace SDL2
 			int freedst,
 			int quality
 		);
+
+		#region Animated Image Support
+
+		/* This region is only available in 2.0.6 or higher. */
+
+		public struct IMG_Animation
+		{
+			public int w;
+			public int h;
+			public IntPtr frames; /* SDL_Surface** */
+			public IntPtr delays; /* int* */
+		}
+
+		/* IntPtr refers to an IMG_Animation* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadAnimation(
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
+				string file
+		);
+
+		/* IntPtr refers to an IMG_Animation*, src to an SDL_RWops* */
+		/* THIS IS A PUBLIC RWops FUNCTION! */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadAnimation_RW(
+			IntPtr src,
+			int freesrc
+		);
+
+		/* IntPtr refers to an IMG_Animation*, src to an SDL_RWops* */
+		/* THIS IS A PUBLIC RWops FUNCTION! */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadAnimationTyped_RW(
+			IntPtr src,
+			int freesrc,
+			[In()] [MarshalAs(UnmanagedType.LPStr)]
+				string type
+		);
+
+		/* anim refers to an IMG_Animation* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void IMG_FreeAnimation(IntPtr anim);
+
+		/* IntPtr refers to an IMG_Animation*, src to an SDL_RWops* */
+		/* THIS IS A PUBLIC RWops FUNCTION! */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr IMG_LoadGIFAnimation_RW(IntPtr src);
+
+		#endregion
 
 		#endregion
 	}
