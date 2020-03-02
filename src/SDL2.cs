@@ -590,6 +590,14 @@ namespace SDL2
 			"SDL_GAMECONTROLLER_USE_BUTTON_LABELS";
 		public const string SDL_HINT_VIDEO_EXTERNAL_CONTEXT =
 			"SDL_VIDEO_EXTERNAL_CONTEXT";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_GAMECUBE =
+			"SDL_JOYSTICK_HIDAPI_GAMECUBE";
+		public const string SDL_HINT_DISPLAY_USABLE_BOUNDS =
+			"SDL_DISPLAY_USABLE_BOUNDS";
+		public const string SDL_HINT_VIDEO_X11_FORCE_EGL =
+			"SDL_VIDEO_X11_FORCE_EGL";
+		public const string SDL_HINT_GAMECONTROLLERTYPE =
+			"SDL_GAMECONTROLLERTYPE";
 
 		public enum SDL_HintPriority
 		{
@@ -7402,6 +7410,9 @@ namespace SDL2
 				INTERNAL_SDL_AndroidGetExternalStoragePath()
 			);
 		}
+
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetAndroidSDKVersion();
 
 		/* WinRT */
 
