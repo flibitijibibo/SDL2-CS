@@ -7223,6 +7223,7 @@ namespace SDL2
 		{
 			public IntPtr window; // Refers to an HWND
 			public IntPtr hdc; // Refers to an HDC
+			public IntPtr hinstance; // Refers to an HINSTANCE
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
