@@ -123,7 +123,7 @@ namespace SDL2
 			int freesrc,
 			string type
 		) {
-			int utf8TypeBufSize = SDL.Utf8Size(type);
+			int utf8TypeBufSize = SDL.Utf8SizeNullable(type);
 			byte* utf8Type = stackalloc byte[utf8TypeBufSize];
 			return INTERNAL_IMG_LoadTyped_RW(
 				src,
