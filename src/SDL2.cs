@@ -667,7 +667,7 @@ namespace SDL2
 		private static extern unsafe IntPtr INTERNAL_SDL_GetHint(byte* name);
 		public static unsafe string SDL_GetHint(string name)
 		{
-			int utf8NameBufSize = Utf8SizeNullable(name);
+			int utf8NameBufSize = Utf8Size(name);
 			byte* utf8Name = stackalloc byte[utf8NameBufSize];
 			return UTF8_ToManaged(
 				INTERNAL_SDL_GetHint(
@@ -683,10 +683,10 @@ namespace SDL2
 		);
 		public static unsafe SDL_bool SDL_SetHint(string name, string value)
 		{
-			int utf8NameBufSize = Utf8SizeNullable(name);
+			int utf8NameBufSize = Utf8Size(name);
 			byte* utf8Name = stackalloc byte[utf8NameBufSize];
 
-			int utf8ValueBufSize = Utf8SizeNullable(value);
+			int utf8ValueBufSize = Utf8Size(value);
 			byte* utf8Value = stackalloc byte[utf8ValueBufSize];
 
 			return INTERNAL_SDL_SetHint(
@@ -706,10 +706,10 @@ namespace SDL2
 			string value,
 			SDL_HintPriority priority
 		) {
-			int utf8NameBufSize = Utf8SizeNullable(name);
+			int utf8NameBufSize = Utf8Size(name);
 			byte* utf8Name = stackalloc byte[utf8NameBufSize];
 
-			int utf8ValueBufSize = Utf8SizeNullable(value);
+			int utf8ValueBufSize = Utf8Size(value);
 			byte* utf8Value = stackalloc byte[utf8ValueBufSize];
 
 			return INTERNAL_SDL_SetHintWithPriority(
@@ -729,7 +729,7 @@ namespace SDL2
 			string name,
 			SDL_bool default_value
 		) {
-			int utf8NameBufSize = Utf8SizeNullable(name);
+			int utf8NameBufSize = Utf8Size(name);
 			byte* utf8Name = stackalloc byte[utf8NameBufSize];
 			return INTERNAL_SDL_GetHintBoolean(
 				Utf8Encode(name, utf8Name, utf8NameBufSize),
@@ -756,7 +756,7 @@ namespace SDL2
 		private static extern unsafe void INTERNAL_SDL_SetError(byte* fmtAndArglist);
 		public static unsafe void SDL_SetError(string fmtAndArglist)
 		{
-			int utf8FmtAndArglistBufSize = Utf8SizeNullable(fmtAndArglist);
+			int utf8FmtAndArglistBufSize = Utf8Size(fmtAndArglist);
 			byte* utf8FmtAndArglist = stackalloc byte[utf8FmtAndArglistBufSize];
 			INTERNAL_SDL_SetError(
 				Utf8Encode(fmtAndArglist, utf8FmtAndArglist, utf8FmtAndArglistBufSize)
@@ -827,7 +827,7 @@ namespace SDL2
 		private static extern unsafe void INTERNAL_SDL_Log(byte* fmtAndArglist);
 		public static unsafe void SDL_Log(string fmtAndArglist)
 		{
-			int utf8FmtAndArglistBufSize = Utf8SizeNullable(fmtAndArglist);
+			int utf8FmtAndArglistBufSize = Utf8Size(fmtAndArglist);
 			byte* utf8FmtAndArglist = stackalloc byte[utf8FmtAndArglistBufSize];
 			INTERNAL_SDL_Log(
 				Utf8Encode(fmtAndArglist, utf8FmtAndArglist, utf8FmtAndArglistBufSize)
@@ -844,7 +844,7 @@ namespace SDL2
 			int category,
 			string fmtAndArglist
 		) {
-			int utf8FmtAndArglistBufSize = Utf8SizeNullable(fmtAndArglist);
+			int utf8FmtAndArglistBufSize = Utf8Size(fmtAndArglist);
 			byte* utf8FmtAndArglist = stackalloc byte[utf8FmtAndArglistBufSize];
 			INTERNAL_SDL_LogVerbose(
 				category,
@@ -862,7 +862,7 @@ namespace SDL2
 			int category,
 			string fmtAndArglist
 		) {
-			int utf8FmtAndArglistBufSize = Utf8SizeNullable(fmtAndArglist);
+			int utf8FmtAndArglistBufSize = Utf8Size(fmtAndArglist);
 			byte* utf8FmtAndArglist = stackalloc byte[utf8FmtAndArglistBufSize];
 			INTERNAL_SDL_LogDebug(
 				category,
@@ -880,7 +880,7 @@ namespace SDL2
 			int category,
 			string fmtAndArglist
 		) {
-			int utf8FmtAndArglistBufSize = Utf8SizeNullable(fmtAndArglist);
+			int utf8FmtAndArglistBufSize = Utf8Size(fmtAndArglist);
 			byte* utf8FmtAndArglist = stackalloc byte[utf8FmtAndArglistBufSize];
 			INTERNAL_SDL_LogInfo(
 				category,
@@ -898,7 +898,7 @@ namespace SDL2
 			int category,
 			string fmtAndArglist
 		) {
-			int utf8FmtAndArglistBufSize = Utf8SizeNullable(fmtAndArglist);
+			int utf8FmtAndArglistBufSize = Utf8Size(fmtAndArglist);
 			byte* utf8FmtAndArglist = stackalloc byte[utf8FmtAndArglistBufSize];
 			INTERNAL_SDL_LogWarn(
 				category,
@@ -916,7 +916,7 @@ namespace SDL2
 			int category,
 			string fmtAndArglist
 		) {
-			int utf8FmtAndArglistBufSize = Utf8SizeNullable(fmtAndArglist);
+			int utf8FmtAndArglistBufSize = Utf8Size(fmtAndArglist);
 			byte* utf8FmtAndArglist = stackalloc byte[utf8FmtAndArglistBufSize];
 			INTERNAL_SDL_LogError(
 				category,
@@ -934,7 +934,7 @@ namespace SDL2
 			int category,
 			string fmtAndArglist
 		) {
-			int utf8FmtAndArglistBufSize = Utf8SizeNullable(fmtAndArglist);
+			int utf8FmtAndArglistBufSize = Utf8Size(fmtAndArglist);
 			byte* utf8FmtAndArglist = stackalloc byte[utf8FmtAndArglistBufSize];
 			INTERNAL_SDL_LogCritical(
 				category,
@@ -954,7 +954,7 @@ namespace SDL2
 			SDL_LogPriority priority,
 			string fmtAndArglist
 		) {
-			int utf8FmtAndArglistBufSize = Utf8SizeNullable(fmtAndArglist);
+			int utf8FmtAndArglistBufSize = Utf8Size(fmtAndArglist);
 			byte* utf8FmtAndArglist = stackalloc byte[utf8FmtAndArglistBufSize];
 			INTERNAL_SDL_LogMessage(
 				category,
@@ -975,7 +975,7 @@ namespace SDL2
 			SDL_LogPriority priority,
 			string fmtAndArglist
 		) {
-			int utf8FmtAndArglistBufSize = Utf8SizeNullable(fmtAndArglist);
+			int utf8FmtAndArglistBufSize = Utf8Size(fmtAndArglist);
 			byte* utf8FmtAndArglist = stackalloc byte[utf8FmtAndArglistBufSize];
 			INTERNAL_SDL_LogMessageV(
 				category,
@@ -1627,7 +1627,7 @@ namespace SDL2
 			IntPtr window,
 			string name
 		) {
-			int utf8NameBufSize = Utf8SizeNullable(name);
+			int utf8NameBufSize = Utf8Size(name);
 			byte* utf8Name = stackalloc byte[utf8NameBufSize];
 			return INTERNAL_SDL_GetWindowData(
 				window,
@@ -1753,7 +1753,7 @@ namespace SDL2
 		);
 		public static unsafe IntPtr SDL_GL_GetProcAddress(string proc)
 		{
-			int utf8ProcBufSize = Utf8SizeNullable(proc);
+			int utf8ProcBufSize = Utf8Size(proc);
 			byte* utf8Proc = stackalloc byte[utf8ProcBufSize];
 			return INTERNAL_SDL_GL_GetProcAddress(
 				Utf8Encode(proc, utf8Proc, utf8ProcBufSize)
@@ -1896,7 +1896,7 @@ namespace SDL2
 			string name,
 			IntPtr userdata
 		) {
-			int utf8NameBufSize = Utf8SizeNullable(name);
+			int utf8NameBufSize = Utf8Size(name);
 			byte* utf8Name = stackalloc byte[utf8NameBufSize];
 			return INTERNAL_SDL_SetWindowData(
 				window,
@@ -2013,7 +2013,7 @@ namespace SDL2
 			IntPtr window,
 			string title
 		) {
-			int utf8TitleBufSize = Utf8SizeNullable(title);
+			int utf8TitleBufSize = Utf8Size(title);
 			byte* utf8Title = stackalloc byte[utf8TitleBufSize];
 			INTERNAL_SDL_SetWindowTitle(
 				window,
@@ -2043,7 +2043,7 @@ namespace SDL2
 		);
 		public static unsafe int SDL_VideoInit(string driver_name)
 		{
-			int utf8DriverNameBufSize = Utf8SizeNullable(driver_name);
+			int utf8DriverNameBufSize = Utf8Size(driver_name);
 			byte* utf8DriverName = stackalloc byte[utf8DriverNameBufSize];
 			return INTERNAL_SDL_VideoInit(
 				Utf8Encode(driver_name, utf8DriverName, utf8DriverNameBufSize)
@@ -5653,7 +5653,7 @@ namespace SDL2
 		);
 		public static unsafe SDL_Scancode SDL_GetScancodeFromName(string name)
 		{
-			int utf8NameBufSize = Utf8SizeNullable(name);
+			int utf8NameBufSize = Utf8Size(name);
 			byte* utf8Name = stackalloc byte[utf8NameBufSize];
 			return INTERNAL_SDL_GetScancodeFromName(
 				Utf8Encode(name, utf8Name, utf8NameBufSize)
@@ -5675,7 +5675,7 @@ namespace SDL2
 		);
 		public static unsafe SDL_Keycode SDL_GetKeyFromName(string name)
 		{
-			int utf8NameBufSize = Utf8SizeNullable(name);
+			int utf8NameBufSize = Utf8Size(name);
 			byte* utf8Name = stackalloc byte[utf8NameBufSize];
 			return INTERNAL_SDL_GetKeyFromName(
 				Utf8Encode(name, utf8Name, utf8NameBufSize)
@@ -6105,7 +6105,7 @@ namespace SDL2
 		);
 		public static unsafe Guid SDL_JoystickGetGUIDFromString(string pchGuid)
 		{
-			int utf8PchGuidBufSize = Utf8SizeNullable(pchGuid);
+			int utf8PchGuidBufSize = Utf8Size(pchGuid);
 			byte* utf8PchGuid = stackalloc byte[utf8PchGuidBufSize];
 			return INTERNAL_SDL_JoystickGetGUIDFromString(
 				Utf8Encode(pchGuid, utf8PchGuid, utf8PchGuidBufSize)
@@ -6460,7 +6460,7 @@ namespace SDL2
 		public static unsafe SDL_GameControllerAxis SDL_GameControllerGetAxisFromString(
 			string pchString
 		) {
-			int utf8PchStringBufSize = Utf8SizeNullable(pchString);
+			int utf8PchStringBufSize = Utf8Size(pchString);
 			byte* utf8PchString = stackalloc byte[utf8PchStringBufSize];
 			return INTERNAL_SDL_GameControllerGetAxisFromString(
 				Utf8Encode(pchString, utf8PchString, utf8PchStringBufSize)
@@ -6517,7 +6517,7 @@ namespace SDL2
 		public static unsafe SDL_GameControllerButton SDL_GameControllerGetButtonFromString(
 			string pchString
 		) {
-			int utf8PchStringBufSize = Utf8SizeNullable(pchString);
+			int utf8PchStringBufSize = Utf8Size(pchString);
 			byte* utf8PchString = stackalloc byte[utf8PchStringBufSize];
 			return INTERNAL_SDL_GameControllerGetButtonFromString(
 				Utf8Encode(pchString, utf8PchString, utf8PchStringBufSize)
@@ -7149,7 +7149,7 @@ namespace SDL2
 		);
 		public static unsafe int SDL_AudioInit(string driver_name)
 		{
-			int utf8DriverNameBufSize = Utf8SizeNullable(driver_name);
+			int utf8DriverNameBufSize = Utf8Size(driver_name);
 			byte* utf8DriverName = stackalloc byte[utf8DriverNameBufSize];
 			return INTERNAL_SDL_AudioInit(
 				Utf8Encode(driver_name, utf8DriverName, utf8DriverNameBufSize)
@@ -7304,7 +7304,7 @@ namespace SDL2
 			out SDL_AudioSpec obtained,
 			int allowed_changes
 		) {
-			int utf8DeviceBufSize = Utf8SizeNullable(device);
+			int utf8DeviceBufSize = Utf8Size(device);
 			byte* utf8Device = stackalloc byte[utf8DeviceBufSize];
 			return INTERNAL_SDL_OpenAudioDevice(
 				Utf8Encode(device, utf8Device, utf8DeviceBufSize),
