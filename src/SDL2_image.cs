@@ -89,12 +89,17 @@ namespace SDL2
 
 		/* IntPtr refers to an SDL_Surface* */
 		[DllImport(nativeLibName, EntryPoint = "IMG_Load", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_IMG_Load(
-			byte[] file
+		private static extern unsafe IntPtr INTERNAL_IMG_Load(
+			byte* file
 		);
-		public static IntPtr IMG_Load(string file)
+		public static unsafe IntPtr IMG_Load(string file)
 		{
-			return INTERNAL_IMG_Load(SDL.UTF8_ToNative(file));
+			byte* utf8File = SDL.Utf8Encode(file);
+			IntPtr handle = INTERNAL_IMG_Load(
+				utf8File
+			);
+			Marshal.FreeHGlobal((IntPtr)utf8File);
+			return handle;
 		}
 
 		/* src refers to an SDL_RWops*, IntPtr to an SDL_Surface* */
@@ -108,37 +113,42 @@ namespace SDL2
 		/* src refers to an SDL_RWops*, IntPtr to an SDL_Surface* */
 		/* THIS IS A PUBLIC RWops FUNCTION! */
 		[DllImport(nativeLibName, EntryPoint = "IMG_LoadTyped_RW", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_IMG_LoadTyped_RW(
+		private static extern unsafe IntPtr INTERNAL_IMG_LoadTyped_RW(
 			IntPtr src,
 			int freesrc,
-			byte[] type
+			byte* type
 		);
-		public static IntPtr IMG_LoadTyped_RW(
+		public static unsafe IntPtr IMG_LoadTyped_RW(
 			IntPtr src,
 			int freesrc,
 			string type
 		) {
+			int utf8TypeBufSize = SDL.Utf8Size(type);
+			byte* utf8Type = stackalloc byte[utf8TypeBufSize];
 			return INTERNAL_IMG_LoadTyped_RW(
 				src,
 				freesrc,
-				SDL.UTF8_ToNative(type)
+				SDL.Utf8Encode(type, utf8Type, utf8TypeBufSize)
 			);
 		}
 
 		/* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
 		[DllImport(nativeLibName, EntryPoint = "IMG_LoadTexture", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_IMG_LoadTexture(
+		private static extern unsafe IntPtr INTERNAL_IMG_LoadTexture(
 			IntPtr renderer,
-			byte[] file
+			byte* file
 		);
-		public static IntPtr IMG_LoadTexture(
+		public static unsafe IntPtr IMG_LoadTexture(
 			IntPtr renderer,
 			string file
 		) {
-			return INTERNAL_IMG_LoadTexture(
+			byte* utf8File = SDL.Utf8Encode(file);
+			IntPtr handle = INTERNAL_IMG_LoadTexture(
 				renderer,
-				SDL.UTF8_ToNative(file)
+				utf8File
 			);
+			Marshal.FreeHGlobal((IntPtr)utf8File);
+			return handle;
 		}
 
 		/* renderer refers to an SDL_Renderer*.
@@ -159,24 +169,27 @@ namespace SDL2
 		 */
 		/* THIS IS A PUBLIC RWops FUNCTION! */
 		[DllImport(nativeLibName, EntryPoint = "IMG_LoadTextureTyped_RW", CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_IMG_LoadTextureTyped_RW(
+		private static extern unsafe IntPtr INTERNAL_IMG_LoadTextureTyped_RW(
 			IntPtr renderer,
 			IntPtr src,
 			int freesrc,
-			byte[] type
+			byte* type
 		);
-		public static IntPtr IMG_LoadTextureTyped_RW(
+		public static unsafe IntPtr IMG_LoadTextureTyped_RW(
 			IntPtr renderer,
 			IntPtr src,
 			int freesrc,
 			string type
 		) {
-			return INTERNAL_IMG_LoadTextureTyped_RW(
+			byte* utf8Type = SDL.Utf8Encode(type);
+			IntPtr handle = INTERNAL_IMG_LoadTextureTyped_RW(
 				renderer,
 				src,
 				freesrc,
-				SDL.UTF8_ToNative(type)
+				utf8Type
 			);
+			Marshal.FreeHGlobal((IntPtr)utf8Type);
+			return handle;
 		}
 
 		/* IntPtr refers to an SDL_Surface* */
@@ -188,16 +201,19 @@ namespace SDL2
 
 		/* surface refers to an SDL_Surface* */
 		[DllImport(nativeLibName, EntryPoint = "IMG_SavePNG", CallingConvention = CallingConvention.Cdecl)]
-		private static extern int INTERNAL_IMG_SavePNG(
+		private static extern unsafe int INTERNAL_IMG_SavePNG(
 			IntPtr surface,
-			byte[] file
+			byte* file
 		);
-		public static int IMG_SavePNG(IntPtr surface, string file)
+		public static unsafe int IMG_SavePNG(IntPtr surface, string file)
 		{
-			return INTERNAL_IMG_SavePNG(
+			byte* utf8File = SDL.Utf8Encode(file);
+			int result = INTERNAL_IMG_SavePNG(
 				surface,
-				SDL.UTF8_ToNative(file)
+				utf8File
 			);
+			Marshal.FreeHGlobal((IntPtr)utf8File);
+			return result;
 		}
 
 		/* surface refers to an SDL_Surface*, dst to an SDL_RWops* */
@@ -211,18 +227,21 @@ namespace SDL2
 
 		/* surface refers to an SDL_Surface* */
 		[DllImport(nativeLibName, EntryPoint = "IMG_SaveJPG", CallingConvention = CallingConvention.Cdecl)]
-		private static extern int INTERNAL_IMG_SaveJPG(
+		private static extern unsafe int INTERNAL_IMG_SaveJPG(
 			IntPtr surface,
-			byte[] file,
+			byte* file,
 			int quality
 		);
-		public static int IMG_SaveJPG(IntPtr surface, string file, int quality)
+		public static unsafe int IMG_SaveJPG(IntPtr surface, string file, int quality)
 		{
-			return INTERNAL_IMG_SaveJPG(
+			byte* utf8File = SDL.Utf8Encode(file);
+			int result = INTERNAL_IMG_SaveJPG(
 				surface,
-				SDL.UTF8_ToNative(file),
+				utf8File,
 				quality
 			);
+			Marshal.FreeHGlobal((IntPtr)utf8File);
+			return result;
 		}
 
 		/* surface refers to an SDL_Surface*, dst to an SDL_RWops* */
