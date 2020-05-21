@@ -85,7 +85,7 @@ namespace SDL2
 		{
 			Debug.Assert(str != null);
 			int bufferSize = Utf8Size(str);
-			byte* buffer = (byte*)Marshal.AllocHGlobal(bufferSize);
+			byte* buffer = (byte*) Marshal.AllocHGlobal(bufferSize);
 			fixed (char* strPtr = str)
 			{
 				Encoding.UTF8.GetBytes(strPtr, str.Length + 1, buffer, bufferSize);
@@ -95,16 +95,21 @@ namespace SDL2
 		internal static unsafe byte* Utf8EncodeNullable(string str)
 		{
 			int bufferSize = Utf8SizeNullable(str);
-			byte* buffer = (byte*)Marshal.AllocHGlobal(bufferSize);
+			byte* buffer = (byte*) Marshal.AllocHGlobal(bufferSize);
 			fixed (char* strPtr = str)
 			{
-				Encoding.UTF8.GetBytes(strPtr, str != null ? str.Length + 1 : 0, buffer, bufferSize);
+				Encoding.UTF8.GetBytes(
+					strPtr,
+					(str != null) ? (str.Length + 1) : 0,
+					buffer,
+					bufferSize
+				);
 			}
 			return buffer;
 		}
 
 		/* This is public because SDL_DropEvent needs it! */
-		internal static unsafe string UTF8_ToManaged(IntPtr s, bool freePtr = false)
+		public static unsafe string UTF8_ToManaged(IntPtr s, bool freePtr = false)
 		{
 			if (s == IntPtr.Zero)
 			{
@@ -268,8 +273,8 @@ namespace SDL2
 				utf8File,
 				utf8Mode
 			);
-			Marshal.FreeHGlobal((IntPtr)utf8Mode);
-			Marshal.FreeHGlobal((IntPtr)utf8File);
+			Marshal.FreeHGlobal((IntPtr) utf8Mode);
+			Marshal.FreeHGlobal((IntPtr) utf8File);
 			return rwOps;
 		}
 
@@ -1746,20 +1751,6 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_GL_DeleteContext(IntPtr context);
 
-		/* IntPtr refers to a function pointer */
-		[DllImport(nativeLibName, EntryPoint = "SDL_GL_GetProcAddress", CallingConvention = CallingConvention.Cdecl)]
-		private static extern unsafe IntPtr INTERNAL_SDL_GL_GetProcAddress(
-			byte* proc
-		);
-		public static unsafe IntPtr SDL_GL_GetProcAddress(string proc)
-		{
-			int utf8ProcBufSize = Utf8Size(proc);
-			byte* utf8Proc = stackalloc byte[utf8ProcBufSize];
-			return INTERNAL_SDL_GL_GetProcAddress(
-				Utf8Encode(proc, utf8Proc, utf8ProcBufSize)
-			);
-		}
-
 		[DllImport(nativeLibName, EntryPoint = "SDL_GL_LoadLibrary", CallingConvention = CallingConvention.Cdecl)]
 		private static extern unsafe int INTERNAL_SDL_GL_LoadLibrary(byte* path);
 		public static unsafe int SDL_GL_LoadLibrary(string path)
@@ -1768,13 +1759,23 @@ namespace SDL2
 			int result = INTERNAL_SDL_GL_LoadLibrary(
 				utf8Path
 			);
-			Marshal.FreeHGlobal((IntPtr)utf8Path);
+			Marshal.FreeHGlobal((IntPtr) utf8Path);
 			return result;
 		}
 
 		/* IntPtr refers to a function pointer, proc to a const char* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GL_GetProcAddress(IntPtr proc);
+
+		/* IntPtr refers to a function pointer */
+		public static unsafe IntPtr SDL_GL_GetProcAddress(string proc)
+		{
+			int utf8ProcBufSize = Utf8Size(proc);
+			byte* utf8Proc = stackalloc byte[utf8ProcBufSize];
+			return SDL_GL_GetProcAddress(
+				(IntPtr) Utf8Encode(proc, utf8Proc, utf8ProcBufSize)
+			);
+		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_GL_UnloadLibrary();
@@ -2133,7 +2134,7 @@ namespace SDL2
 			int result = INTERNAL_SDL_Vulkan_LoadLibrary(
 				utf8Path
 			);
-			Marshal.FreeHGlobal((IntPtr)utf8Path);
+			Marshal.FreeHGlobal((IntPtr) utf8Path);
 			return result;
 		}
 
@@ -4322,7 +4323,7 @@ namespace SDL2
 			int result = INTERNAL_SDL_SetClipboardText(
 				utf8Text
 			);
-			Marshal.FreeHGlobal((IntPtr)utf8Text);
+			Marshal.FreeHGlobal((IntPtr) utf8Text);
 			return result;
 		}
 
@@ -6306,7 +6307,7 @@ namespace SDL2
 			int result = INTERNAL_SDL_GameControllerAddMapping(
 				utf8MappingString
 			);
-			Marshal.FreeHGlobal((IntPtr)utf8MappingString);
+			Marshal.FreeHGlobal((IntPtr) utf8MappingString);
 			return result;
 		}
 

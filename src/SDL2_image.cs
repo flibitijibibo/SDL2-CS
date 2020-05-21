@@ -98,7 +98,7 @@ namespace SDL2
 			IntPtr handle = INTERNAL_IMG_Load(
 				utf8File
 			);
-			Marshal.FreeHGlobal((IntPtr)utf8File);
+			Marshal.FreeHGlobal((IntPtr) utf8File);
 			return handle;
 		}
 
@@ -147,7 +147,7 @@ namespace SDL2
 				renderer,
 				utf8File
 			);
-			Marshal.FreeHGlobal((IntPtr)utf8File);
+			Marshal.FreeHGlobal((IntPtr) utf8File);
 			return handle;
 		}
 
@@ -188,7 +188,7 @@ namespace SDL2
 				freesrc,
 				utf8Type
 			);
-			Marshal.FreeHGlobal((IntPtr)utf8Type);
+			Marshal.FreeHGlobal((IntPtr) utf8Type);
 			return handle;
 		}
 
@@ -212,7 +212,7 @@ namespace SDL2
 				surface,
 				utf8File
 			);
-			Marshal.FreeHGlobal((IntPtr)utf8File);
+			Marshal.FreeHGlobal((IntPtr) utf8File);
 			return result;
 		}
 
@@ -240,7 +240,7 @@ namespace SDL2
 				utf8File,
 				quality
 			);
-			Marshal.FreeHGlobal((IntPtr)utf8File);
+			Marshal.FreeHGlobal((IntPtr) utf8File);
 			return result;
 		}
 
