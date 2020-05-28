@@ -68,7 +68,10 @@ namespace SDL2
 		{
 			if (str == null)
 			{
-				buffer[0] = 0;
+				if (bufferSize > 0)
+				{
+					buffer[0] = 0;
+				}
 				return buffer;
 			}
 			fixed (char* strPtr = str)
@@ -94,7 +97,11 @@ namespace SDL2
 		}
 		internal static unsafe byte* Utf8EncodeNullable(string str)
 		{
-			int bufferSize = Utf8SizeNullable(str);
+			if (str == null)
+			{
+				return (byte*) 0;
+			}
+			int bufferSize = Utf8Size(str);
 			byte* buffer = (byte*) Marshal.AllocHGlobal(bufferSize);
 			fixed (char* strPtr = str)
 			{
