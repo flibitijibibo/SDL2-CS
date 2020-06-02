@@ -41,6 +41,16 @@ exception from being thrown by SDL, add this line before your SDL_Init call:
 
 SDL.SDL_SetHint(SDL.SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
 
+Net core examples
+-----------------
+
+```sh
+cd samples-core/SDL_RenderDrawLine
+dotnet run
+```
+
+to debug it start `code .` then hit F5
+
 Roadmap
 -------
 To see the current roadmap for SDL2#, visit the GitHub issues page:
