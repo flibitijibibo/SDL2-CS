@@ -4827,6 +4827,8 @@ namespace SDL2
 			[FieldOffset(0)]
 			public SDL_EventType type;
 			[FieldOffset(0)]
+			public SDL_EventType typeFSharp;
+			[FieldOffset(0)]
 			public SDL_DisplayEvent display;
 			[FieldOffset(0)]
 			public SDL_WindowEvent window;
