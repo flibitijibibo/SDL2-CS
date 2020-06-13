@@ -4822,7 +4822,7 @@ namespace SDL2
 		/* General event structure */
 		// C# doesn't do unions, so we do this ugly thing. */
 		[StructLayout(LayoutKind.Explicit)]
-		public struct SDL_Event
+		public unsafe struct SDL_Event
 		{
 			[FieldOffset(0)]
 			public SDL_EventType type;
@@ -4878,6 +4878,8 @@ namespace SDL2
 			public SDL_DollarGestureEvent dgesture;
 			[FieldOffset(0)]
 			public SDL_DropEvent drop;
+			[FieldOffset(0)]
+			private fixed byte padding[56];
 		}
 
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
