@@ -68,11 +68,7 @@ namespace SDL2
 		{
 			if (str == null)
 			{
-				if (bufferSize > 0)
-				{
-					buffer[0] = 0;
-				}
-				return buffer;
+				return (byte*) 0;
 			}
 			fixed (char* strPtr = str)
 			{
