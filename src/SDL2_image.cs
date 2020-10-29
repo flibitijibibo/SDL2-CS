@@ -254,6 +254,16 @@ namespace SDL2
 			int quality
 		);
 
+		public static string IMG_GetError()
+		{
+			return SDL.SDL_GetError();
+		}
+
+		public static void IMG_SetError(string fmtAndArglist)
+		{
+			SDL.SDL_SetError(fmtAndArglist);
+		}
+
 		#region Animated Image Support
 
 		/* This region is only available in 2.0.6 or higher. */
