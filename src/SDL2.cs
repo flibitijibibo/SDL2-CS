@@ -7223,36 +7223,30 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GetNumAudioDrivers();
 
-		/* audio_buf will refer to a malloc()'d byte buffer */
+		/* audio_buf refers to a malloc()'d buffer, IntPtr to an SDL_AudioSpec* */
 		/* THIS IS AN RWops FUNCTION! */
 		[DllImport(nativeLibName, EntryPoint = "SDL_LoadWAV_RW", CallingConvention = CallingConvention.Cdecl)]
 		private static extern IntPtr INTERNAL_SDL_LoadWAV_RW(
 			IntPtr src,
 			int freesrc,
-			ref SDL_AudioSpec spec,
+			out SDL_AudioSpec spec,
 			out IntPtr audio_buf,
 			out uint audio_len
 		);
-		public static SDL_AudioSpec SDL_LoadWAV(
+		public static IntPtr SDL_LoadWAV(
 			string file,
-			ref SDL_AudioSpec spec,
+			out SDL_AudioSpec spec,
 			out IntPtr audio_buf,
 			out uint audio_len
 		) {
-			SDL_AudioSpec result;
 			IntPtr rwops = SDL_RWFromFile(file, "rb");
-			IntPtr result_ptr = INTERNAL_SDL_LoadWAV_RW(
+			return INTERNAL_SDL_LoadWAV_RW(
 				rwops,
 				1,
-				ref spec,
+				out spec,
 				out audio_buf,
 				out audio_len
 			);
-			result = (SDL_AudioSpec) Marshal.PtrToStructure(
-				result_ptr,
-				typeof(SDL_AudioSpec)
-			);
-			return result;
 		}
 
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
