@@ -6971,7 +6971,7 @@ namespace SDL2
 		 * Only available in 2.0.14 or higher.
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_bool SDL_GameControllerGetSensorData(
+		public static extern int SDL_GameControllerGetSensorData(
 			IntPtr gamecontroller,
 			SDL_SensorType type,
 			IntPtr data,
