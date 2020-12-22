@@ -801,9 +801,11 @@ namespace SDL2
 			);
 		}
 
-		/* Only available in 2.0.14 or higher. */
+		/* IntPtr refers to a char*.
+		 * Only available in 2.0.14 or higher.
+		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr INTERNAL_SDL_GetErrorMsg(IntPtr errstr, int maxlength);
+		private static extern IntPtr SDL_GetErrorMsg(IntPtr errstr, int maxlength);
 
 		#endregion
 
