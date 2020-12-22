@@ -805,7 +805,7 @@ namespace SDL2
 		 * Only available in 2.0.14 or higher.
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		private static extern IntPtr SDL_GetErrorMsg(IntPtr errstr, int maxlength);
+		public static extern IntPtr SDL_GetErrorMsg(IntPtr errstr, int maxlength);
 
 		#endregion
 
