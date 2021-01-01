@@ -9,7 +9,7 @@
     <projectUrl>https://github.com/flibitijibibo/SDL2-CS</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>SDL2# - C# Wrapper for SDL2</description>
-    <copyright>Copyright 2013-2020</copyright>
+    <copyright>Copyright 2013-2021</copyright>
     <tags>SDL2# SDL2 SDL</tags>
   </metadata>
   <files>
