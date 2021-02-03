@@ -397,12 +397,19 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern long SDL_RWclose(IntPtr context);
 
-		/* file refers to a const char*, datasize to a size_t*
+		/* datasize refers to a size_t*
 		 * IntPtr refers to a void*
 		 * Only available in SDL 2.0.10 or higher.
 		 */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_LoadFile(IntPtr file, IntPtr datasize);
+		[DllImport(nativeLibName, EntryPoint = "SDL_LoadFile", CallingConvention = CallingConvention.Cdecl)]
+		private static extern unsafe IntPtr INTERNAL_SDL_LoadFile(byte* file, out IntPtr datasize);
+		public static unsafe IntPtr SDL_LoadFile(string file, out IntPtr datasize)
+		{
+			byte* utf8File = Utf8Encode(file);
+			IntPtr result = INTERNAL_SDL_LoadFile(utf8File, out datasize);
+			Marshal.FreeHGlobal((IntPtr) utf8File);
+			return result;
+		}
 
 		#endregion
 
