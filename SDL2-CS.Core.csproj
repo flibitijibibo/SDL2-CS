@@ -10,6 +10,10 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
+	<PropertyGroup>
+		<SDLSettingsPropsFilePath>$(SolutionDir)SDL-CS.Settings.props</SDLSettingsPropsFilePath>
+	</PropertyGroup>
+	<Import Project="$(SDLSettingsPropsFilePath)" Condition="Exists('$(SDLSettingsPropsFilePath)')" />	
 	<ItemGroup>
 		<Compile Include="src\SDL2.cs" />
 		<Compile Include="src\SDL2_image.cs" />
