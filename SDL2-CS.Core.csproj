@@ -11,7 +11,7 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<PropertyGroup>
-		<SDLSettingsPropsFilePath>$(SolutionDir)SDL-CS.Settings.props</SDLSettingsPropsFilePath>
+		<SDLSettingsPropsFilePath>$(SolutionDir)SDL2-CS.Settings.props</SDLSettingsPropsFilePath>
 	</PropertyGroup>
 	<Import Project="$(SDLSettingsPropsFilePath)" Condition="Exists('$(SDLSettingsPropsFilePath)')" />
 	<Target Name="ValidatePropsFilePath" BeforeTargets="BeforeBuild">

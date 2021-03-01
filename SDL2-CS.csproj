@@ -75,6 +75,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <SDLSettingsPropsFilePath>$(SolutionDir)SDL2-CS.Settings.props</SDLSettingsPropsFilePath>
+  </PropertyGroup>
+  <Import Project="$(SDLSettingsPropsFilePath)" Condition="Exists('$(SDLSettingsPropsFilePath)')" />
+  <Target Name="ValidatePropsFilePath" BeforeTargets="BeforeBuild">
+    <Message Importance="High" Text="No property overrides found at '$(SDLSettingsPropsFilePath)'" Condition="!Exists('$(SDLSettingsPropsFilePath)')" />
+    <Message Importance="High" Text="Loaded property overrides from '$(SDLSettingsPropsFilePath)'" Condition="Exists('$(SDLSettingsPropsFilePath)')" />
+  </Target>
   <ItemGroup>
     <Compile Include="src\SDL2.cs" />
     <Compile Include="src\SDL2_image.cs" />
