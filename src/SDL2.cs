@@ -91,25 +91,6 @@ namespace SDL2
 			}
 			return buffer;
 		}
-		internal static unsafe byte* Utf8EncodeNullable(string str)
-		{
-			if (str == null)
-			{
-				return (byte*) 0;
-			}
-			int bufferSize = Utf8Size(str);
-			byte* buffer = (byte*) Marshal.AllocHGlobal(bufferSize);
-			fixed (char* strPtr = str)
-			{
-				Encoding.UTF8.GetBytes(
-					strPtr,
-					(str != null) ? (str.Length + 1) : 0,
-					buffer,
-					bufferSize
-				);
-			}
-			return buffer;
-		}
 
 		/* This is public because SDL_DropEvent needs it! */
 		public static unsafe string UTF8_ToManaged(IntPtr s, bool freePtr = false)
@@ -7931,9 +7912,12 @@ namespace SDL2
 		public static unsafe SDL_bool SDL_AndroidRequestPermission(
 			string permission
 		) {
-			return INTERNAL_SDL_AndroidRequestPermission(
-				Utf8Encode(permission)
+			byte* permissionPtr = Utf8Encode(permission);
+			SDL_bool result = INTERNAL_SDL_AndroidRequestPermission(
+				permissionPtr
 			);
+			Marshal.FreeHGlobal((IntPtr) permissionPtr);
+			return result;
 		}
 
 		/* WinRT */
@@ -8251,9 +8235,10 @@ namespace SDL2
 		private static unsafe extern int INTERNAL_SDL_OpenURL(byte* url);
 		public static unsafe int SDL_OpenURL(string url)
 		{
-			return INTERNAL_SDL_OpenURL(
-				Utf8Encode(url)
-			);
+			byte* urlPtr = Utf8Encode(url);
+			int result = INTERNAL_SDL_OpenURL(urlPtr);
+			Marshal.FreeHGlobal((IntPtr) urlPtr);
+			return result;
 		}
 
 		#endregion
