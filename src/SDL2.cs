@@ -680,6 +680,10 @@ namespace SDL2
 			"SDL_AUTO_UPDATE_JOYSTICKS";
 		public const string SDL_HINT_AUTO_UPDATE_SENSORS =
 			"SDL_AUTO_UPDATE_SENSORS";
+		public const string SDL_HINT_MOUSE_RELATIVE_SCALING =
+			"SDL_MOUSE_RELATIVE_SCALING";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_PS5_RUMBLE =
+			"SDL_JOYSTICK_HIDAPI_PS5_RUMBLE";
 
 		public enum SDL_HintPriority
 		{
@@ -6811,7 +6815,7 @@ namespace SDL2
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_GameControllerRumbleTriggers(
-			IntPtr joystick,
+			IntPtr gamecontroller,
 			UInt16 left_rumble,
 			UInt16 right_rumble,
 			UInt32 duration_ms
@@ -6993,7 +6997,7 @@ namespace SDL2
 		public const byte SDL_HAPTIC_POLAR =		0;
 		public const byte SDL_HAPTIC_CARTESIAN =	1;
 		public const byte SDL_HAPTIC_SPHERICAL =	2;
-		public const byte SDL_HAPTIC_STEERING_AXIS =	3;
+		public const byte SDL_HAPTIC_STEERING_AXIS =	3; /* Requires >= 2.0.14 */
 
 		/* SDL_HapticRunEffect */
 		public const uint SDL_HAPTIC_INFINITY = 4294967295U;
@@ -8199,7 +8203,7 @@ namespace SDL2
 
 		/* Only available in SDL 2.0.14 or higher. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern IntPtr SDL_SIMDRealloc(IntPtr mem, uint len);
+		public static extern IntPtr SDL_SIMDRealloc(IntPtr ptr, uint len);
 
 		/* Only available in SDL 2.0.10 or higher. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
