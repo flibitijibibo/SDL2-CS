@@ -208,9 +208,11 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void TTF_SetFontKerning(IntPtr font, int allowed);
 
-		/* font refers to a TTF_Font* */
+		/* font refers to a TTF_Font*.
+		 * IntPtr is actually a C long! This ignores Win64!
+		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern long TTF_FontFaces(IntPtr font);
+		public static extern IntPtr TTF_FontFaces(IntPtr font);
 
 		/* font refers to a TTF_Font* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
