@@ -48,23 +48,9 @@ namespace SDL2
 		/* Used for stack allocated string marshaling. */
 		internal static int Utf8Size(string str)
 		{
-			Debug.Assert(str != null);
-			return (str.Length * 4) + 1;
-		}
-		internal static int Utf8SizeNullable(string str)
-		{
 			return str != null ? (str.Length * 4) + 1 : 0;
 		}
 		internal static unsafe byte* Utf8Encode(string str, byte* buffer, int bufferSize)
-		{
-			Debug.Assert(str != null);
-			fixed (char* strPtr = str)
-			{
-				Encoding.UTF8.GetBytes(strPtr, str.Length + 1, buffer, bufferSize);
-			}
-			return buffer;
-		}
-		internal static unsafe byte* Utf8EncodeNullable(string str, byte* buffer, int bufferSize)
 		{
 			if (str == null)
 			{
@@ -1234,16 +1220,16 @@ namespace SDL2
 			string message,
 			IntPtr window
 		) {
-			int utf8TitleBufSize = Utf8SizeNullable(title);
+			int utf8TitleBufSize = Utf8Size(title);
 			byte* utf8Title = stackalloc byte[utf8TitleBufSize];
 
-			int utf8MessageBufSize = Utf8SizeNullable(message);
+			int utf8MessageBufSize = Utf8Size(message);
 			byte* utf8Message = stackalloc byte[utf8MessageBufSize];
 
 			return INTERNAL_SDL_ShowSimpleMessageBox(
 				flags,
-				Utf8EncodeNullable(title, utf8Title, utf8TitleBufSize),
-				Utf8EncodeNullable(message, utf8Message, utf8MessageBufSize),
+				Utf8Encode(title, utf8Title, utf8TitleBufSize),
+				Utf8Encode(message, utf8Message, utf8MessageBufSize),
 				window
 			);
 		}
@@ -1497,10 +1483,10 @@ namespace SDL2
 			int h,
 			SDL_WindowFlags flags
 		) {
-			int utf8TitleBufSize = Utf8SizeNullable(title);
+			int utf8TitleBufSize = Utf8Size(title);
 			byte* utf8Title = stackalloc byte[utf8TitleBufSize];
 			return INTERNAL_SDL_CreateWindow(
-				Utf8EncodeNullable(title, utf8Title, utf8TitleBufSize),
+				Utf8Encode(title, utf8Title, utf8TitleBufSize),
 				x, y, w, h,
 				flags
 			);
@@ -1822,7 +1808,7 @@ namespace SDL2
 		);
 		public static unsafe SDL_bool SDL_GL_ExtensionSupported(string extension)
 		{
-			int utf8ExtensionBufSize = Utf8SizeNullable(extension);
+			int utf8ExtensionBufSize = Utf8Size(extension);
 			byte* utf8Extension = stackalloc byte[utf8ExtensionBufSize];
 			return INTERNAL_SDL_GL_ExtensionSupported(
 				Utf8Encode(extension, utf8Extension, utf8ExtensionBufSize)
@@ -8106,16 +8092,16 @@ namespace SDL2
 		);
 		public static unsafe string SDL_GetPrefPath(string org, string app)
 		{
-			int utf8OrgBufSize = Utf8SizeNullable(org);
+			int utf8OrgBufSize = Utf8Size(org);
 			byte* utf8Org = stackalloc byte[utf8OrgBufSize];
 
-			int utf8AppBufSize = Utf8SizeNullable(app);
+			int utf8AppBufSize = Utf8Size(app);
 			byte* utf8App = stackalloc byte[utf8AppBufSize];
 
 			return UTF8_ToManaged(
 				INTERNAL_SDL_GetPrefPath(
-					Utf8EncodeNullable(org, utf8Org, utf8OrgBufSize),
-					Utf8EncodeNullable(app, utf8App, utf8AppBufSize)
+					Utf8Encode(org, utf8Org, utf8OrgBufSize),
+					Utf8Encode(app, utf8App, utf8AppBufSize)
 				),
 				true
 			);
