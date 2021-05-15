@@ -48,7 +48,11 @@ namespace SDL2
 		/* Used for stack allocated string marshaling. */
 		internal static int Utf8Size(string str)
 		{
-			return str != null ? (str.Length * 4) + 1 : 0;
+			if (str == null)
+			{
+				return 0;
+			}
+			return (str.Length * 4) + 1;
 		}
 		internal static unsafe byte* Utf8Encode(string str, byte* buffer, int bufferSize)
 		{
@@ -68,7 +72,11 @@ namespace SDL2
 		 */
 		internal static unsafe byte* Utf8EncodeHeap(string str)
 		{
-			Debug.Assert(str != null);
+			if (str == null)
+			{
+				return (byte*) 0;
+			}
+
 			int bufferSize = Utf8Size(str);
 			byte* buffer = (byte*) Marshal.AllocHGlobal(bufferSize);
 			fixed (char* strPtr = str)
