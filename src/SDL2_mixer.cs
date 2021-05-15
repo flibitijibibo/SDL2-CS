@@ -205,7 +205,7 @@ namespace SDL2
 		);
 		public static unsafe IntPtr Mix_LoadMUS(string file)
 		{
-			byte* utf8File = SDL.Utf8Encode(file);
+			byte* utf8File = SDL.Utf8EncodeHeap(file);
 			IntPtr handle = INTERNAL_Mix_LoadMUS(
 				utf8File
 			);
@@ -579,7 +579,7 @@ namespace SDL2
 		);
 		public static unsafe int Mix_SetMusicCMD(string command)
 		{
-			byte* utf8Cmd = SDL.Utf8Encode(command);
+			byte* utf8Cmd = SDL.Utf8EncodeHeap(command);
 			int result = INTERNAL_Mix_SetMusicCMD(
 				utf8Cmd
 			);
@@ -599,7 +599,7 @@ namespace SDL2
 		);
 		public static unsafe int Mix_SetSoundFonts(string paths)
 		{
-			byte* utf8Paths = SDL.Utf8Encode(paths);
+			byte* utf8Paths = SDL.Utf8EncodeHeap(paths);
 			int result = INTERNAL_Mix_SetSoundFonts(
 				utf8Paths
 			);

@@ -101,7 +101,7 @@ namespace SDL2
 		);
 		public static unsafe IntPtr TTF_OpenFont(string file, int ptsize)
 		{
-			byte* utf8File = SDL.Utf8Encode(file);
+			byte* utf8File = SDL.Utf8EncodeHeap(file);
 			IntPtr handle = INTERNAL_TTF_OpenFont(
 				utf8File,
 				ptsize
@@ -131,7 +131,7 @@ namespace SDL2
 			int ptsize,
 			long index
 		) {
-			byte* utf8File = SDL.Utf8Encode(file);
+			byte* utf8File = SDL.Utf8EncodeHeap(file);
 			IntPtr handle = INTERNAL_TTF_OpenFontIndex(
 				utf8File,
 				ptsize,
@@ -302,7 +302,7 @@ namespace SDL2
 			out int w,
 			out int h
 		) {
-			byte* utf8Text = SDL.Utf8Encode(text);
+			byte* utf8Text = SDL.Utf8EncodeHeap(text);
 			int result = INTERNAL_TTF_SizeUTF8(
 				font,
 				utf8Text,
@@ -354,7 +354,7 @@ namespace SDL2
 			out int extent,
 			out int count
 		) {
-			byte* utf8Text = SDL.Utf8Encode(text);
+			byte* utf8Text = SDL.Utf8EncodeHeap(text);
 			int result = INTERNAL_TTF_MeasureUTF8(
 				font,
 				utf8Text,
@@ -400,7 +400,7 @@ namespace SDL2
 			string text,
 			SDL.SDL_Color fg
 		) {
-			byte* utf8Text = SDL.Utf8Encode(text);
+			byte* utf8Text = SDL.Utf8EncodeHeap(text);
 			IntPtr result = INTERNAL_TTF_RenderUTF8_Solid(
 				font,
 				utf8Text,
@@ -447,7 +447,7 @@ namespace SDL2
 			SDL.SDL_Color fg,
 			uint wrapLength
 		) {
-			byte* utf8Text = SDL.Utf8Encode(text);
+			byte* utf8Text = SDL.Utf8EncodeHeap(text);
 			IntPtr result = INTERNAL_TTF_RenderUTF8_Solid_Wrapped(
 				font,
 				utf8Text,
@@ -512,7 +512,7 @@ namespace SDL2
 			SDL.SDL_Color fg,
 			SDL.SDL_Color bg
 		) {
-			byte* utf8Text = SDL.Utf8Encode(text);
+			byte* utf8Text = SDL.Utf8EncodeHeap(text);
 			IntPtr result = INTERNAL_TTF_RenderUTF8_Shaded(
 				font,
 				utf8Text,
@@ -562,7 +562,7 @@ namespace SDL2
 			SDL.SDL_Color bg,
 			uint wrapLength
 		) {
-			byte* utf8Text = SDL.Utf8Encode(text);
+			byte* utf8Text = SDL.Utf8EncodeHeap(text);
 			IntPtr result = INTERNAL_TTF_RenderUTF8_Shaded_Wrapped(
 				font,
 				utf8Text,
@@ -626,7 +626,7 @@ namespace SDL2
 			string text,
 			SDL.SDL_Color fg
 		) {
-			byte* utf8Text = SDL.Utf8Encode(text);
+			byte* utf8Text = SDL.Utf8EncodeHeap(text);
 			IntPtr result = INTERNAL_TTF_RenderUTF8_Blended(
 				font,
 				utf8Text,
@@ -669,7 +669,7 @@ namespace SDL2
 			SDL.SDL_Color fg,
 			uint wrapped
 		) {
-			byte* utf8Text = SDL.Utf8Encode(text);
+			byte* utf8Text = SDL.Utf8EncodeHeap(text);
 			IntPtr result = INTERNAL_TTF_RenderUTF8_Blended_Wrapped(
 				font,
 				utf8Text,

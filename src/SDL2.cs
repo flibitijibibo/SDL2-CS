@@ -66,7 +66,7 @@ namespace SDL2
 		/* Used for heap allocated string marshaling.
 		 * Returned byte* must be free'd with FreeHGlobal.
 		 */
-		internal static unsafe byte* Utf8Encode(string str)
+		internal static unsafe byte* Utf8EncodeHeap(string str)
 		{
 			Debug.Assert(str != null);
 			int bufferSize = Utf8Size(str);
@@ -237,8 +237,8 @@ namespace SDL2
 			string file,
 			string mode
 		) {
-			byte* utf8File = Utf8Encode(file);
-			byte* utf8Mode = Utf8Encode(mode);
+			byte* utf8File = Utf8EncodeHeap(file);
+			byte* utf8Mode = Utf8EncodeHeap(mode);
 			IntPtr rwOps = INTERNAL_SDL_RWFromFile(
 				utf8File,
 				utf8Mode
@@ -372,7 +372,7 @@ namespace SDL2
 		private static extern unsafe IntPtr INTERNAL_SDL_LoadFile(byte* file, out IntPtr datasize);
 		public static unsafe IntPtr SDL_LoadFile(string file, out IntPtr datasize)
 		{
-			byte* utf8File = Utf8Encode(file);
+			byte* utf8File = Utf8EncodeHeap(file);
 			IntPtr result = INTERNAL_SDL_LoadFile(utf8File, out datasize);
 			Marshal.FreeHGlobal((IntPtr) utf8File);
 			return result;
@@ -1777,7 +1777,7 @@ namespace SDL2
 		private static extern unsafe int INTERNAL_SDL_GL_LoadLibrary(byte* path);
 		public static unsafe int SDL_GL_LoadLibrary(string path)
 		{
-			byte* utf8Path = Utf8Encode(path);
+			byte* utf8Path = Utf8EncodeHeap(path);
 			int result = INTERNAL_SDL_GL_LoadLibrary(
 				utf8Path
 			);
@@ -2152,7 +2152,7 @@ namespace SDL2
 		);
 		public static unsafe int SDL_Vulkan_LoadLibrary(string path)
 		{
-			byte* utf8Path = Utf8Encode(path);
+			byte* utf8Path = Utf8EncodeHeap(path);
 			int result = INTERNAL_SDL_Vulkan_LoadLibrary(
 				utf8Path
 			);
@@ -4378,7 +4378,7 @@ namespace SDL2
 		public static unsafe int SDL_SetClipboardText(
 			string text
 		) {
-			byte* utf8Text = Utf8Encode(text);
+			byte* utf8Text = Utf8EncodeHeap(text);
 			int result = INTERNAL_SDL_SetClipboardText(
 				utf8Text
 			);
@@ -6507,7 +6507,7 @@ namespace SDL2
 		public static unsafe int SDL_GameControllerAddMapping(
 			string mappingString
 		) {
-			byte* utf8MappingString = Utf8Encode(mappingString);
+			byte* utf8MappingString = Utf8EncodeHeap(mappingString);
 			int result = INTERNAL_SDL_GameControllerAddMapping(
 				utf8MappingString
 			);
@@ -7902,7 +7902,7 @@ namespace SDL2
 		public static unsafe SDL_bool SDL_AndroidRequestPermission(
 			string permission
 		) {
-			byte* permissionPtr = Utf8Encode(permission);
+			byte* permissionPtr = Utf8EncodeHeap(permission);
 			SDL_bool result = INTERNAL_SDL_AndroidRequestPermission(
 				permissionPtr
 			);
@@ -8225,7 +8225,7 @@ namespace SDL2
 		private static unsafe extern int INTERNAL_SDL_OpenURL(byte* url);
 		public static unsafe int SDL_OpenURL(string url)
 		{
-			byte* urlPtr = Utf8Encode(url);
+			byte* urlPtr = Utf8EncodeHeap(url);
 			int result = INTERNAL_SDL_OpenURL(urlPtr);
 			Marshal.FreeHGlobal((IntPtr) urlPtr);
 			return result;
