@@ -6535,7 +6535,8 @@ namespace SDL2
 			return UTF8_ToManaged(
 				INTERNAL_SDL_GameControllerMappingForIndex(
 					mapping_index
-				)
+				),
+				true
 			);
 		}
 
@@ -6558,7 +6559,8 @@ namespace SDL2
 		public static string SDL_GameControllerMappingForGUID(Guid guid)
 		{
 			return UTF8_ToManaged(
-				INTERNAL_SDL_GameControllerMappingForGUID(guid)
+				INTERNAL_SDL_GameControllerMappingForGUID(guid),
+				true
 			);
 		}
 
@@ -6573,7 +6575,8 @@ namespace SDL2
 			return UTF8_ToManaged(
 				INTERNAL_SDL_GameControllerMapping(
 					gamecontroller
-				)
+				),
+				true
 			);
 		}
 
@@ -6601,7 +6604,8 @@ namespace SDL2
 			int joystick_index
 		) {
 			return UTF8_ToManaged(
-				INTERNAL_SDL_GameControllerMappingForDeviceIndex(joystick_index)
+				INTERNAL_SDL_GameControllerMappingForDeviceIndex(joystick_index),
+				true
 			);
 		}
 
