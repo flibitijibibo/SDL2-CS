@@ -7908,7 +7908,7 @@ namespace SDL2
 
 		/* Only available in 2.0.14 or higher. */
 		[DllImport(nativeLibName, EntryPoint = "SDL_AndroidRequestPermission", CallingConvention = CallingConvention.Cdecl)]
-		public static unsafe extern SDL_bool INTERNAL_SDL_AndroidRequestPermission(
+		private static unsafe extern SDL_bool INTERNAL_SDL_AndroidRequestPermission(
 			byte* permission
 		);
 		public static unsafe SDL_bool SDL_AndroidRequestPermission(
