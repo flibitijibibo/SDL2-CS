@@ -1944,6 +1944,14 @@ namespace SDL2
 		);
 
 		/* window refers to an SDL_Window* */
+		/* NULL overload - use the window's dimensions and the desktop's format and refresh rate */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetWindowDisplayMode(
+			IntPtr window,
+			IntPtr mode
+		);
+
+		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SetWindowFullscreen(
 			IntPtr window,
