@@ -647,7 +647,7 @@ namespace SDL2
 
 		/* Only available in 2.0.14 or higher. */
 		public const string SDL_HINT_JOYSTICK_HIDAPI_CORRELATE_XINPUT =
-			"SDL_JOYSTICK_HIDAPI_CORRELATE_XINPUT";
+			"SDL_JOYSTICK_HIDAPI_CORRELATE_XINPUT"; /* NOTE: This was removed in 2.0.16. */
 		public const string SDL_HINT_JOYSTICK_RAWINPUT =
 			"SDL_JOYSTICK_RAWINPUT";
 		public const string SDL_HINT_AUDIO_DEVICE_APP_NAME =
@@ -678,6 +678,38 @@ namespace SDL2
 			"SDL_MOUSE_RELATIVE_SCALING";
 		public const string SDL_HINT_JOYSTICK_HIDAPI_PS5_RUMBLE =
 			"SDL_JOYSTICK_HIDAPI_PS5_RUMBLE";
+
+		/* Only available in 2.0.16 or higher. */
+		public const string SDL_HINT_WINDOWS_FORCE_MUTEX_CRITICAL_SECTIONS =
+			"SDL_WINDOWS_FORCE_MUTEX_CRITICAL_SECTIONS";
+		public const string SDL_HINT_WINDOWS_FORCE_SEMAPHORE_KERNEL =
+			"SDL_WINDOWS_FORCE_SEMAPHORE_KERNEL";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_PS5_PLAYER_LED =
+			"SDL_JOYSTICK_HIDAPI_PS5_PLAYER_LED";
+		public const string SDL_HINT_WINDOWS_USE_D3D9EX =
+			"SDL_WINDOWS_USE_D3D9EX";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_JOY_CONS =
+			"SDL_JOYSTICK_HIDAPI_JOY_CONS";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_STADIA =
+			"SDL_JOYSTICK_HIDAPI_STADIA";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_SWITCH_HOME_LED =
+			"SDL_JOYSTICK_HIDAPI_SWITCH_HOME_LED";
+		public const string SDL_HINT_ALLOW_ALT_TAB_WHILE_GRABBED =
+			"SDL_ALLOW_ALT_TAB_WHILE_GRABBED";
+		public const string SDL_HINT_KMSDRM_REQUIRE_DRM_MASTER =
+			"SDL_KMSDRM_REQUIRE_DRM_MASTER";
+		public const string SDL_HINT_AUDIO_DEVICE_STREAM_ROLE =
+			"SDL_AUDIO_DEVICE_STREAM_ROLE";
+		public const string SDL_HINT_X11_FORCE_OVERRIDE_REDIRECT =
+			"SDL_X11_FORCE_OVERRIDE_REDIRECT";
+		public const string SDL_HINT_JOYSTICK_HIDAPI_LUNA =
+			"SDL_JOYSTICK_HIDAPI_LUNA";
+		public const string SDL_HINT_JOYSTICK_RAWINPUT_CORRELATE_XINPUT =
+			"SDL_JOYSTICK_RAWINPUT_CORRELATE_XINPUT";
+		public const string SDL_HINT_AUDIO_INCLUDE_MONITORS =
+			"SDL_AUDIO_INCLUDE_MONITORS";
+		public const string SDL_HINT_VIDEO_WAYLAND_ALLOW_LIBDECOR =
+			"SDL_VIDEO_WAYLAND_ALLOW_LIBDECOR";
 
 		public enum SDL_HintPriority
 		{
@@ -1252,7 +1284,7 @@ namespace SDL2
 		 */
 		public const int SDL_MAJOR_VERSION =	2;
 		public const int SDL_MINOR_VERSION =	0;
-		public const int SDL_PATCHLEVEL =	14;
+		public const int SDL_PATCHLEVEL =	16;
 
 		public static readonly int SDL_COMPILEDVERSION = SDL_VERSIONNUM(
 			SDL_MAJOR_VERSION,
@@ -1389,6 +1421,14 @@ namespace SDL2
 			SDL_ORIENTATION_PORTRAIT_FLIPPED
 		}
 
+		/* Only available in 2.0.16 or higher. */
+		public enum SDL_FlashOperation
+		{
+			SDL_FLASH_CANCEL,
+			SDL_FLASH_BRIEFLY,
+			SDL_FLASH_UNTIL_FOCUSED
+		}
+
 		[Flags]
 		public enum SDL_WindowFlags : uint
 		{
@@ -1400,7 +1440,7 @@ namespace SDL2
 			SDL_WINDOW_RESIZABLE =		0x00000020,
 			SDL_WINDOW_MINIMIZED =		0x00000040,
 			SDL_WINDOW_MAXIMIZED =		0x00000080,
-			SDL_WINDOW_INPUT_GRABBED =	0x00000100,
+			SDL_WINDOW_MOUSE_GRABBED =	0x00000100,
 			SDL_WINDOW_INPUT_FOCUS =	0x00000200,
 			SDL_WINDOW_MOUSE_FOCUS =	0x00000400,
 			SDL_WINDOW_FULLSCREEN_DESKTOP =
@@ -1413,8 +1453,12 @@ namespace SDL2
 			SDL_WINDOW_UTILITY =		0x00020000,	/* Requires >= 2.0.5 */
 			SDL_WINDOW_TOOLTIP =		0x00040000,	/* Requires >= 2.0.5 */
 			SDL_WINDOW_POPUP_MENU =		0x00080000,	/* Requires >= 2.0.5 */
+			SDL_WINDOW_KEYBOARD_GRABBED =	0x00100000,	/* Requires >= 2.0.16 */
 			SDL_WINDOW_VULKAN =		0x10000000,	/* Requires >= 2.0.6 */
 			SDL_WINDOW_METAL =		0x2000000,	/* Requires >= 2.0.14 */
+
+			SDL_WINDOW_INPUT_GRABBED =
+				SDL_WINDOW_MOUSE_GRABBED,
 		}
 
 		/* Only available in 2.0.4 or higher. */
@@ -1707,6 +1751,18 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_GetWindowGrab(IntPtr window);
 
+		/* window refers to an SDL_Window*
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_GetWindowKeyboardGrab(IntPtr window);
+
+		/* window refers to an SDL_Window*
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_GetWindowMouseGrab(IntPtr window);
+
 		/* window refers to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern uint SDL_GetWindowID(IntPtr window);
@@ -1977,6 +2033,25 @@ namespace SDL2
 			SDL_bool grabbed
 		);
 
+		/* window refers to an SDL_Window*
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetWindowKeyboardGrab(
+			IntPtr window,
+			SDL_bool grabbed
+		);
+
+		/* window refers to an SDL_Window*
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetWindowMouseGrab(
+			IntPtr window,
+			SDL_bool grabbed
+		);
+
+
 		/* window refers to an SDL_Window*, icon to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_SetWindowIcon(
@@ -2040,6 +2115,15 @@ namespace SDL2
 		public static extern void SDL_SetWindowResizable(
 			IntPtr window,
 			SDL_bool resizable
+		);
+
+		/* window refers to an SDL_Window*
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_SetWindowAlwaysOnTop(
+			IntPtr window,
+			SDL_bool on_top
 		);
 
 		/* window refers to an SDL_Window* */
@@ -2107,6 +2191,15 @@ namespace SDL2
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetGrabbedWindow();
+
+		/* window refers to an SDL_Window*
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_FlashWindow(
+			IntPtr window,
+			SDL_FlashOperation operation
+		);
 
 		#endregion
 
@@ -3185,6 +3278,20 @@ namespace SDL2
 			int uPitch,
 			IntPtr vPlane,
 			int vPitch
+		);
+
+		/* texture refers to an SDL_Texture*.
+		 * yPlane and uvPlane refer to const Uint*.
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_UpdateNVTexture(
+			IntPtr texture,
+			ref SDL_Rect rect,
+			IntPtr yPlane,
+			int yPitch,
+			IntPtr uvPlane,
+			int uvPitch
 		);
 
 		/* renderer refers to an SDL_Renderer* */
@@ -4341,6 +4448,17 @@ namespace SDL2
 		/* src and dst refer to an SDL_Surface* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_SoftStretch(
+			IntPtr src,
+			ref SDL_Rect srcrect,
+			IntPtr dst,
+			ref SDL_Rect dstrect
+		);
+
+		/* src and dst refer to an SDL_Surface*
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SoftStretchLinear(
 			IntPtr src,
 			ref SDL_Rect srcrect,
 			IntPtr dst,
@@ -6416,6 +6534,17 @@ namespace SDL2
 			byte blue
 		);
 
+		/* joystick refers to an SDL_Joystick*.
+		 * data refers to a const void*.
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_JoystickSendEffect(
+			IntPtr joystick,
+			IntPtr data,
+			int size
+		);
+
 		#endregion
 
 		#region SDL_gamecontroller.h
@@ -6475,8 +6604,10 @@ namespace SDL2
 			SDL_CONTROLLER_TYPE_PS3,
 			SDL_CONTROLLER_TYPE_PS4,
 			SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO,
-			SDL_CONTROLLER_TYPE_VIRTUAL,	/* Requires >= 2.0.14 */
-			SDL_CONTROLLER_TYPE_PS5,	/* Requires >= 2.0.14 */
+			SDL_CONTROLLER_TYPE_VIRTUAL,		/* Requires >= 2.0.14 */
+			SDL_CONTROLLER_TYPE_PS5,		/* Requires >= 2.0.14 */
+			SDL_CONTROLLER_TYPE_AMAZON_LUNA,	/* Requires >= 2.0.16 */
+			SDL_CONTROLLER_TYPE_GOOGLE_STADIA	/* Requires >= 2.0.16 */
 		}
 
 		// FIXME: I'd rather this somehow be private...
@@ -6976,6 +7107,26 @@ namespace SDL2
 			SDL_SensorType type,
 			IntPtr data,
 			int num_values
+		);
+
+		/* gamecontroller refers to an SDL_GameController*.
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern float SDL_GameControllerGetSensorDataRate(
+			IntPtr gamecontroller,
+			SDL_SensorType type
+		);
+
+		/* gamecontroller refers to an SDL_GameController*.
+		 * data refers to a const void*.
+		 * Only available in 2.0.16 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GameControllerSendEffect(
+			IntPtr gamecontroller,
+			IntPtr data,
+			int size
 		);
 
 		#endregion
@@ -7778,6 +7929,14 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_FreeAudioStream(IntPtr stream);
 
+		/* Only available in 2.0.16 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GetAudioDeviceSpec(
+			int index,
+			int iscapture,
+			out SDL_AudioSpec spec
+		);
+
 		#endregion
 
 		#region SDL_timer.h
@@ -7846,6 +8005,20 @@ namespace SDL2
 			SDL_WindowsMessageHook callback,
 			IntPtr userdata
 		);
+
+		/* renderer refers to an SDL_Renderer*
+		 * IntPtr refers to an IDirect3DDevice9*
+		 * Only available in 2.0.1 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RenderGetD3D9Device(IntPtr renderer);
+
+		/* renderer refers to an SDL_Renderer*
+		 * IntPtr refers to an ID3D11Device*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_RenderGetD3D11Device(IntPtr renderer);
 
 		/* iOS */
 
@@ -7930,6 +8103,34 @@ namespace SDL2
 			return result;
 		}
 
+		/* Only available in 2.0.16 or higher. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		private static unsafe extern int INTERNAL_SDL_AndroidShowToast(
+			byte* message,
+			int duration,
+			int gravity,
+			int xOffset,
+			int yOffset
+		);
+		public static unsafe int SDL_AndroidShowToast(
+			string message,
+			int duration,
+			int gravity,
+			int xOffset,
+			int yOffset
+		) {
+			byte* messagePtr = Utf8EncodeHeap(message);
+			int result = INTERNAL_SDL_AndroidShowToast(
+				messagePtr,
+				duration,
+				gravity,
+				xOffset,
+				yOffset
+			);
+			Marshal.FreeHGlobal((IntPtr) messagePtr);
+			return result;
+		}
+
 		/* WinRT */
 
 		public enum SDL_WinRT_DeviceFamily
@@ -7964,7 +8165,8 @@ namespace SDL2
 			SDL_SYSWM_ANDROID,
 			SDL_SYSWM_VIVANTE,
 			SDL_SYSWM_OS2,
-			SDL_SYSWM_HAIKU
+			SDL_SYSWM_HAIKU,
+			SDL_SYSWM_KMSDRM /* requires >= 2.0.16 */
 		}
 
 		// FIXME: I wish these weren't public...
@@ -8018,6 +8220,8 @@ namespace SDL2
 			public IntPtr display; // Refers to a wl_display*
 			public IntPtr surface; // Refers to a wl_surface*
 			public IntPtr shell_surface; // Refers to a wl_shell_surface*
+			public IntPtr egl_window; // Refers to an egl_window*, requires >= 2.0.16
+			public IntPtr xdg_surface; // Refers to an xdg_surface*, requires >= 2.0.16
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -8045,8 +8249,17 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct INTERNAL_os2_wminfo
 		{
-			public IntPtr hwnd; /* Refers to an HWND */
-			public IntPtr hwndFrame; /* Refers to an HWND */
+			public IntPtr hwnd; // Refers to an HWND
+			public IntPtr hwndFrame; // Refers to an HWND
+		}
+
+		/* Only available in 2.0.16 or higher. */
+		[StructLayout(LayoutKind.Sequential)]
+		public struct INTERNAL_kmsdrm_wminfo
+		{
+			int dev_index;
+			int drm_fd;
+			IntPtr gbm_dev; // Refers to a gbm_device*
 		}
 
 		[StructLayout(LayoutKind.Explicit)]
@@ -8071,9 +8284,11 @@ namespace SDL2
 			[FieldOffset(0)]
 			public INTERNAL_android_wminfo android;
 			[FieldOffset(0)]
+			public INTERNAL_os2_wminfo os2;
+			[FieldOffset(0)]
 			public INTERNAL_vivante_wminfo vivante;
 			[FieldOffset(0)]
-			public INTERNAL_os2_wminfo os2;
+			public INTERNAL_kmsdrm_wminfo ksmdrm;
 			// private int dummy;
 		}
 
