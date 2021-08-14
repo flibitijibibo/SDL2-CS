@@ -2279,6 +2279,17 @@ namespace SDL2
 
 		/* window refers to an SDL_Window*, pNames to a const char**.
 		 * Only available in 2.0.6 or higher.
+		 * This overload allows for IntPtr.Zero (null) to be passed for pNames.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_Vulkan_GetInstanceExtensions(
+			IntPtr window,
+			out uint pCount,
+			IntPtr pNames
+		);
+
+		/* window refers to an SDL_Window*, pNames to a const char**.
+		 * Only available in 2.0.6 or higher.
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_Vulkan_GetInstanceExtensions(
@@ -7778,6 +7789,17 @@ namespace SDL2
 		);
 
 		/* format refers to an SDL_AudioFormat */
+		/* This overload allows raw pointers to be passed for dst and src. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_MixAudioFormat(
+			IntPtr dst,
+			IntPtr src,
+			ushort format,
+			uint len,
+			int volume
+		);
+
+		/* format refers to an SDL_AudioFormat */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern void SDL_MixAudioFormat(
 			[Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 3)]
@@ -7799,6 +7821,17 @@ namespace SDL2
 		public static extern int SDL_OpenAudio(
 			ref SDL_AudioSpec desired,
 			IntPtr obtained
+		);
+
+		/* uint refers to an SDL_AudioDeviceID */
+		/* This overload allows for IntPtr.Zero (null) to be passed for device. */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern unsafe uint SDL_OpenAudioDevice(
+			IntPtr device,
+			int iscapture,
+			ref SDL_AudioSpec desired,
+			out SDL_AudioSpec obtained,
+			int allowed_changes
 		);
 
 		/* uint refers to an SDL_AudioDeviceID */
