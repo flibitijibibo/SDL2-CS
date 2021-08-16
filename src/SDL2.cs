@@ -8048,7 +8048,7 @@ namespace SDL2
 
 		/* renderer refers to an SDL_Renderer*
 		 * IntPtr refers to an ID3D11Device*
-		 * Only available in 2.0.18 or higher.
+		 * Only available in 2.0.16 or higher.
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_RenderGetD3D11Device(IntPtr renderer);
