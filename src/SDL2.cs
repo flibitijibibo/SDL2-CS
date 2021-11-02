@@ -8137,7 +8137,7 @@ namespace SDL2
 		}
 
 		/* Only available in 2.0.16 or higher. */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		[DllImport(nativeLibName, EntryPoint = "SDL_AndroidShowToast", CallingConvention = CallingConvention.Cdecl)]
 		private static unsafe extern int INTERNAL_SDL_AndroidShowToast(
 			byte* message,
 			int duration,
