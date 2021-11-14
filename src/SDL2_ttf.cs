@@ -754,6 +754,16 @@ namespace SDL2
 			ushort ch
 		);
 
+		public static string TTF_GetError()
+		{
+			return SDL.SDL_GetError();
+		}
+
+		public static void TTF_SetError(string fmtAndArglist)
+		{
+			SDL.SDL_SetError(fmtAndArglist);
+		}
+		
 		#endregion
 	}
 }
