@@ -711,6 +711,24 @@ namespace SDL2
 		public const string SDL_HINT_VIDEO_WAYLAND_ALLOW_LIBDECOR =
 			"SDL_VIDEO_WAYLAND_ALLOW_LIBDECOR";
 
+		/* Only available in 2.0.18 or higher. */
+		public const string SDL_HINT_VIDEO_EGL_ALLOW_TRANSPARENCY =
+			"SDL_VIDEO_EGL_ALLOW_TRANSPARENCY";
+		public const string SDL_HINT_APP_NAME =
+			"SDL_APP_NAME";
+		public const string SDL_HINT_SCREENSAVER_INHIBIT_ACTIVITY_NAME =
+			"SDL_SCREENSAVER_INHIBIT_ACTIVITY_NAME";
+		public const string SDL_HINT_IME_SHOW_UI =
+			"SDL_IME_SHOW_UI";
+		public const string SDL_HINT_WINDOW_NO_ACTIVATION_WHEN_SHOWN =
+			"SDL_WINDOW_NO_ACTIVATION_WHEN_SHOWN";
+		public const string SDL_HINT_POLL_SENTINEL =
+			"SDL_POLL_SENTINEL";
+		public const string SDL_HINT_JOYSTICK_DEVICE =
+			"SDL_JOYSTICK_DEVICE";
+		public const string SDL_HINT_LINUX_JOYSTICK_CLASSIC =
+			"SDL_LINUX_JOYSTICK_CLASSIC";
+
 		public enum SDL_HintPriority
 		{
 			SDL_HINT_DEFAULT,
@@ -1284,7 +1302,7 @@ namespace SDL2
 		 */
 		public const int SDL_MAJOR_VERSION =	2;
 		public const int SDL_MINOR_VERSION =	0;
-		public const int SDL_PATCHLEVEL =	16;
+		public const int SDL_PATCHLEVEL =	18;
 
 		public static readonly int SDL_COMPILEDVERSION = SDL_VERSIONNUM(
 			SDL_MAJOR_VERSION,
@@ -1401,7 +1419,10 @@ namespace SDL2
 			SDL_WINDOWEVENT_CLOSE,
 			/* Only available in 2.0.5 or higher. */
 			SDL_WINDOWEVENT_TAKE_FOCUS,
-			SDL_WINDOWEVENT_HIT_TEST
+			SDL_WINDOWEVENT_HIT_TEST,
+			/* Only available in 2.0.18 or higher. */
+			SDL_WINDOWEVENT_ICCPROF_CHANGED,
+			SDL_WINDOWEVENT_DISPLAY_CHANGED
 		}
 
 		public enum SDL_DisplayEventID : byte
@@ -1725,6 +1746,17 @@ namespace SDL2
 		public static extern int SDL_GetWindowDisplayMode(
 			IntPtr window,
 			out SDL_DisplayMode mode
+		);
+
+		/* IntPtr refers to a void*
+		 * window refers to an SDL_Window*
+		 * mode refers to a size_t*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetWindowICCProfile(
+			IntPtr window,
+			out IntPtr mode
 		);
 
 		/* window refers to an SDL_Window* */
@@ -2193,6 +2225,35 @@ namespace SDL2
 		public static extern IntPtr SDL_GetGrabbedWindow();
 
 		/* window refers to an SDL_Window*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetWindowMouseRect(
+			IntPtr window,
+			ref SDL_Rect rect
+		);
+
+		/* window refers to an SDL_Window*
+		 * rect refers to an SDL_Rect*
+		 * This overload allows for IntPtr.Zero (null) to be passed for rect.
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetWindowMouseRect(
+			IntPtr window,
+			IntPtr rect
+		);
+
+		/* window refers to an SDL_Window*
+		 * IntPtr refers to an SDL_Rect*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetWindowMouseRect(
+			IntPtr window
+		);
+
+		/* window refers to an SDL_Window*
 		 * Only available in 2.0.16 or higher.
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2408,6 +2469,15 @@ namespace SDL2
 			SDL_ScaleModeBest
 		}
 
+		/* Only available in 2.0.18 or higher. */
+		[StructLayout(LayoutKind.Sequential)]
+		public struct SDL_Vertex
+		{
+			public SDL_FPoint position;
+			public SDL_Color color;
+			public SDL_FPoint tex_coord;
+		}
+
 		/* IntPtr refers to an SDL_Renderer*, window to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_CreateRenderer(
@@ -2475,6 +2545,22 @@ namespace SDL2
 			IntPtr texture,
 			out SDL_ScaleMode scaleMode
 		);
+
+		/* texture refers to an SDL_Texture*
+		 * userdata refers to a void*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_SetTextureUserData(
+			IntPtr texture,
+			IntPtr userdata
+		);
+
+		/* IntPtr refers to a void*, texture refers to an SDL_Texture*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern IntPtr SDL_GetTextureUserData(IntPtr texture);
 
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -3031,6 +3117,41 @@ namespace SDL2
 			SDL_RendererFlip flip
 		);
 
+		/* renderer refers to an SDL_Renderer*
+		 * texture refers to an SDL_Texture*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderGeometry(
+			IntPtr renderer,
+			IntPtr texture,
+			[In] SDL_Vertex[] vertices,
+			int num_vertices,
+			[In] int[] indices,
+			int num_indices
+		);
+
+		/* renderer refers to an SDL_Renderer*
+		 * texture refers to an SDL_Texture*
+		 * indices refers to a void*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderGeometryRaw(
+			IntPtr renderer,
+			IntPtr texture,
+			[In] float[] xy,
+			int xy_stride,
+			[In] int[] color,
+			int color_stride,
+			[In] float[] uv,
+			int uv_stride,
+			int num_vertices,
+			IntPtr indices,
+			int num_indices,
+			int size_indices
+		);
+
 		/* renderer refers to an SDL_Renderer* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int SDL_RenderDrawPointF(
@@ -3136,6 +3257,30 @@ namespace SDL2
 			IntPtr renderer,
 			out float scaleX,
 			out float scaleY
+		);
+
+		/* renderer refers to an SDL_Renderer*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_RenderWindowToLogical(
+			IntPtr renderer,
+			int windowX,
+			int windowY,
+			out float logicalX,
+			out float logicalY
+		);
+
+		/* renderer refers to an SDL_Renderer*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_RenderLogicalToWindow(
+			IntPtr renderer,
+			float logicalX,
+			float logicalY,
+			out int windowX,
+			out int windowY
 		);
 
 		/* renderer refers to an SDL_Renderer* */
@@ -3330,6 +3475,12 @@ namespace SDL2
 		public static extern IntPtr SDL_RenderGetMetalCommandEncoder(
 			IntPtr renderer
 		);
+
+		/* renderer refers to an SDL_Renderer*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_RenderSetVSync(IntPtr renderer, int vsync);
 
 		/* renderer refers to an SDL_Renderer*
 		 * Only available in 2.0.4 or higher.
@@ -4639,6 +4790,10 @@ namespace SDL2
 			/* Only available in SDL 2.0.4 or higher. */
 			SDL_RENDER_DEVICE_RESET,
 
+			/* Internal events */
+			/* Only available in 2.0.18 or higher. */
+			SDL_POLLSENTINEL =		0x7F00,
+
 			/* Events SDL_USEREVENT through SDL_LASTEVENT are for
 			 * your use, and should be allocated with
 			 * SDL_RegisterEvents()
@@ -4786,6 +4941,8 @@ namespace SDL2
 			public Int32 x; /* amount scrolled horizontally */
 			public Int32 y; /* amount scrolled vertically */
 			public UInt32 direction; /* Set to one of the SDL_MOUSEWHEEL_* defines */
+			public float preciseX; /* Requires >= 2.0.18 */
+			public float preciseY; /* Requires >= 2.0.18 */
 		}
 
 // Ignore private members used for padding in this struct
@@ -5832,13 +5989,15 @@ namespace SDL2
 			KMOD_NUM = 0x1000,
 			KMOD_CAPS = 0x2000,
 			KMOD_MODE = 0x4000,
-			KMOD_RESERVED = 0x8000,
+			KMOD_SCROLL = 0x8000,
 
 			/* These are defines in the SDL headers */
 			KMOD_CTRL = (KMOD_LCTRL | KMOD_RCTRL),
 			KMOD_SHIFT = (KMOD_LSHIFT | KMOD_RSHIFT),
 			KMOD_ALT = (KMOD_LALT | KMOD_RALT),
-			KMOD_GUI = (KMOD_LGUI | KMOD_RGUI)
+			KMOD_GUI = (KMOD_LGUI | KMOD_RGUI),
+
+			KMOD_RESERVED = KMOD_SCROLL
 		}
 
 		#endregion
@@ -6535,6 +6694,18 @@ namespace SDL2
 		public static extern SDL_bool SDL_JoystickHasLED(IntPtr joystick);
 
 		/* IntPtr refers to an SDL_Joystick*.
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_JoystickHasRumble(IntPtr joystick);
+
+		/* IntPtr refers to an SDL_Joystick*.
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_JoystickHasRumbleTriggers(IntPtr joystick);
+
+		/* IntPtr refers to an SDL_Joystick*.
 		 * Only available in 2.0.14 or higher.
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -6975,6 +7146,40 @@ namespace SDL2
 			IntPtr gamecontroller
 		);
 
+		/* gamecontroller refers to an SDL_GameController*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetAppleSFSymbolsNameForButton", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GameControllerGetAppleSFSymbolsNameForButton(
+			IntPtr gamecontroller,
+			SDL_GameControllerButton button
+		);
+		public static string SDL_GameControllerGetAppleSFSymbolsNameForButton(
+			IntPtr gamecontroller,
+			SDL_GameControllerButton button
+		) {
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GameControllerGetAppleSFSymbolsNameForButton(gamecontroller, button)
+			);
+		}
+
+		/* gamecontroller refers to an SDL_GameController*
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, EntryPoint = "SDL_GameControllerGetAppleSFSymbolsNameForAxis", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GameControllerGetAppleSFSymbolsNameForAxis(
+			IntPtr gamecontroller,
+			SDL_GameControllerAxis axis
+		);
+		public static string SDL_GameControllerGetAppleSFSymbolsNameForAxis(
+			IntPtr gamecontroller,
+			SDL_GameControllerAxis axis
+		) {
+			return UTF8_ToManaged(
+				INTERNAL_SDL_GameControllerGetAppleSFSymbolsNameForAxis(gamecontroller, axis)
+			);
+		}
+
 		/* int refers to an SDL_JoystickID, IntPtr to an SDL_GameController*.
 		 * Only available in 2.0.4 or higher.
 		 */
@@ -7017,6 +7222,22 @@ namespace SDL2
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_GameControllerHasLED(
+			IntPtr gamecontroller
+		);
+
+		/* gamecontroller refers to an SDL_GameController*.
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_GameControllerHasRumble(
+			IntPtr gamecontroller
+		);
+
+		/* gamecontroller refers to an SDL_GameController*.
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_GameControllerHasRumbleTriggers(
 			IntPtr gamecontroller
 		);
 
@@ -7994,6 +8215,12 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt32 SDL_GetTicks();
 
+		/* Returns the milliseconds that have passed since SDL was initialized
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern UInt64 SDL_GetTicks64();
+
 		/* Get the current value of the high resolution counter */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern UInt64 SDL_GetPerformanceCounter();
@@ -8255,6 +8482,7 @@ namespace SDL2
 			public IntPtr shell_surface; // Refers to a wl_shell_surface*
 			public IntPtr egl_window; // Refers to an egl_window*, requires >= 2.0.16
 			public IntPtr xdg_surface; // Refers to an xdg_surface*, requires >= 2.0.16
+			public IntPtr xdg_toplevel; // Referes to an xdg_toplevel*, requires >= 2.0.18
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
