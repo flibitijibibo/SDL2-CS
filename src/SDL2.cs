@@ -4351,6 +4351,21 @@ namespace SDL2
 			int dst_pitch
 		);
 
+		/* src and dst are void* pointers
+		 * Only available in 2.0.18 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_PremultiplyAlpha(
+			int width,
+			int height,
+			uint src_format,
+			IntPtr src,
+			int src_pitch,
+			uint dst_format,
+			IntPtr dst,
+			int dst_pitch
+		);
+
 		/* IntPtr refers to an SDL_Surface*
 		 * src refers to an SDL_Surface*
 		 * fmt refers to an SDL_PixelFormat*
