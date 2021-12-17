@@ -85,6 +85,7 @@
   </Target>
   <ItemGroup>
     <Compile Include="src\SDL2.cs" />
+    <Compile Include="src\SDL2_gfx.cs" />
     <Compile Include="src\SDL2_image.cs" />
     <Compile Include="src\SDL2_mixer.cs" />
     <Compile Include="src\SDL2_ttf.cs" />
