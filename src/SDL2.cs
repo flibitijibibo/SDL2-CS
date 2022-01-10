@@ -729,6 +729,10 @@ namespace SDL2
 		public const string SDL_HINT_LINUX_JOYSTICK_CLASSIC =
 			"SDL_LINUX_JOYSTICK_CLASSIC";
 
+		/* Only available in 2.0.20 or higher. */
+		public const string SDL_HINT_RENDER_LINE_METHOD =
+			"SDL_RENDER_LINE_METHOD";
+
 		public enum SDL_HintPriority
 		{
 			SDL_HINT_DEFAULT,
