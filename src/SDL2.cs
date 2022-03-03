@@ -3961,6 +3961,91 @@ namespace SDL2
 			public byte g;
 			public byte b;
 			public byte a;
+
+			public SDL_Color() { r = 0; g = 0; b = 0; a = 0; }
+			public SDL_Color(byte r, byte g, byte b)
+			{
+				this.r = r;
+				this.g = g;
+				this.b = b;
+				this.a = 255;
+			}
+			public SDL_Color(byte a, byte r, byte g, byte b)
+			{
+				this.r = r;
+				this.g = g;
+				this.b = b;
+				this.a = a;
+			}
+			public SDL_Color(byte a, SDL_Color color)
+			{
+				this.r = color.r;
+				this.g = color.g;
+				this.b = color.b;
+				this.a = a;
+			}
+
+			public SDL_Color(string hex)
+			{
+				var formattedHex = "";
+				switch (hex.Length)
+				{
+					case 3:
+					{
+						formattedHex = $"FF{hex[0]}{hex[0]}{hex[1]}{hex[1]}{hex[2]}{hex[2]}";
+					}
+					break;
+					case 4:
+					{
+						if (hex[0] == '#')
+						{
+							formattedHex = $"FF{hex[1]}{hex[1]}{hex[2]}{hex[2]}{hex[3]}{hex[3]}";
+						}
+					}
+					break;
+					case 6:
+					{
+						formattedHex = $"FF{hex}";
+					}
+					break;
+					case 7:
+					{
+						if (hex[0] == '#')
+						{
+							formattedHex = $"FF{hex.Substring(1)}";
+						}
+					}
+					break;
+					case 8:
+					{
+						formattedHex = hex;
+					}
+					break;
+					case 9:
+					{
+						if (hex[0] == '#')
+						{
+							formattedHex = hex.Substring(1);
+						}
+					}
+					break;
+				}
+				if (string.IsNullOrEmpty(formattedHex))
+				{
+					throw new FormatException($"Unsupported color hex string format: '{hex}'");
+				}
+				try
+				{
+					a = byte.Parse(formattedHex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+					r = byte.Parse(formattedHex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+					g = byte.Parse(formattedHex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+					b = byte.Parse(formattedHex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
+				}
+				catch (Exception ex)
+				{
+					throw new FormatException($"Invalid color hex string '{hex}'", ex);
+				}
+			}
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -8782,5 +8867,154 @@ namespace SDL2
 		}
 
 		#endregion
+
+		/// <summary>
+		/// predefined SDL colors identical to those from System.Drawing.Color 
+		/// </summary>
+		public static class SDL_Colors
+		{
+			public static SDL_Color AliceBlue => new("FFF0F8FF");
+			public static SDL_Color AntiqueWhite => new("FFFAEBD7");
+			public static SDL_Color Aqua => new("FF00FFFF");
+			public static SDL_Color Aquamarine => new("FF7FFFD4");
+			public static SDL_Color Azure => new("FFF0FFFF");
+			public static SDL_Color Beige => new("FFF5F5DC");
+			public static SDL_Color Bisque => new("FFFFE4C4");
+			public static SDL_Color Black => new("FF000000");
+			public static SDL_Color BlanchedAlmond => new("FFFFEBCD");
+			public static SDL_Color Blue => new("FF0000FF");
+			public static SDL_Color BlueViolet => new("FF8A2BE2");
+			public static SDL_Color Brown => new("FFA52A2A");
+			public static SDL_Color BurlyWood => new("FFDEB887");
+			public static SDL_Color CadetBlue => new("FF5F9EA0");
+			public static SDL_Color Chartreuse => new("FF7FFF00");
+			public static SDL_Color Chocolate => new("FFD2691E");
+			public static SDL_Color Coral => new("FFFF7F50");
+			public static SDL_Color CornflowerBlue => new("FF6495ED");
+			public static SDL_Color Cornsilk => new("FFFFF8DC");
+			public static SDL_Color Crimson => new("FFDC143C");
+			public static SDL_Color Cyan => new("FF00FFFF");
+			public static SDL_Color DarkBlue => new("FF00008B");
+			public static SDL_Color DarkCyan => new("FF008B8B");
+			public static SDL_Color DarkGoldenrod => new("FFB8860B");
+			public static SDL_Color DarkGray => new("FFA9A9A9");
+			public static SDL_Color DarkGreen => new("FF006400");
+			public static SDL_Color DarkKhaki => new("FFBDB76B");
+			public static SDL_Color DarkMagenta => new("FF8B008B");
+			public static SDL_Color DarkOliveGreen => new("FF556B2F");
+			public static SDL_Color DarkOrange => new("FFFF8C00");
+			public static SDL_Color DarkOrchid => new("FF9932CC");
+			public static SDL_Color DarkRed => new("FF8B0000");
+			public static SDL_Color DarkSalmon => new("FFE9967A");
+			public static SDL_Color DarkSeaGreen => new("FF8FBC8B");
+			public static SDL_Color DarkSlateBlue => new("FF483D8B");
+			public static SDL_Color DarkSlateGray => new("FF2F4F4F");
+			public static SDL_Color DarkTurquoise => new("FF00CED1");
+			public static SDL_Color DarkViolet => new("FF9400D3");
+			public static SDL_Color DeepPink => new("FFFF1493");
+			public static SDL_Color DeepSkyBlue => new("FF00BFFF");
+			public static SDL_Color DimGray => new("FF696969");
+			public static SDL_Color DodgerBlue => new("FF1E90FF");
+			public static SDL_Color Firebrick => new("FFB22222");
+			public static SDL_Color FloralWhite => new("FFFFFAF0");
+			public static SDL_Color ForestGreen => new("FF228B22");
+			public static SDL_Color Fuchsia => new("FFFF00FF");
+			public static SDL_Color Gainsboro => new("FFDCDCDC");
+			public static SDL_Color GhostWhite => new("FFF8F8FF");
+			public static SDL_Color Gold => new("FFFFD700");
+			public static SDL_Color Goldenrod => new("FFDAA520");
+			public static SDL_Color Gray => new("FF808080");
+			public static SDL_Color Green => new("FF008000");
+			public static SDL_Color GreenYellow => new("FFADFF2F");
+			public static SDL_Color Honeydew => new("FFF0FFF0");
+			public static SDL_Color HotPink => new("FFFF69B4");
+			public static SDL_Color IndianRed => new("FFCD5C5C");
+			public static SDL_Color Indigo => new("FF4B0082");
+			public static SDL_Color Ivory => new("FFFFFFF0");
+			public static SDL_Color Khaki => new("FFF0E68C");
+			public static SDL_Color Lavender => new("FFE6E6FA");
+			public static SDL_Color LavenderBlush => new("FFFFF0F5");
+			public static SDL_Color LawnGreen => new("FF7CFC00");
+			public static SDL_Color LemonChiffon => new("FFFFFACD");
+			public static SDL_Color LightBlue => new("FFADD8E6");
+			public static SDL_Color LightCoral => new("FFF08080");
+			public static SDL_Color LightCyan => new("FFE0FFFF");
+			public static SDL_Color LightGoldenrodYellow => new("FFFAFAD2");
+			public static SDL_Color LightGray => new("FFD3D3D3");
+			public static SDL_Color LightGreen => new("FF90EE90");
+			public static SDL_Color LightPink => new("FFFFB6C1");
+			public static SDL_Color LightSalmon => new("FFFFA07A");
+			public static SDL_Color LightSeaGreen => new("FF20B2AA");
+			public static SDL_Color LightSkyBlue => new("FF87CEFA");
+			public static SDL_Color LightSlateGray => new("FF778899");
+			public static SDL_Color LightSteelBlue => new("FFB0C4DE");
+			public static SDL_Color LightYellow => new("FFFFFFE0");
+			public static SDL_Color Lime => new("FF00FF00");
+			public static SDL_Color LimeGreen => new("FF32CD32");
+			public static SDL_Color Linen => new("FFFAF0E6");
+			public static SDL_Color Magenta => new("FFFF00FF");
+			public static SDL_Color Maroon => new("FF800000");
+			public static SDL_Color MediumAquamarine => new("FF66CDAA");
+			public static SDL_Color MediumBlue => new("FF0000CD");
+			public static SDL_Color MediumOrchid => new("FFBA55D3");
+			public static SDL_Color MediumPurple => new("FF9370DB");
+			public static SDL_Color MediumSeaGreen => new("FF3CB371");
+			public static SDL_Color MediumSlateBlue => new("FF7B68EE");
+			public static SDL_Color MediumSpringGreen => new("FF00FA9A");
+			public static SDL_Color MediumTurquoise => new("FF48D1CC");
+			public static SDL_Color MediumVioletRed => new("FFC71585");
+			public static SDL_Color MidnightBlue => new("FF191970");
+			public static SDL_Color MintCream => new("FFF5FFFA");
+			public static SDL_Color MistyRose => new("FFFFE4E1");
+			public static SDL_Color Moccasin => new("FFFFE4B5");
+			public static SDL_Color NavajoWhite => new("FFFFDEAD");
+			public static SDL_Color Navy => new("FF000080");
+			public static SDL_Color OldLace => new("FFFDF5E6");
+			public static SDL_Color Olive => new("FF808000");
+			public static SDL_Color OliveDrab => new("FF6B8E23");
+			public static SDL_Color Orange => new("FFFFA500");
+			public static SDL_Color OrangeRed => new("FFFF4500");
+			public static SDL_Color Orchid => new("FFDA70D6");
+			public static SDL_Color PaleGoldenrod => new("FFEEE8AA");
+			public static SDL_Color PaleGreen => new("FF98FB98");
+			public static SDL_Color PaleTurquoise => new("FFAFEEEE");
+			public static SDL_Color PaleVioletRed => new("FFDB7093");
+			public static SDL_Color PapayaWhip => new("FFFFEFD5");
+			public static SDL_Color PeachPuff => new("FFFFDAB9");
+			public static SDL_Color Peru => new("FFCD853F");
+			public static SDL_Color Pink => new("FFFFC0CB");
+			public static SDL_Color Plum => new("FFDDA0DD");
+			public static SDL_Color PowderBlue => new("FFB0E0E6");
+			public static SDL_Color Purple => new("FF800080");
+			public static SDL_Color RebeccaPurple => new("663399");
+			public static SDL_Color Red => new("FFFF0000");
+			public static SDL_Color RosyBrown => new("FFBC8F8F");
+			public static SDL_Color RoyalBlue => new("FF4169E1");
+			public static SDL_Color SaddleBrown => new("FF8B4513");
+			public static SDL_Color Salmon => new("FFFA8072");
+			public static SDL_Color SandyBrown => new("FFF4A460");
+			public static SDL_Color SeaGreen => new("FF2E8B57");
+			public static SDL_Color SeaShell => new("FFFFF5EE");
+			public static SDL_Color Sienna => new("FFA0522D");
+			public static SDL_Color Silver => new("FFC0C0C0");
+			public static SDL_Color SkyBlue => new("FF87CEEB");
+			public static SDL_Color SlateBlue => new("FF6A5ACD");
+			public static SDL_Color SlateGray => new("FF708090");
+			public static SDL_Color Snow => new("FFFFFAFA");
+			public static SDL_Color SpringGreen => new("FF00FF7F");
+			public static SDL_Color SteelBlue => new("FF4682B4");
+			public static SDL_Color Tan => new("FFD2B48C");
+			public static SDL_Color Teal => new("FF008080");
+			public static SDL_Color Thistle => new("FFD8BFD8");
+			public static SDL_Color Tomato => new("FFFF6347");
+			public static SDL_Color Turquoise => new("FF40E0D0");
+			public static SDL_Color Violet => new("FFEE82EE");
+			public static SDL_Color Wheat => new("FFF5DEB3");
+			public static SDL_Color White => new("FFFFFFFF");
+			public static SDL_Color WhiteSmoke => new("FFF5F5F5");
+			public static SDL_Color Yellow => new("FFFFFF00");
+			public static SDL_Color YellowGreen => new("FF9ACD32");
+		}
+
 	}
 }
