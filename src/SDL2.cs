@@ -4113,6 +4113,14 @@ namespace SDL2
 		{
 			public int x;
 			public int y;
+
+			public SDL_Point() { x = 0; y = 0; }
+
+			public SDL_Point(int x, int y)
+			{
+				this.x = x;
+				this.y = y;
+			}
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -4122,6 +4130,16 @@ namespace SDL2
 			public int y;
 			public int w;
 			public int h;
+
+			public SDL_Rect() { x = 0; y = 0; w = 0; h = 0; }
+
+			public SDL_Rect(int x, int y, int width, int height)
+			{
+				this.x = x;
+				this.y = y;
+				this.w = width;
+				this.h = height;
+			}
 		}
 
 		/* Only available in 2.0.10 or higher. */
@@ -4130,6 +4148,13 @@ namespace SDL2
 		{
 			public float x;
 			public float y;
+
+			public SDL_FPoint() { x = 0.0f; y = 0.0f; }
+			public SDL_FPoint(float x, float y)
+			{
+				this.x = x;
+				this.y = y;
+			}
 		}
 
 		/* Only available in 2.0.10 or higher. */
@@ -4140,6 +4165,16 @@ namespace SDL2
 			public float y;
 			public float w;
 			public float h;
+
+			public SDL_FRect() { x = 0.0f; y = 0.0f; w = 0.0f; h = 0.0f; }
+
+			public SDL_FRect(float x, float y, float width, float height)
+			{
+				this.x = x;
+				this.y = y;
+				this.w = width;
+				this.h = height;
+			}
 		}
 
 		/* Only available in 2.0.4 or higher. */
