@@ -403,6 +403,15 @@ namespace SDL2
 			IntPtr reserved
 		);
 
+		/* Use this function with GDK/GDKX to call your C# Main() function!
+		 * Only available in SDL 2.24.0 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GDKRunApp(
+			SDL_main_func mainFunction,
+			IntPtr reserved
+		);
+
 		/* Use this function with iOS to call your C# Main() function!
 		 * Only available in SDL 2.0.10 or higher.
 		 */
