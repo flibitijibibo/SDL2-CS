@@ -6508,6 +6508,16 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_TouchDeviceType SDL_GetTouchDeviceType(Int64 touchID);
 
+		/* Only available in 2.0.22 or higher. */
+		[DllImport(nativeLibName, EntryPoint = "SDL_GetTouchName", CallingConvention = CallingConvention.Cdecl)]
+		private static extern IntPtr INTERNAL_SDL_GetTouchName(int index);
+
+		/* Only available in 2.0.22 or higher. */
+		public static string SDL_GetTouchName(int index)
+		{
+			return UTF8_ToManaged(INTERNAL_SDL_GetTouchName(index));
+		}
+
 		#endregion
 
 		#region SDL_joystick.h
