@@ -5222,7 +5222,7 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_ControllerTouchpadEvent
 		{
-			public UInt32 type;
+			public SDL_EventType type;
 			public UInt32 timestamp;
 			public Int32 which; /* SDL_JoystickID */
 			public Int32 touchpad;
@@ -5236,7 +5236,7 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_ControllerSensorEvent
 		{
-			public UInt32 type;
+			public SDL_EventType type;
 			public UInt32 timestamp;
 			public Int32 which; /* SDL_JoystickID */
 			public Int32 sensor;
@@ -5251,7 +5251,7 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_AudioDeviceEvent
 		{
-			public UInt32 type;
+			public SDL_EventType type;
 			public UInt32 timestamp;
 			public UInt32 which;
 			public byte iscapture;
@@ -5264,7 +5264,7 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_TouchFingerEvent
 		{
-			public UInt32 type;
+			public SDL_EventType type;
 			public UInt32 timestamp;
 			public Int64 touchId; // SDL_TouchID
 			public Int64 fingerId; // SDL_GestureID
@@ -5279,7 +5279,7 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_MultiGestureEvent
 		{
-			public UInt32 type;
+			public SDL_EventType type;
 			public UInt32 timestamp;
 			public Int64 touchId; // SDL_TouchID
 			public float dTheta;
@@ -5293,7 +5293,7 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_DollarGestureEvent
 		{
-			public UInt32 type;
+			public SDL_EventType type;
 			public UInt32 timestamp;
 			public Int64 touchId; // SDL_TouchID
 			public Int64 gestureId; // SDL_GestureID
@@ -5341,7 +5341,7 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_UserEvent
 		{
-			public UInt32 type;
+			public SDL_EventType type;
 			public UInt32 timestamp;
 			public UInt32 windowID;
 			public Int32 code;
