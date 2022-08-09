@@ -8873,7 +8873,7 @@ namespace SDL2
 
 		/* Only available in SDL 2.0.11 or higher. */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern void SDL_HasARMSIMD();
+		public static extern SDL_bool SDL_HasARMSIMD();
 
 		#endregion
 
