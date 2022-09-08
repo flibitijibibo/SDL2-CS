@@ -6602,7 +6602,7 @@ namespace SDL2
 		public static extern SDL_bool SDL_JoystickGetAxisInitialState(
 			IntPtr joystick,
 			int axis,
-			out ushort state
+			out short state
 		);
 
 		/* joystick refers to an SDL_Joystick* */
