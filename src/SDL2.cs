@@ -7520,6 +7520,17 @@ namespace SDL2
 		);
 
 		/* gamecontroller refers to an SDL_GameController*.
+		 * Only available in 2.0.14 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern int SDL_GameControllerGetSensorData(
+			IntPtr gamecontroller,
+			SDL_SensorType type,
+			[In] float[] data,
+			int num_values
+		);
+
+		/* gamecontroller refers to an SDL_GameController*.
 		 * Only available in 2.0.16 or higher.
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
