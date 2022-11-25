@@ -1141,9 +1141,8 @@ namespace SDL2
 			);
 			if (result != IntPtr.Zero)
 			{
-				callback = (SDL_LogOutputFunction) Marshal.GetDelegateForFunctionPointer(
-					result,
-					typeof(SDL_LogOutputFunction)
+				callback = Marshal.GetDelegateForFunctionPointer<SDL_LogOutputFunction>(
+					result
 				);
 			}
 			else
@@ -5519,9 +5518,8 @@ namespace SDL2
 			SDL_bool retval = SDL_GetEventFilter(out result, out userdata);
 			if (result != IntPtr.Zero)
 			{
-				filter = (SDL_EventFilter) Marshal.GetDelegateForFunctionPointer(
-					result,
-					typeof(SDL_EventFilter)
+				filter = Marshal.GetDelegateForFunctionPointer<SDL_EventFilter>(
+					result
 				);
 			}
 			else
