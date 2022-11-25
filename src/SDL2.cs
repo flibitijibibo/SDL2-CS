@@ -29,6 +29,7 @@
 #region Using Statements
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 #endregion
@@ -40,6 +41,38 @@ namespace SDL2
 		#region SDL2# Variables
 
 		private const string nativeLibName = "SDL2";
+
+		#endregion
+
+		#region Marshaling
+
+#if NET6_0_OR_GREATER
+		internal static T PtrToStructure<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(IntPtr ptr) {
+#else
+		internal static T PtrToStructure<T>(IntPtr ptr) {
+#endif
+#if NETSTANDARD2_0_OR_GREATER || NET6_0_OR_GREATER
+			return Marshal.PtrToStructure<T>(ptr);
+#else
+			return (T)Marshal.PtrToStructure(ptr, typeof(T));
+#endif
+		}
+
+		internal static T GetDelegateForFunctionPointer<T>(IntPtr ptr) where T : Delegate {
+#if NETSTANDARD2_0_OR_GREATER || NET6_0_OR_GREATER
+			return Marshal.GetDelegateForFunctionPointer<T>(ptr);
+#else
+			return (T)Marshal.GetDelegateForFunctionPointer(ptr, typeof(T));
+#endif
+		}
+
+		internal static int SizeOf<T>() {
+#if NETSTANDARD2_0_OR_GREATER || NET6_0_OR_GREATER
+			return Marshal.SizeOf<T>();
+#else
+			return Marshal.SizeOf(typeof(T));
+#endif
+		}
 
 		#endregion
 
@@ -1141,7 +1174,7 @@ namespace SDL2
 			);
 			if (result != IntPtr.Zero)
 			{
-				callback = Marshal.GetDelegateForFunctionPointer<SDL_LogOutputFunction>(
+				callback = GetDelegateForFunctionPointer<SDL_LogOutputFunction>(
 					result
 				);
 			}
@@ -1280,7 +1313,7 @@ namespace SDL2
 
 			if (messageboxdata.colorScheme != null)
 			{
-				data.colorScheme = Marshal.AllocHGlobal(Marshal.SizeOf<SDL_MessageBoxColorScheme>());
+				data.colorScheme = Marshal.AllocHGlobal(SizeOf<SDL_MessageBoxColorScheme>());
 				Marshal.StructureToPtr(messageboxdata.colorScheme.Value, data.colorScheme, false);
 			}
 
@@ -4358,7 +4391,7 @@ namespace SDL2
 		public static bool SDL_MUSTLOCK(IntPtr surface)
 		{
 			SDL_Surface sur;
-			sur = Marshal.PtrToStructure<SDL_Surface>(
+			sur = PtrToStructure<SDL_Surface>(
 				surface
 			);
 			return (sur.flags & SDL_RLEACCEL) != 0;
@@ -5518,7 +5551,7 @@ namespace SDL2
 			SDL_bool retval = SDL_GetEventFilter(out result, out userdata);
 			if (result != IntPtr.Zero)
 			{
-				filter = Marshal.GetDelegateForFunctionPointer<SDL_EventFilter>(
+				filter = GetDelegateForFunctionPointer<SDL_EventFilter>(
 					result
 				);
 			}

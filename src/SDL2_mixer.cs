@@ -151,7 +151,7 @@ namespace SDL2
 		{
 			SDL.SDL_version result;
 			IntPtr result_ptr = INTERNAL_MIX_Linked_Version();
-			result = Marshal.PtrToStructure<SDL.SDL_version>(
+			result = SDL.PtrToStructure<SDL.SDL_version>(
 				result_ptr
 			);
 			return result;
