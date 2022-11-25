@@ -9,6 +9,8 @@
 		<RootNamespace>SDL2</RootNamespace>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<IsTrimmable>true</IsTrimmable>
+		<EnableAOTAnalyzer>true</EnableAOTAnalyzer>
 	</PropertyGroup>
 	<PropertyGroup>
 		<SDLSettingsPropsFilePath>$(SolutionDir)SDL2-CS.Settings.props</SDLSettingsPropsFilePath>
