@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+		<TargetFrameworks>net40;netstandard2.0;net7.0</TargetFrameworks>
 		<Platforms>x64</Platforms>
 	</PropertyGroup>
 	<PropertyGroup>
@@ -9,6 +9,10 @@
 		<RootNamespace>SDL2</RootNamespace>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(TargetFramework)' != 'net40' ">
+		<IsTrimmable>true</IsTrimmable>
+		<EnableAOTAnalyzer>true</EnableAOTAnalyzer>
 	</PropertyGroup>
 	<PropertyGroup>
 		<SDLSettingsPropsFilePath>$(SolutionDir)SDL2-CS.Settings.props</SDLSettingsPropsFilePath>
