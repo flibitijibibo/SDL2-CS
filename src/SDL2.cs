@@ -49,26 +49,29 @@ namespace SDL2
 		#region Marshaling
 
 #if NET6_0_OR_GREATER
-		internal static T PtrToStructure<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(IntPtr ptr) {
-#else
-		internal static T PtrToStructure<T>(IntPtr ptr) {
-#endif
-#if NETSTANDARD2_0_OR_GREATER || NET6_0_OR_GREATER
+		internal static T PtrToStructure<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(IntPtr ptr)
+		{
 			return Marshal.PtrToStructure<T>(ptr);
-#else
-			return (T)Marshal.PtrToStructure(ptr, typeof(T));
-#endif
 		}
 
-		internal static T GetDelegateForFunctionPointer<T>(IntPtr ptr) where T : Delegate {
-#if NETSTANDARD2_0_OR_GREATER || NET6_0_OR_GREATER
+		internal static T GetDelegateForFunctionPointer<T>(IntPtr ptr) where T : Delegate
+		{
 			return Marshal.GetDelegateForFunctionPointer<T>(ptr);
+		}
 #else
-			return (T)Marshal.GetDelegateForFunctionPointer(ptr, typeof(T));
-#endif
+		internal static T PtrToStructure<T>(IntPtr ptr)
+		{
+			return (T) Marshal.PtrToStructure(ptr, typeof(T));
 		}
 
-		internal static int SizeOf<T>() {
+		internal static Delegate GetDelegateForFunctionPointer<T>(IntPtr ptr)
+		{
+			return Marshal.GetDelegateForFunctionPointer(ptr, typeof(T));
+		}
+#endif
+
+		internal static int SizeOf<T>()
+		{
 #if NETSTANDARD2_0_OR_GREATER || NET6_0_OR_GREATER
 			return Marshal.SizeOf<T>();
 #else
@@ -1176,7 +1179,7 @@ namespace SDL2
 			);
 			if (result != IntPtr.Zero)
 			{
-				callback = GetDelegateForFunctionPointer<SDL_LogOutputFunction>(
+				callback = (SDL_LogOutputFunction) GetDelegateForFunctionPointer<SDL_LogOutputFunction>(
 					result
 				);
 			}
@@ -5553,7 +5556,7 @@ namespace SDL2
 			SDL_bool retval = SDL_GetEventFilter(out result, out userdata);
 			if (result != IntPtr.Zero)
 			{
-				filter = GetDelegateForFunctionPointer<SDL_EventFilter>(
+				filter = (SDL_EventFilter) GetDelegateForFunctionPointer<SDL_EventFilter>(
 					result
 				);
 			}
