@@ -2431,16 +2431,6 @@ namespace SDL2
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern SDL_bool SDL_Vulkan_GetInstanceExtensions(
 			IntPtr window,
-			out uint pCount,
-			IntPtr[] pNames
-		);
-
-		/* window refers to an SDL_Window*, pNames to a const char**.
-		 * Only available in 2.0.6 or higher.
-		 */
-		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern SDL_bool SDL_Vulkan_GetInstanceExtensions(
-			IntPtr window,
 			ref uint pCount,
 			IntPtr[] pNames
 		);
