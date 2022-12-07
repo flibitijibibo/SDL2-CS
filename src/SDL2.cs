@@ -2435,6 +2435,32 @@ namespace SDL2
 			IntPtr[] pNames
 		);
 
+		/* window refers to an SDL_Window*, pNames to a const char**.
+		 * Only available in 2.0.6 or higher.
+		 */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern SDL_bool SDL_Vulkan_GetInstanceExtensions(
+			IntPtr window,
+			ref uint pCount,
+			IntPtr[] pNames
+		);
+
+		/* window refers to an SDL_Window*.
+		 * Only available in 2.0.6 or higher.
+		 */
+		public static SDL_bool SDL_Vulkan_GetInstanceExtensions(IntPtr window, out string[] names) 
+		{
+			names = Array.Empty<string>();
+			uint count;
+			SDL_bool result = SDL_Vulkan_GetInstanceExtensions(window, out count, IntPtr.Zero);
+			if (result == SDL_bool.SDL_FALSE) return result;
+			IntPtr[] pNames = new IntPtr[count];
+			result = SDL_Vulkan_GetInstanceExtensions(window, ref count, pNames);
+			if (result == SDL_bool.SDL_FALSE) return result;
+			names = pNames.Select(pointer => UTF8_ToManaged(pointer)).ToArray();
+			return result;
+		}
+
 		/* window refers to an SDL_Window.
 		 * instance refers to a VkInstance.
 		 * surface refers to a VkSurfaceKHR.
