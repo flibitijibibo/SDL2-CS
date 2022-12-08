@@ -29,6 +29,7 @@
 #region Using Statements
 using System;
 using System.Diagnostics;
+using System.Linq;
 #if NET6_0_OR_GREATER
 using System.Diagnostics.CodeAnalysis;
 #endif
@@ -2440,7 +2441,7 @@ namespace SDL2
 		 */
 		public static SDL_bool SDL_Vulkan_GetInstanceExtensions(IntPtr window, out string[] names) 
 		{
-			names = Array.Empty<string>();
+			names = new string[0];
 			uint count;
 			SDL_bool result = SDL_Vulkan_GetInstanceExtensions(window, out count, IntPtr.Zero);
 			if (result == SDL_bool.SDL_FALSE) return result;
