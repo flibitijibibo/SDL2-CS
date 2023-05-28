@@ -116,7 +116,7 @@ namespace SDL2
 			}
 
 			int bufferSize = Utf8Size(str);
-			byte* buffer = stackalloc byte[bufferSize];;
+			byte *buffer = (byte *)NativeMemory.Alloc((nuint)bufferSize);
 			fixed (char* strPtr = str)
 			{
 				Encoding.UTF8.GetBytes(strPtr, str.Length + 1, buffer, bufferSize);
