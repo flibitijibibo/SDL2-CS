@@ -8928,8 +8928,8 @@ namespace SDL2
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SDL_Locale
 		{
-			IntPtr language;
-			IntPtr country;
+			public IntPtr language; /* char* */
+			public IntPtr country; /* char* */
 		}
 
 		/* IntPtr refers to an SDL_Locale*.
