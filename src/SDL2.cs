@@ -1913,6 +1913,14 @@ namespace SDL2
 			out int h
 		);
 
+		/* window refers to an SDL_Window* */
+		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+		public static extern void SDL_GetWindowSizeInPixels(
+			IntPtr window,
+			out int w,
+			out int h
+		);
+
 		/* IntPtr refers to an SDL_Surface*, window to an SDL_Window* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr SDL_GetWindowSurface(IntPtr window);
