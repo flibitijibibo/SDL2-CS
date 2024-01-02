@@ -805,6 +805,8 @@ namespace SDL2
 			"SDL_X11_WINDOW_TYPE";
 		public const string SDL_HINT_QUIT_ON_LAST_WINDOW_CLOSE =
 			"SDL_QUIT_ON_LAST_WINDOW_CLOSE";
+		public const string SDL_HINT_VIDEODRIVER =
+			"SDL_VIDEODRIVER";
 
 		public enum SDL_HintPriority
 		{
