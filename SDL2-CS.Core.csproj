@@ -10,7 +10,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(TargetFramework)' != 'net40' ">
+	<PropertyGroup Condition=" '$(TargetFramework)' != 'net40' And '$(TargetFramework)' != 'netstandard2.0' ">
 		<IsTrimmable>true</IsTrimmable>
 		<EnableAOTAnalyzer>true</EnableAOTAnalyzer>
 	</PropertyGroup>
