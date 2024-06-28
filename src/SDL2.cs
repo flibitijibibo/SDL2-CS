@@ -3075,7 +3075,7 @@ namespace SDL2
 
 		/* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_RenderCopyEx(
+		public static extern int SDL_RenderCopyExF(
 			IntPtr renderer,
 			IntPtr texture,
 			ref SDL_Rect srcrect,
@@ -3091,7 +3091,7 @@ namespace SDL2
 		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
 		 */
 		[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-		public static extern int SDL_RenderCopyEx(
+		public static extern int SDL_RenderCopyExF(
 			IntPtr renderer,
 			IntPtr texture,
 			IntPtr srcrect,
